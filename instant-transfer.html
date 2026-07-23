@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحويل فوري | البنك السعودي</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">🏦</div>
+        <div><div class="brand-text">البنك السعودي</div><div class="brand-sub">نظام الخدمات المصرفية</div></div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">القائمة الرئيسية</div>
+          <a href="index.html" class="nav-item" data-page="index"><span class="icon">📊</span><span>الرئيسية</span></a>
+          <a href="accounts.html" class="nav-item" data-page="accounts"><span class="icon">💰</span><span>حساباتي</span></a>
+          <a href="cards.html" class="nav-item" data-page="cards"><span class="icon">💳</span><span>البطاقات</span></a>
+          <a href="transfers.html" class="nav-item active" data-page="transfers"><span class="icon">⚡</span><span>التحويلات</span></a>
+          <a href="bills.html" class="nav-item" data-page="bills"><span class="icon">📋</span><span>الفواتير</span></a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">الخدمات</div>
+          <a href="government.html" class="nav-item" data-page="government"><span class="icon">🏛️</span><span>الخدمات الحكومية</span></a>
+          <a href="financing.html" class="nav-item" data-page="financing"><span class="icon">💼</span><span>التمويل</span></a>
+          <a href="investments.html" class="nav-item" data-page="investments"><span class="icon">📈</span><span>الاستثمارات</span></a>
+          <a href="capital.html" class="nav-item" data-page="capital"><span class="icon">🏢</span><span>الجزيرة كابيتال</span></a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">الإعدادات</div>
+          <a href="profile.html" class="nav-item" data-page="profile"><span class="icon">👤</span><span>الملف الشخصي</span></a>
+        </div>
+      </nav>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <main class="main-content">
+      <header class="top-header">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+          <h1 class="header-title">تحويل فوري ⚡</h1>
+        </div>
+        <div class="header-actions">
+          <button class="header-btn" onclick="showToast('لا توجد إشعارات جديدة','info')">🔔</button>
+          <button class="header-btn" onclick="showToast('قريباً','info')">⚙️</button>
+          <div class="user-profile" onclick="location.href='profile.html'">
+            <div class="user-avatar">و</div>
+            <div class="user-info"><div class="user-name">الوليد بن طلال</div><div class="user-role">عميل بريميوم</div></div>
+          </div>
+        </div>
+      </header>
+      <div class="page-content">
+        <div style="text-align:center;margin-bottom:16px;">
+          <div style="font-size:14px;color:var(--accent-gold);font-weight:600;">فوري ← التحويل إلى مستفيد فوري</div>
+          <div style="font-size:24px;font-weight:700;margin-top:8px;">تحويل فوري★</div>
+        </div>
+
+        <div class="transfer-steps">
+          <div class="step completed"><div class="step-number">4</div><div class="step-label">النتيجة</div></div>
+          <div class="step completed"><div class="step-number">3</div><div class="step-label">التعميد</div></div>
+          <div class="step completed"><div class="step-number">2</div><div class="step-label">التأكيد</div></div>
+          <div class="step active"><div class="step-number">1</div><div class="step-label">التنفيذ</div></div>
+        </div>
+
+        <div class="cards-grid card-grid-2">
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title"><span class="icon">⚡</span> تفاصيل التحويل</div>
+            </div>
+            <div class="section-card-body">
+              <div class="form-group">
+                <label class="form-label">التحويل بواسطة *</label>
+                <select class="form-select"><option>رقم الحساب</option><option>رقم الهاتف</option><option>البريد الإلكتروني</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">المستفيد *</label>
+                <input type="text" class="form-input" placeholder="اسم المستفيد">
+              </div>
+              <div class="form-group">
+                <label class="form-label">من حساب *</label>
+                <select class="form-select">
+                  <option>الحساب الجاري الذهبي - SA29 8000 0000 6080 1016 7519</option>
+                  <option>حساب التوفير البلاتيني - SA29 8000 0000 6080 2027 8620</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">المبلغ *</label>
+                <input type="text" class="form-input" placeholder="0.00">
+              </div>
+              <div class="form-group">
+                <label class="form-label">العملة</label>
+                <select class="form-select"><option>SAR</option><option>USD</option><option>EUR</option></select>
+              </div>
+              <div style="padding:12px;background:var(--bg-secondary);border-radius:8px;margin-bottom:16px;">
+                <div style="font-size:13px;color:var(--text-secondary);">رسوم التحويل (0.5%): <strong style="color:var(--accent-gold-light);">USD 5,000.00</strong></div>
+              </div>
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox">
+                  <span>لقد قرأت وافقت على <a href="#" class="link-gold">الشروط والأحكام</a> الخاصة</span>
+                </label>
+              </div>
+              <button class="btn btn-primary btn-block" onclick="showToast('جاري معالجة التحويل...','info')">متابعة التحويل</button>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title"><span class="icon">📋</span> ملخص التحويل</div>
+            </div>
+            <div class="section-card-body">
+              <div class="summary-box">
+                <div class="summary-row"><span>من حساب</span><span>—</span></div>
+                <div class="summary-row"><span>التحويل بواسطة</span><span>—</span></div>
+                <div class="summary-row"><span>المستفيد</span><span>—</span></div>
+                <div class="summary-row"><span>رقم الحساب / الهاتف</span><span>—</span></div>
+                <div class="summary-row"><span>المبلغ</span><span>—</span></div>
+                <div class="summary-row"><span>رسوم التحويل (0.5%)</span><span>—</span></div>
+                <div class="summary-row"><span>الإجمالي</span><span>—</span></div>
+                <div class="summary-row"><span>العملة</span><span>—</span></div>
+                <div class="summary-row"><span>تاريخ التنفيذ</span><span>—</span></div>
+                <div class="summary-row"><span>رقم العملية</span><span>—</span></div>
+              </div>
+              <div style="margin-top:16px;padding:12px;background:rgba(212,175,55,0.05);border:1px solid var(--border-color);border-radius:8px;font-size:12px;color:var(--text-muted);line-height:1.6;">
+                سيستم نظام الإجراءات لازم سرعات التنفيذ خلال 24 ساعة<br>
+                الموافقة على نظام مراقبة البنوك بالصيغة المرافقة لهذا<br>
+                نظام الإيداعات والتحويلات المالية<br>
+                بيانات المستفيد<br>
+                اسم الحالة التي تم الموافقة:<br>
+                يتم صرف المنحة المقدرة بمبلغ وقدره <strong style="color:var(--accent-gold-light);">USD 1,000,000.00</strong> لاغير<br>
+                المالية إيداع المنحة بعد استكمال ما تم التوجيه به للمستفيد:
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card" style="margin-top:24px;">
+          <div class="section-card-header">
+            <div class="section-card-title"><span class="icon">🔒</span> التحقق من هوية المستخدم</div>
+          </div>
+          <div class="section-card-body" style="text-align:center;">
+            <div style="margin-bottom:16px;font-size:14px;color:var(--text-secondary);">
+              تم إرسال رمز التحقق إلى هاتفك المسجل <strong>***680</strong>
+            </div>
+            <div class="otp-inputs">
+              <input type="text" class="otp-input" maxlength="1">
+              <input type="text" class="otp-input" maxlength="1">
+              <input type="text" class="otp-input" maxlength="1">
+              <input type="text" class="otp-input" maxlength="1">
+              <input type="text" class="otp-input" maxlength="1">
+              <input type="text" class="otp-input" maxlength="1">
+            </div>
+            <button class="btn btn-secondary" style="margin-bottom:16px;" onclick="showToast('تم إعادة إرسال الرمز','success')">إعادة إرسال الرمز</button>
+            <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">جاري التحقق من البيانات...</div>
+            <button class="btn btn-primary btn-block" onclick="showToast('تم التحقق بنجاح','success')">تأكيد</button>
+          </div>
+        </div>
+
+        <div class="section-card" style="margin-top:24px;border-color:var(--accent-red);">
+          <div class="section-card-header" style="border-color:var(--accent-red);">
+            <div class="section-card-title"><span class="icon">❌</span> فشلت عملية التحويل</div>
+          </div>
+          <div class="section-card-body">
+            <div style="text-align:center;margin-bottom:20px;">
+              <div style="font-size:48px;margin-bottom:12px;">❌</div>
+              <div style="font-size:18px;font-weight:700;color:var(--accent-red);margin-bottom:8px;">فشلت عملية التحويل</div>
+              <div style="font-size:13px;color:var(--text-muted);">#TXN-— | —</div>
+            </div>
+            <div class="status-steps">
+              <div class="status-step completed"><div class="status-step-icon">🔒</div><div class="status-step-info"><div class="status-step-title">التحقق من هوية المستخدم</div></div></div>
+              <div class="status-step completed"><div class="status-step-icon">💰</div><div class="status-step-info"><div class="status-step-title">التحقق من رصيد الحساب</div></div></div>
+              <div class="status-step completed"><div class="status-step-icon">🏢</div><div class="status-step-info"><div class="status-step-title">الاتصال بنظام التحويل البنكي</div></div></div>
+              <div class="status-step failed"><div class="status-step-icon">📋</div><div class="status-step-info"><div class="status-step-title">التحقق من رسوم معاملة التحويل</div><div class="status-step-desc" style="color:var(--accent-red);">رسوم التحويل غير مسددة</div></div></div>
+              <div class="status-step pending"><div class="status-step-icon">✉</div><div class="status-step-info"><div class="status-step-title">إرسال الطلب للمستفيد</div></div></div>
+            </div>
+            <div style="margin-top:20px;padding:16px;background:var(--bg-secondary);border-radius:8px;">
+              <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><strong>سبب الفشل:</strong> <span style="color:var(--accent-red);">رسوم التحويل غير مسددة</span></div>
+              <div style="font-size:13px;color:var(--text-secondary);"><strong>الرسوم المتبقية:</strong> <span style="color:var(--accent-gold-light);">—</span></div>
+              <div style="font-size:13px;color:var(--text-secondary);margin-top:8px;"><strong>المستفيد:</strong> <span>—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast"><span class="toast-icon" id="toastIcon">✓</span><span id="toastMessage">تمت العملية بنجاح</span></div>
+  <script>
+    const mobileMenuBtn=document.getElementById('mobileMenuBtn');
+    const sidebar=document.getElementById('sidebar');
+    const sidebarOverlay=document.getElementById('sidebarOverlay');
+    if(mobileMenuBtn){mobileMenuBtn.addEventListener('click',()=>{sidebar.classList.toggle('open');sidebarOverlay.classList.toggle('active');});}
+    if(sidebarOverlay){sidebarOverlay.addEventListener('click',()=>{sidebar.classList.remove('open');sidebarOverlay.classList.remove('active');});}
+    function showToast(message,type){const toast=document.getElementById('toast'),toastIcon=document.getElementById('toastIcon'),toastMessage=document.getElementById('toastMessage');toastMessage.textContent=message;toast.className='toast show toast-'+(type||'success');if(type==='success')toastIcon.textContent='✓';else if(type==='error')toastIcon.textContent='✕';else toastIcon.textContent='ℹ';setTimeout(()=>{toast.classList.remove('show');},3000);}
+    document.querySelectorAll('.otp-input').forEach((input,idx,arr)=>{
+      input.addEventListener('input',()=>{if(input.value&&idx<arr.length-1)arr[idx+1].focus();});
+      input.addEventListener('keydown',(e)=>{if(e.key==='Backspace'&&!input.value&&idx>0)arr[idx-1].focus();});
+    });
+  </script>
+</body>
+</html>
