@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تحويل فوري | البنك السعودي</title>
+  <title>تأكيد التحويل | البنك السعودي</title>
   <link rel="stylesheet" href="style.css">
   <style>
     .top-services-bar {
@@ -56,118 +56,37 @@
       align-items: center;
     }
     .transfer-card-body { padding: 24px; }
-    .form-row-flex {
+    .confirm-row {
       display: flex;
-      gap: 16px;
-      margin-bottom: 16px;
-      align-items: flex-end;
-      flex-wrap: wrap;
-    }
-    .form-group-flex { flex: 1; min-width: 200px; }
-    .add-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-hover);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      padding: 8px 16px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 13px;
-    }
-    .add-btn:hover { border-color: var(--accent-gold); }
-    .amount-input-wrapper {
-      display: flex;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-sm);
-      overflow: hidden;
-      background: var(--bg-secondary);
-    }
-    .amount-input-wrapper input {
-      flex: 1;
-      border: none;
-      background: transparent;
-      padding: 12px 16px;
-      color: var(--text-primary);
-      font-size: 16px;
-      font-weight: 700;
-      text-align: center;
-      font-family: inherit;
-    }
-    .amount-input-wrapper input:focus { outline: none; }
-    .amount-currency {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 0 16px;
-      background: linear-gradient(135deg, #1e3a5f, #2d4a6f);
-      color: white;
-      font-weight: 700;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-color);
       font-size: 14px;
-      cursor: pointer;
-      border: none;
-      font-family: inherit;
     }
-    .fees-box {
-      display: inline-block;
-      padding: 10px 20px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-sm);
-      margin-top: 12px;
-    }
-    .fees-label { font-size: 13px; color: var(--text-secondary); }
-    .fees-value { font-size: 16px; font-weight: 700; color: var(--accent-gold-light); }
-    .details-card {
-      background: var(--bg-card);
-      border: 2px solid var(--accent-red);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-    .details-card-header {
-      background: linear-gradient(135deg, #1e3a5f, #2d4a6f);
-      color: white;
-      padding: 14px 20px;
-      font-size: 16px;
-      font-weight: 700;
-    }
-    .details-card-body {
-      padding: 24px;
-      text-align: center;
-      line-height: 2;
-      font-size: 14px;
-      color: var(--text-secondary);
-    }
-    .details-card-body strong { color: var(--accent-gold-light); }
-    .highlight-box {
-      display: inline-block;
-      background: rgba(212,175,55,0.15);
-      padding: 4px 12px;
-      border-radius: 4px;
-      font-weight: 700;
-      color: var(--accent-gold-light);
-    }
+    .confirm-row:last-child { border-bottom: none; }
+    .confirm-label { color: var(--text-secondary); }
+    .confirm-value { font-weight: 700; color: var(--text-primary); }
+    .confirm-value.gold { color: var(--accent-gold-light); }
+    .confirm-value.green { color: var(--accent-green); }
     .bottom-actions {
       display: flex;
       gap: 16px;
       margin-top: 24px;
     }
-    .btn-cancel {
+    .btn-back {
       flex: 1;
       padding: 14px 24px;
-      background: var(--accent-red);
-      color: white;
-      border: none;
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
       border-radius: var(--radius-sm);
       font-family: inherit;
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
     }
-    .btn-next {
+    .btn-back:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+    .btn-confirm {
       flex: 1;
       padding: 14px 24px;
       background: var(--accent-green);
@@ -199,7 +118,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      cursor: pointer;
     }
     .right-menu-item {
       display: flex;
@@ -209,12 +127,6 @@
       border-bottom: 1px solid var(--border-color);
       color: var(--text-secondary);
       font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .right-menu-item:hover, .right-menu-item.active {
-      background: var(--bg-hover);
-      color: var(--accent-gold);
     }
     .right-menu-item:last-child { border-bottom: none; }
     .transfer-layout {
@@ -227,8 +139,6 @@
       .transfer-layout { flex-direction: column; }
     }
     @media (max-width: 768px) {
-      .form-row-flex { flex-direction: column; }
-      .form-group-flex { width: 100%; }
       .bottom-actions { flex-direction: column; }
     }
   </style>
@@ -267,7 +177,7 @@
       <header class="top-header">
         <div style="display:flex;align-items:center;gap:16px;">
           <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
-          <h1 class="header-title">تحويل فوري ⚡</h1>
+          <h1 class="header-title">تأكيد التحويل ⚡</h1>
         </div>
         <div class="header-actions">
           <button class="header-btn" onclick="showToast('لا توجد إشعارات جديدة','info')">🔔</button>
@@ -299,83 +209,73 @@
             </div>
 
             <div class="transfer-steps" style="margin-bottom:24px;">
-              <div class="step active"><div class="step-number">1</div><div class="step-label">التنفيذ</div></div>
-              <div class="step"><div class="step-number">2</div><div class="step-label">التأكيد</div></div>
+              <div class="step completed"><div class="step-number">✓</div><div class="step-label">التنفيذ</div></div>
+              <div class="step active"><div class="step-number">2</div><div class="step-label">التأكيد</div></div>
               <div class="step"><div class="step-number">3</div><div class="step-label">التعميد</div></div>
               <div class="step"><div class="step-number">4</div><div class="step-label">النتيجة</div></div>
             </div>
 
             <div class="transfer-card">
-              <div class="transfer-card-header"><span>إلى</span></div>
+              <div class="transfer-card-header"><span>ملخص التحويل</span></div>
               <div class="transfer-card-body">
-                <div class="form-row-flex">
-                  <div class="form-group-flex">
-                    <label class="form-label">* التحويل بواسطة</label>
-                    <select class="form-select" id="transferVia">
-                      <option value="saudi">بنوك سعودية</option>
-                      <option value="iskan">بنك الإسكان</option>
-                    </select>
-                  </div>
-                  <div class="form-group-flex">
-                    <label class="form-label">* المستفيد</label>
-                    <select class="form-select" id="beneficiary">
-                      <option value="ghazi">غازي ساكب حسين الوحيدي</option>
-                    </select>
-                  </div>
+                <div class="confirm-row">
+                  <span class="confirm-label">التحويل بواسطة</span>
+                  <span class="confirm-value" id="cfTransferVia">—</span>
                 </div>
-                <button class="add-btn" onclick="showToast('قريباً','info')"><span style="font-size:18px;">+</span> إضافة مستفيد جديد</button>
+                <div class="confirm-row">
+                  <span class="confirm-label">المستفيد</span>
+                  <span class="confirm-value" id="cfBeneficiary">—</span>
+                </div>
+                <div class="confirm-row">
+                  <span class="confirm-label">من حساب</span>
+                  <span class="confirm-value" id="cfFromAccount">—</span>
+                </div>
+                <div class="confirm-row">
+                  <span class="confirm-label">المبلغ</span>
+                  <span class="confirm-value gold" id="cfAmount">—</span>
+                </div>
+                <div class="confirm-row">
+                  <span class="confirm-label">رسوم التحويل (0.5%)</span>
+                  <span class="confirm-value" id="cfFees">—</span>
+                </div>
+                <div class="confirm-row">
+                  <span class="confirm-label">الإجمالي</span>
+                  <span class="confirm-value gold" id="cfTotal">—</span>
+                </div>
+                <div class="confirm-row">
+                  <span class="confirm-label">العملة</span>
+                  <span class="confirm-value">USD 🇺🇸</span>
+                </div>
+                <div class="confirm-row">
+                  <span class="confirm-label">تاريخ التنفيذ</span>
+                  <span class="confirm-value green" id="cfDate">—</span>
+                </div>
+                <div class="confirm-row">
+                  <span class="confirm-label">رقم العملية</span>
+                  <span class="confirm-value" id="cfRef">—</span>
+                </div>
               </div>
             </div>
 
             <div class="transfer-card">
-              <div class="transfer-card-header"><span>من</span></div>
-              <div class="transfer-card-body">
-                <div class="form-group" style="margin-bottom:16px;">
-                  <label class="form-label">* من حساب</label>
-                  <select class="form-select" id="fromAccount">
-                    <option value="waleed">مؤسسة الوليد بن طلال للإنسانية</option>
-                    <option value="gold">الحساب الجاري الذهبي</option>
-                  </select>
-                </div>
-                <div class="form-group" style="margin-bottom:16px;">
-                  <label class="form-label">* المبلغ</label>
-                  <div class="amount-input-wrapper">
-                    <input type="text" id="amount" value="1,000,000.00" placeholder="0.00">
-                    <button class="amount-currency" onclick="showToast('تغيير العملة قريباً','info')">▼ USD 🇺🇸</button>
-                  </div>
-                </div>
-                <div class="fees-box">
-                  <span class="fees-label">رسوم التحويل (0.5%): </span>
-                  <span class="fees-value" id="feesDisplay">USD 5,000.00</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="details-card">
-              <div class="details-card-header">3. تفاصيل التحويل</div>
-              <div class="details-card-body">
+              <div class="transfer-card-header"><span>تفاصيل التحويل</span></div>
+              <div class="transfer-card-body" style="text-align:center;line-height:2;font-size:14px;color:var(--text-secondary);">
                 <div>سيستم نظام الإجراءات لازم سرعات التنفيذ خلال 24 ساعة</div>
                 <div>الموافقة على نظام مراقبة البنوك بالصيغة المرافقة لهذا</div>
                 <div>نظام الإيداعات والتحويلات المالية</div>
                 <div style="margin:16px 0;"><strong>بيانات المستفيد</strong></div>
-                <div>اسم الحالة التي تم الموافقة: <strong id="detailName">غازي ساكب حسين الوحيدي</strong></div>
+                <div>اسم الحالة التي تم الموافقة: <strong id="cfDetailName">—</strong></div>
                 <div style="margin:12px 0;">
-                  يتم صرف المنحة المقدرة بمبلغ وقدره <span class="highlight-box" id="detailAmount">USD 1,000,000.00</span> لاغير
+                  يتم صرف المنحة المقدرة بمبلغ وقدره <span style="background:rgba(212,175,55,0.15);padding:4px 12px;border-radius:4px;font-weight:700;color:var(--accent-gold-light);" id="cfDetailAmount">—</span> لاغير
                 </div>
                 <div>المالية إيداع المنحة بعد استكمال ما تم التوجيه به للمستفيد:</div>
-                <div style="margin-top:8px;"><strong id="detailName2">غازي ساكب حسين الوحيدي</strong></div>
-                <div style="margin-top:16px;">
-                  <label class="checkbox-label" style="justify-content:center;">
-                    <input type="checkbox" id="agreeTerms">
-                    <span>لقد قرأت وافقت على <a href="#" class="link-gold">الشروط والأحكام الخاصة</a></span>
-                  </label>
-                </div>
+                <div style="margin-top:8px;"><strong id="cfDetailName2">—</strong></div>
               </div>
             </div>
 
             <div class="bottom-actions">
-              <button class="btn-cancel" onclick="location.href='transfers.html'">إلغاء</button>
-              <button class="btn-next" onclick="goToConfirm()">متابعة ←</button>
+              <button class="btn-back" onclick="location.href='instant-transfer.html'">← رجوع للتعديل</button>
+              <button class="btn-confirm" onclick="showToast('تم تأكيد التحويل بنجاح','success')">تأكيد التحويل ✓</button>
             </div>
           </div>
 
@@ -419,54 +319,20 @@
     if(sidebarOverlay){sidebarOverlay.addEventListener('click',()=>{sidebar.classList.remove('open');sidebarOverlay.classList.remove('active');});}
     function showToast(message,type){const toast=document.getElementById('toast'),toastIcon=document.getElementById('toastIcon'),toastMessage=document.getElementById('toastMessage');toastMessage.textContent=message;toast.className='toast show toast-'+(type||'success');if(type==='success')toastIcon.textContent='✓';else if(type==='error')toastIcon.textContent='✕';else toastIcon.textContent='ℹ';setTimeout(()=>{toast.classList.remove('show');},3000);}
 
-    const amountInput = document.getElementById('amount');
-    const feesDisplay = document.getElementById('feesDisplay');
-    const detailAmount = document.getElementById('detailAmount');
-    const detailName = document.getElementById('detailName');
-    const detailName2 = document.getElementById('detailName2');
-    const beneficiarySelect = document.getElementById('beneficiary');
-
-    function formatNumber(num) {
-      return parseFloat(num.replace(/,/g, '')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-    }
-
-    amountInput.addEventListener('input', function() {
-      let val = this.value.replace(/[^0-9.]/g, '');
-      if(val) {
-        let num = parseFloat(val);
-        if(!isNaN(num)) {
-          this.value = num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-          let fees = (num * 0.005).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-          feesDisplay.textContent = 'USD ' + fees;
-          detailAmount.textContent = 'USD ' + this.value;
-        }
-      }
-    });
-
-    beneficiarySelect.addEventListener('change', function() {
-      let name = this.options[this.selectedIndex].text;
-      detailName.textContent = name;
-      detailName2.textContent = name;
-    });
-
-    function goToConfirm() {
-      const agree = document.getElementById('agreeTerms');
-      if(!agree.checked) {
-        showToast('يجب الموافقة على الشروط والأحكام','error');
-        return;
-      }
-      const data = {
-        transferVia: document.getElementById('transferVia').value,
-        transferViaText: document.getElementById('transferVia').options[document.getElementById('transferVia').selectedIndex].text,
-        beneficiary: document.getElementById('beneficiary').value,
-        beneficiaryText: document.getElementById('beneficiary').options[document.getElementById('beneficiary').selectedIndex].text,
-        fromAccount: document.getElementById('fromAccount').value,
-        fromAccountText: document.getElementById('fromAccount').options[document.getElementById('fromAccount').selectedIndex].text,
-        amount: document.getElementById('amount').value,
-        fees: feesDisplay.textContent
-      };
-      sessionStorage.setItem('transferData', JSON.stringify(data));
-      location.href = 'instant-transfer-confirm.html';
+    const data = JSON.parse(sessionStorage.getItem('transferData') || '{}');
+    if(data.transferViaText) {
+      document.getElementById('cfTransferVia').textContent = data.transferViaText;
+      document.getElementById('cfBeneficiary').textContent = data.beneficiaryText;
+      document.getElementById('cfFromAccount').textContent = data.fromAccountText;
+      document.getElementById('cfAmount').textContent = 'USD ' + data.amount;
+      document.getElementById('cfFees').textContent = data.fees;
+      let total = parseFloat(data.amount.replace(/,/g, '')) + parseFloat(data.fees.replace(/[^0-9.]/g, ''));
+      document.getElementById('cfTotal').textContent = 'USD ' + total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      document.getElementById('cfDate').textContent = new Date().toLocaleDateString('ar-SA');
+      document.getElementById('cfRef').textContent = 'TXN-' + Math.floor(Math.random() * 1000000000);
+      document.getElementById('cfDetailName').textContent = data.beneficiaryText;
+      document.getElementById('cfDetailName2').textContent = data.beneficiaryText;
+      document.getElementById('cfDetailAmount').textContent = 'USD ' + data.amount;
     }
   </script>
 </body>
