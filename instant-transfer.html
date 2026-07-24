@@ -4,8 +4,141 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تحويل فوري | البنك السعودي</title>
-  <link rel="stylesheet" href="style.css">
   <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-card: #1e293b;
+      --bg-hover: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border-color: #334155;
+      --accent-gold: #d4af37;
+      --accent-gold-light: #fbbf24;
+      --accent-green: #22c55e;
+      --accent-red: #ef4444;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      direction: rtl;
+    }
+    .app-container { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 260px;
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--border-color);
+      padding: 20px 0;
+      position: fixed;
+      right: 0;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      transition: transform 0.3s;
+    }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px 20px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+    .brand-icon { font-size: 28px; }
+    .brand-text { font-size: 16px; font-weight: 700; color: var(--accent-gold); }
+    .brand-sub { font-size: 11px; color: var(--text-muted); }
+    .nav-section { margin-bottom: 16px; }
+    .nav-section-title {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      padding: 0 20px 8px;
+      letter-spacing: 1px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .nav-item:hover, .nav-item.active {
+      background: var(--bg-hover);
+      color: var(--accent-gold);
+      border-right: 3px solid var(--accent-gold);
+    }
+    .nav-item .icon { font-size: 18px; }
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 99;
+    }
+    .sidebar-overlay.active { display: block; }
+    .main-content {
+      flex: 1;
+      margin-right: 260px;
+      min-height: 100vh;
+    }
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-title { font-size: 20px; font-weight: 700; }
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+    .header-btn {
+      background: var(--bg-hover);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      transition: background 0.2s;
+    }
+    .user-profile:hover { background: var(--bg-hover); }
+    .user-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-gold), #b8860b);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: #fff;
+    }
+    .user-name { font-size: 14px; font-weight: 600; }
+    .user-role { font-size: 11px; color: var(--accent-gold); }
+    .mobile-menu-btn {
+      display: none;
+      background: none; border: none;
+      color: var(--text-primary);
+      font-size: 24px; cursor: pointer;
+    }
+    .page-content { padding: 24px; max-width: 1400px; }
     .top-services-bar {
       display: flex;
       gap: 8px;
@@ -38,6 +171,26 @@
       border-color: var(--accent-gold);
     }
     .top-service-btn .icon { font-size: 20px; }
+    .transfer-layout { display: flex; gap: 20px; }
+    .transfer-main { flex: 1; min-width: 0; }
+    .transfer-steps {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+    .step { display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0.4; }
+    .step.active { opacity: 1; }
+    .step-number {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--bg-hover);
+      border: 2px solid var(--border-color);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px;
+    }
+    .step.active .step-number { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
+    .step-label { font-size: 12px; color: var(--text-secondary); }
     .transfer-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -56,6 +209,40 @@
       align-items: center;
     }
     .transfer-card-body { padding: 24px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+    .form-select, .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    .form-select:focus, .form-input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+    }
+    .form-select optgroup {
+      background: var(--bg-secondary);
+      color: var(--accent-gold);
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .form-select option {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      padding: 8px;
+    }
     .form-row-flex {
       display: flex;
       gap: 16px;
@@ -109,7 +296,9 @@
       cursor: pointer;
       border: none;
       font-family: inherit;
+      white-space: nowrap;
     }
+    .amount-currency:hover { background: linear-gradient(135deg, #2d4a6f, #3d5a7f); }
     .fees-box {
       display: inline-block;
       padding: 10px 20px;
@@ -179,6 +368,7 @@
       font-weight: 700;
       cursor: pointer;
     }
+    .btn-next:disabled { opacity: 0.5; cursor: not-allowed; }
     .right-sidebar {
       width: 280px;
       flex-shrink: 0;
@@ -217,19 +407,76 @@
       color: var(--accent-gold);
     }
     .right-menu-item:last-child { border-bottom: none; }
-    .transfer-layout {
+    .checkbox-label {
       display: flex;
-      gap: 20px;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 14px;
     }
-    .transfer-main { flex: 1; min-width: 0; }
+    .checkbox-label input { width: 18px; height: 18px; accent-color: var(--accent-gold); }
+    .link-gold { color: var(--accent-gold); text-decoration: underline; }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      padding: 14px 24px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.3s;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .toast-icon { font-size: 20px; }
+    .toast-success { border-color: var(--accent-green); }
+    .toast-error { border-color: var(--accent-red); }
+    .toast-info { border-color: var(--accent-gold); }
+    .currency-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      z-index: 10;
+      display: none;
+      min-width: 140px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .currency-dropdown.show { display: block; }
+    .currency-option {
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .currency-option:hover { background: var(--bg-hover); color: var(--accent-gold); }
+    .currency-wrapper { position: relative; display: inline-block; }
     @media (max-width: 992px) {
       .right-sidebar { display: none; }
       .transfer-layout { flex-direction: column; }
     }
     @media (max-width: 768px) {
+      .sidebar { transform: translateX(100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-right: 0; }
+      .mobile-menu-btn { display: block; }
       .form-row-flex { flex-direction: column; }
       .form-group-flex { width: 100%; }
       .bottom-actions { flex-direction: column; }
+      .top-header { padding: 12px 16px; }
+      .page-content { padding: 16px; }
     }
   </style>
 </head>
@@ -312,15 +559,132 @@
                   <div class="form-group-flex">
                     <label class="form-label">* التحويل بواسطة</label>
                     <select class="form-select" id="transferVia">
-                      <option value="saudi">بنوك سعودية</option>
-                      <option value="iskan">بنك الإسكان</option>
+                      <optgroup label="🏦 البنوك السعودية">
+                        <option value="alrajhi">بنك الراجحي</option>
+                        <option value="alahli">البنك الأهلي السعودي</option>
+                        <option value="riyad">بنك الرياض</option>
+                        <option value="albilad">بنك البلاد</option>
+                        <option value="aljazira">بنك الجزيرة</option>
+                        <option value="sab">بنك ساب (السعودي البريطاني)</option>
+                        <option value="anb">البنك العربي الوطني</option>
+                        <option value="bsf">البنك السعودي الفرنسي</option>
+                        <option value="saib">البنك السعودي للاستثمار</option>
+                        <option value="alinma">بنك الإنماء</option>
+                        <option value="albaraka">بنك البركة</option>
+                        <option value="gib">بنك الخليج الدولي</option>
+                        <option value="muscat_sa">بنك مسقط – فرع السعودية</option>
+                        <option value="samba">البنك الأول (سابقاً سامبا)</option>
+                        <option value="alistithmar">بنك الاستثمار</option>
+                      </optgroup>
+                      <optgroup label="🇦🇪 الإمارات العربية المتحدة">
+                        <option value="fab">بنك أبوظبي الأول</option>
+                        <option value="emirates_nbd">بنك الإمارات دبي الوطني</option>
+                        <option value="dubai_islamic">بنك دبي الإسلامي</option>
+                      </optgroup>
+                      <optgroup label="🇰🇼 الكويت">
+                        <option value="nbk">بنك الكويت الوطني</option>
+                        <option value="boubyan">بنك بوبيان</option>
+                        <option value="warba">بنك وربة</option>
+                      </optgroup>
+                      <optgroup label="🇧🇭 البحرين">
+                        <option value="nb_bahrain">بنك البحرين الوطني</option>
+                        <option value="abc">بنك المؤسسة العربية المصرفية</option>
+                        <option value="albaraka_bh">بنك البركة البحرين</option>
+                      </optgroup>
+                      <optgroup label="🇶🇦 قطر">
+                        <option value="qnb">بنك قطر الوطني</option>
+                        <option value="doha_bank">بنك الدوحة</option>
+                        <option value="alrayan">بنك الريان</option>
+                      </optgroup>
+                      <optgroup label="🇯🇴 الأردن">
+                        <option value="arabi_jo">البنك العربي</option>
+                        <option value="cairo_amm">بنك القاهرة عمان</option>
+                        <option value="jordan_bank">بنك الأردن</option>
+                      </optgroup>
+                      <optgroup label="🇪🇬 مصر">
+                        <option value="nbe">البنك الأهلي المصري</option>
+                        <option value="banque_misr">بنك مصر</option>
+                        <option value="cib">البنك التجاري الدولي (CIB)</option>
+                      </optgroup>
+                      <optgroup label="🇮🇶 العراق">
+                        <option value="rafidain">مصرف الرافدين</option>
+                        <option value="alrasheed">مصرف الرشيد</option>
+                        <option value="trade_bank_iq">مصرف التجارة العراقي</option>
+                      </optgroup>
+                      <optgroup label="🇱🇧 لبنان">
+                        <option value="blom">بنك لبنان والمهجر (BLOM)</option>
+                        <option value="byblos">بنك بيبلوس</option>
+                        <option value="audi">بنك عودة</option>
+                      </optgroup>
+                      <optgroup label="🇴🇲 سلطنة عمان">
+                        <option value="bank_muscat_om">بنك مسقط</option>
+                        <option value="dhofar">بنك ظفار</option>
+                        <option value="oman_arab">بنك عمان العربي</option>
+                      </optgroup>
+                      <optgroup label="🇩🇿 الجزائر">
+                        <option value="bea">بنك الجزائر الخارجي</option>
+                        <option value="bdl">بنك التنمية المحلية</option>
+                        <option value="bna">البنك الوطني الجزائري</option>
+                      </optgroup>
+                      <optgroup label="🇲🇦 المغرب">
+                        <option value="bmce">بنك المغرب للتجارة الخارجية (BMCE)</option>
+                        <option value="attijari">التجاري وفا بنك</option>
+                        <option value="bmci">البنك المغربي للتجارة والصناعة</option>
+                      </optgroup>
+                      <optgroup label="🇹🇳 تونس">
+                        <option value="bnt">البنك الوطني التونسي</option>
+                        <option value="bti">بنك تونس العربي للاستثمار</option>
+                        <option value="zitouna">بنك الزيتونة</option>
+                      </optgroup>
+                      <optgroup label="🇸🇩 السودان">
+                        <option value="khartoum">بنك الخرطوم</option>
+                        <option value="omdurman">بنك أم درمان الوطني</option>
+                        <option value="faisal_sd">بنك فيصل الإسلامي السوداني</option>
+                      </optgroup>
+                      <optgroup label="🇱🇾 ليبيا">
+                        <option value="ntb_ly">المصرف التجاري الوطني</option>
+                        <option value="nahb">المصرف الوطني العقاري والزراعي</option>
+                        <option value="jumhouria">مصرف الجمهورية</option>
+                      </optgroup>
+                      <optgroup label="🇾🇪 اليمن">
+                        <option value="kuraimi">بنك الكريمي</option>
+                        <option value="tadhamon">بنك التضامن الإسلامي الدولي</option>
+                        <option value="yemen_intl">بنك اليمن الدولي</option>
+                      </optgroup>
+                      <optgroup label="🇸🇾 سوريا">
+                        <option value="cb_syria">المصرف التجاري السوري</option>
+                        <option value="syria_meh">بنك سوريا والمهجر</option>
+                        <option value="albaraka_sy">بنك البركة سوريا</option>
+                      </optgroup>
+                      <optgroup label="🇵🇸 فلسطين">
+                        <option value="bank_palestine">بنك فلسطين</option>
+                        <option value="quds">بنك القدس</option>
+                        <option value="arabi_ps">البنك العربي – فلسطين</option>
+                      </optgroup>
+                      <optgroup label="🌍 خدمات تحويل دولية">
+                        <option value="western_union">ويسترن يونيون (Western Union)</option>
+                        <option value="moneygram">موني جرام (MoneyGram)</option>
+                        <option value="ria">ريا فايننشال (Ria)</option>
+                        <option value="express_money">إكسبريس موني</option>
+                        <option value="wise">وايز (Wise / TransferWise)</option>
+                        <option value="remitly">ريميتلي (Remitly)</option>
+                        <option value="other">أخرى</option>
+                      </optgroup>
                     </select>
                   </div>
                   <div class="form-group-flex">
-                    <label class="form-label">* المستفيد</label>
-                    <select class="form-select" id="beneficiary">
-                      <option value="ghazi">غازي ساكب حسين الوحيدي</option>
-                    </select>
+                    <label class="form-label">* اسم المستفيد</label>
+                    <input type="text" class="form-input" id="beneficiaryName" placeholder="أدخل اسم المستفيد بالكامل" maxlength="100">
+                  </div>
+                </div>
+                <div class="form-row-flex">
+                  <div class="form-group-flex">
+                    <label class="form-label">رقم الحساب / الآيبان</label>
+                    <input type="text" class="form-input" id="beneficiaryAccount" placeholder="SA00 0000 0000 0000 0000 0000" maxlength="34">
+                  </div>
+                  <div class="form-group-flex">
+                    <label class="form-label">رقم الهاتف (اختياري)</label>
+                    <input type="tel" class="form-input" id="beneficiaryPhone" placeholder="+966 5X XXX XXXX" maxlength="20">
                   </div>
                 </div>
                 <button class="add-btn" onclick="showToast('قريباً','info')"><span style="font-size:18px;">+</span> إضافة مستفيد جديد</button>
@@ -340,13 +704,21 @@
                 <div class="form-group" style="margin-bottom:16px;">
                   <label class="form-label">* المبلغ</label>
                   <div class="amount-input-wrapper">
-                    <input type="text" id="amount" value="1,000,000.00" placeholder="0.00">
-                    <button class="amount-currency" onclick="showToast('تغيير العملة قريباً','info')">▼ USD 🇺🇸</button>
+                    <input type="text" id="amount" value="" placeholder="0.00" maxlength="16">
+                    <div class="currency-wrapper">
+                      <button class="amount-currency" id="currencyBtn" onclick="toggleCurrency()">▼ USD 🇺🇸</button>
+                      <div class="currency-dropdown" id="currencyDropdown">
+                        <div class="currency-option" onclick="setCurrency('USD','🇺🇸')">🇺🇸 USD - دولار أمريكي</div>
+                        <div class="currency-option" onclick="setCurrency('SAR','🇸🇦')">🇸🇦 SAR - ريال سعودي</div>
+                        <div class="currency-option" onclick="setCurrency('EUR','🇪🇺')">🇪🇺 EUR - يورو</div>
+                      </div>
+                    </div>
                   </div>
+                  <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">الحد الأقصى: 999,999,999,999.99</div>
                 </div>
                 <div class="fees-box">
                   <span class="fees-label">رسوم التحويل (0.5%): </span>
-                  <span class="fees-value" id="feesDisplay">USD 5,000.00</span>
+                  <span class="fees-value" id="feesDisplay">USD 0.00</span>
                 </div>
               </div>
             </div>
@@ -358,12 +730,12 @@
                 <div>الموافقة على نظام مراقبة البنوك بالصيغة المرافقة لهذا</div>
                 <div>نظام الإيداعات والتحويلات المالية</div>
                 <div style="margin:16px 0;"><strong>بيانات المستفيد</strong></div>
-                <div>اسم الحالة التي تم الموافقة: <strong id="detailName">غازي ساكب حسين الوحيدي</strong></div>
+                <div>اسم الحالة التي تم الموافقة: <strong id="detailName">—</strong></div>
                 <div style="margin:12px 0;">
-                  يتم صرف المنحة المقدرة بمبلغ وقدره <span class="highlight-box" id="detailAmount">USD 1,000,000.00</span> لاغير
+                  يتم صرف المنحة المقدرة بمبلغ وقدره <span class="highlight-box" id="detailAmount">USD 0.00</span> لاغير
                 </div>
                 <div>المالية إيداع المنحة بعد استكمال ما تم التوجيه به للمستفيد:</div>
-                <div style="margin-top:8px;"><strong id="detailName2">غازي ساكب حسين الوحيدي</strong></div>
+                <div style="margin-top:8px;"><strong id="detailName2">—</strong></div>
                 <div style="margin-top:16px;">
                   <label class="checkbox-label" style="justify-content:center;">
                     <input type="checkbox" id="agreeTerms">
@@ -375,7 +747,7 @@
 
             <div class="bottom-actions">
               <button class="btn-cancel" onclick="location.href='transfers.html'">إلغاء</button>
-              <button class="btn-next" onclick="goToConfirm()">متابعة ←</button>
+              <button class="btn-next" id="btnNext" onclick="goToConfirm()" disabled>متابعة ←</button>
             </div>
           </div>
 
@@ -412,57 +784,131 @@
   </div>
   <div class="toast" id="toast"><span class="toast-icon" id="toastIcon">✓</span><span id="toastMessage">تمت العملية بنجاح</span></div>
   <script>
-    const mobileMenuBtn=document.getElementById('mobileMenuBtn');
-    const sidebar=document.getElementById('sidebar');
-    const sidebarOverlay=document.getElementById('sidebarOverlay');
-    if(mobileMenuBtn){mobileMenuBtn.addEventListener('click',()=>{sidebar.classList.toggle('open');sidebarOverlay.classList.toggle('active');});}
-    if(sidebarOverlay){sidebarOverlay.addEventListener('click',()=>{sidebar.classList.remove('open');sidebarOverlay.classList.remove('active');});}
-    function showToast(message,type){const toast=document.getElementById('toast'),toastIcon=document.getElementById('toastIcon'),toastMessage=document.getElementById('toastMessage');toastMessage.textContent=message;toast.className='toast show toast-'+(type||'success');if(type==='success')toastIcon.textContent='✓';else if(type==='error')toastIcon.textContent='✕';else toastIcon.textContent='ℹ';setTimeout(()=>{toast.classList.remove('show');},3000);}
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    if(mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        sidebarOverlay.classList.toggle('active');
+      });
+    }
+    if(sidebarOverlay) {
+      sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('active');
+      });
+    }
+    function showToast(message, type) {
+      const toast = document.getElementById('toast');
+      const toastIcon = document.getElementById('toastIcon');
+      const toastMessage = document.getElementById('toastMessage');
+      toastMessage.textContent = message;
+      toast.className = 'toast show toast-' + (type || 'success');
+      if(type === 'success') toastIcon.textContent = '✓';
+      else if(type === 'error') toastIcon.textContent = '✕';
+      else toastIcon.textContent = 'ℹ';
+      setTimeout(() => { toast.classList.remove('show'); }, 3000);
+    }
+
+    let currentCurrency = 'USD';
+    let currentFlag = '🇺🇸';
+    const currencySymbols = { 'USD': '$', 'SAR': 'ر.س', 'EUR': '€' };
+
+    function toggleCurrency() {
+      document.getElementById('currencyDropdown').classList.toggle('show');
+    }
+    function setCurrency(code, flag) {
+      currentCurrency = code;
+      currentFlag = flag;
+      document.getElementById('currencyBtn').innerHTML = '▼ ' + code + ' ' + flag;
+      document.getElementById('currencyDropdown').classList.remove('show');
+      updateAmountDisplay();
+    }
+    document.addEventListener('click', function(e) {
+      if(!e.target.closest('.currency-wrapper')) {
+        document.getElementById('currencyDropdown').classList.remove('show');
+      }
+    });
 
     const amountInput = document.getElementById('amount');
     const feesDisplay = document.getElementById('feesDisplay');
     const detailAmount = document.getElementById('detailAmount');
     const detailName = document.getElementById('detailName');
     const detailName2 = document.getElementById('detailName2');
-    const beneficiarySelect = document.getElementById('beneficiary');
+    const beneficiaryName = document.getElementById('beneficiaryName');
+    const btnNext = document.getElementById('btnNext');
+    const agreeTerms = document.getElementById('agreeTerms');
 
-    function formatNumber(num) {
-      return parseFloat(num.replace(/,/g, '')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    function formatNumber(numStr) {
+      let clean = numStr.replace(/[^0-9.]/g, '');
+      let parts = clean.split('.');
+      if(parts.length > 2) clean = parts[0] + '.' + parts.slice(1).join('');
+      if(parts[0].length > 12) parts[0] = parts[0].slice(0, 12);
+      clean = parts[0] + (parts[1] !== undefined ? '.' + parts[1].slice(0, 2) : '');
+      if(!clean || clean === '.') return '';
+      let num = parseFloat(clean);
+      if(isNaN(num)) return '';
+      return num.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 2});
+    }
+
+    function updateAmountDisplay() {
+      let val = amountInput.value.replace(/,/g, '');
+      let num = parseFloat(val);
+      if(!isNaN(num) && num > 0) {
+        let formatted = num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        amountInput.value = formatted;
+        let fees = (num * 0.005).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        feesDisplay.textContent = currentCurrency + ' ' + fees;
+        detailAmount.textContent = currentCurrency + ' ' + formatted;
+      } else {
+        feesDisplay.textContent = currentCurrency + ' 0.00';
+        detailAmount.textContent = currentCurrency + ' 0.00';
+      }
     }
 
     amountInput.addEventListener('input', function() {
-      let val = this.value.replace(/[^0-9.]/g, '');
-      if(val) {
-        let num = parseFloat(val);
-        if(!isNaN(num)) {
-          this.value = num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-          let fees = (num * 0.005).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-          feesDisplay.textContent = 'USD ' + fees;
-          detailAmount.textContent = 'USD ' + this.value;
-        }
-      }
+      let raw = this.value.replace(/[^0-9.]/g, '');
+      let parts = raw.split('.');
+      if(parts[0].length > 12) parts[0] = parts[0].slice(0, 12);
+      raw = parts[0] + (parts[1] !== undefined ? '.' + parts[1].slice(0, 2) : '');
+      this.value = raw;
+      updateAmountDisplay();
+      validateForm();
     });
 
-    beneficiarySelect.addEventListener('change', function() {
-      let name = this.options[this.selectedIndex].text;
+    amountInput.addEventListener('blur', function() {
+      updateAmountDisplay();
+    });
+
+    beneficiaryName.addEventListener('input', function() {
+      let name = this.value.trim() || '—';
       detailName.textContent = name;
       detailName2.textContent = name;
+      validateForm();
     });
 
+    agreeTerms.addEventListener('change', validateForm);
+
+    function validateForm() {
+      const hasName = beneficiaryName.value.trim().length > 0;
+      const hasAmount = parseFloat(amountInput.value.replace(/,/g, '')) > 0;
+      const hasAgree = agreeTerms.checked;
+      btnNext.disabled = !(hasName && hasAmount && hasAgree);
+    }
+
     function goToConfirm() {
-      const agree = document.getElementById('agreeTerms');
-      if(!agree.checked) {
-        showToast('يجب الموافقة على الشروط والأحكام','error');
-        return;
-      }
+      if(btnNext.disabled) return;
       const data = {
         transferVia: document.getElementById('transferVia').value,
         transferViaText: document.getElementById('transferVia').options[document.getElementById('transferVia').selectedIndex].text,
-        beneficiary: document.getElementById('beneficiary').value,
-        beneficiaryText: document.getElementById('beneficiary').options[document.getElementById('beneficiary').selectedIndex].text,
+        beneficiaryName: beneficiaryName.value,
+        beneficiaryAccount: document.getElementById('beneficiaryAccount').value,
+        beneficiaryPhone: document.getElementById('beneficiaryPhone').value,
         fromAccount: document.getElementById('fromAccount').value,
         fromAccountText: document.getElementById('fromAccount').options[document.getElementById('fromAccount').selectedIndex].text,
-        amount: document.getElementById('amount').value,
+        amount: amountInput.value,
+        currency: currentCurrency,
         fees: feesDisplay.textContent
       };
       sessionStorage.setItem('transferData', JSON.stringify(data));
@@ -470,4 +916,4 @@
     }
   </script>
 </body>
-</html>
+  </html>
