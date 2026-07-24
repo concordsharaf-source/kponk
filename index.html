@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>الرئيسية | البنك السعودي</title>
   <link rel="stylesheet" href="style.css">
+<style>
+    .hidden-row { display: none; }
+    .transactions-expanded .hidden-row { display: table-row; }
+    .transactions-expanded { max-height: none !important; }
+    #transactionsContainer { max-height: 400px; overflow-y: auto; transition: max-height 0.3s ease; }
+    .transactions-expanded #transactionsContainer { max-height: 2000px; overflow-y: auto; }
+    #showMoreBtn { transition: all 0.3s ease; }
+    #showMoreBtn:hover { opacity: 0.9; transform: scale(1.02); }
+</style>
 </head>
 <body>
   <div class="app-container">
@@ -267,10 +276,11 @@
         <div class="section-card" style="margin-top:24px;">
           <div class="section-card-header">
             <div class="section-card-title"><span class="icon">📋</span> آخر العمليات</div>
+            <button class="header-btn" id="showMoreBtn" onclick="toggleTransactions()" style="font-size:13px;padding:6px 16px;border-radius:8px;background:var(--accent-gold);color:#1a1a2e;border:none;cursor:pointer;">عرض المزيد</button>
           </div>
           <div class="section-card-body">
-            <div class="table-container">
-              <table class="data-table">
+            <div class="table-container" id="transactionsContainer">
+              <table class="data-table" id="transactionsTable">
                 <thead>
                   <tr>
                     <th>العملية</th>
@@ -279,55 +289,1205 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+          <tr class="txn-row" data-index="0">
                     <td>
                       <div class="txn-type">
                         <div class="txn-icon in">📥</div>
-                        <span>تحويل وارد - شركة الأعمال</span>
+                        <span>مساعدة - مؤسسة التنمية المستدامة</span>
                       </div>
                     </td>
-                    <td>27/06/2026</td>
-                    <td class="txn-amount in">+SAR 85,000</td>
+                    <td>18/07/2026</td>
+                    <td class="txn-amount in">+USD 4,994,069</td>
                   </tr>
-                  <tr>
+          <tr class="txn-row" data-index="1">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع تعليمي - مؤسسة الفلاحين</span>
+                      </div>
+                    </td>
+                    <td>17/07/2026</td>
+                    <td class="txn-amount in">+USD 1,070,129</td>
+                  </tr>
+          <tr class="txn-row" data-index="2">
                     <td>
                       <div class="txn-type">
                         <div class="txn-icon out">📤</div>
-                        <span>سداد فاتورة الكهرباء</span>
+                        <span>تحويل - تقوى بنت عبدالله</span>
+                      </div>
+                    </td>
+                    <td>16/07/2026</td>
+                    <td class="txn-amount out">-USD 4,857,911</td>
+                  </tr>
+          <tr class="txn-row" data-index="3">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع صحي - مؤسسة الفلاحين</span>
+                      </div>
+                    </td>
+                    <td>15/07/2026</td>
+                    <td class="txn-amount in">+USD 4,587,974</td>
+                  </tr>
+          <tr class="txn-row" data-index="4">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - شيرين بنت أحمد</span>
+                      </div>
+                    </td>
+                    <td>05/07/2026</td>
+                    <td class="txn-amount out">-USD 4,382,935</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="5">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - لؤي بن طلال</span>
+                      </div>
+                    </td>
+                    <td>03/07/2026</td>
+                    <td class="txn-amount out">-SAR 1,521,379</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="6">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - صندوق دعم المشاريع</span>
+                      </div>
+                    </td>
+                    <td>03/07/2026</td>
+                    <td class="txn-amount in">+EUR 4,791,859</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="7">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع اتصالات - جمعية السلام العالمي</span>
+                      </div>
+                    </td>
+                    <td>02/07/2026</td>
+                    <td class="txn-amount in">+USD 2,314,144</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="8">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع رياضي - صندوق البحث العلمي</span>
+                      </div>
+                    </td>
+                    <td>02/07/2026</td>
+                    <td class="txn-amount in">+EUR 2,642,246</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="9">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - سميرة بنت عبدالعزيز</span>
+                      </div>
+                    </td>
+                    <td>30/06/2026</td>
+                    <td class="txn-amount out">-EUR 4,854,952</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="10">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع زراعي - مؤسسة سلمان الإنسانية</span>
+                      </div>
+                    </td>
+                    <td>30/06/2026</td>
+                    <td class="txn-amount in">+EUR 1,058,141</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="11">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع طاقة - مؤسسة التعليم العالي</span>
+                      </div>
+                    </td>
+                    <td>30/06/2026</td>
+                    <td class="txn-amount in">+EUR 4,439,985</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="12">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - آية بنت خالد</span>
+                      </div>
+                    </td>
+                    <td>29/06/2026</td>
+                    <td class="txn-amount out">-USD 2,656,472</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="13">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية المرأة</span>
+                      </div>
+                    </td>
+                    <td>29/06/2026</td>
+                    <td class="txn-amount in">+SAR 4,922,464</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="14">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع اجتماعي - صندوق ذوي الاحتياجات الخاصة</span>
                       </div>
                     </td>
                     <td>26/06/2026</td>
-                    <td class="txn-amount out">-SAR 1,240</td>
+                    <td class="txn-amount in">+SAR 4,154,827</td>
                   </tr>
-                  <tr>
+          <tr class="txn-row hidden-row" data-index="15">
                     <td>
                       <div class="txn-type">
                         <div class="txn-icon out">📤</div>
-                        <span>تحويل فوري - غازي ساكب</span>
-                      </div>
-                    </td>
-                    <td>25/06/2026</td>
-                    <td class="txn-amount out">-USD 50,000</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="txn-type">
-                        <div class="txn-icon in">📥</div>
-                        <span>عائد استثمار - صندوق النمو</span>
+                        <span>تحويل - علي بن خالد</span>
                       </div>
                     </td>
                     <td>24/06/2026</td>
-                    <td class="txn-amount in">+SAR 12,500</td>
+                    <td class="txn-amount out">-SAR 4,233,942</td>
                   </tr>
-                  <tr>
+          <tr class="txn-row hidden-row" data-index="16">
                     <td>
                       <div class="txn-type">
                         <div class="txn-icon out">📤</div>
-                        <span>رسوم إدارة الحساب</span>
+                        <span>تحويل - أيمن بن عبدالعزيز</span>
                       </div>
                     </td>
-                    <td>23/06/2026</td>
-                    <td class="txn-amount out">-SAR 150</td>
+                    <td>21/06/2026</td>
+                    <td class="txn-amount out">-USD 4,802,736</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="17">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع إسكان - مؤسسة الابتكار</span>
+                      </div>
+                    </td>
+                    <td>20/06/2026</td>
+                    <td class="txn-amount in">+SAR 4,300,060</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="18">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية البر</span>
+                      </div>
+                    </td>
+                    <td>19/06/2026</td>
+                    <td class="txn-amount in">+SAR 2,944,565</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="19">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع صناعي - صندوق المحافظة</span>
+                      </div>
+                    </td>
+                    <td>16/06/2026</td>
+                    <td class="txn-amount in">+EUR 3,224,725</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="20">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع صناعي - صندوق الحرفيين</span>
+                      </div>
+                    </td>
+                    <td>16/06/2026</td>
+                    <td class="txn-amount in">+SAR 1,092,893</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="21">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية الطفولة</span>
+                      </div>
+                    </td>
+                    <td>15/06/2026</td>
+                    <td class="txn-amount in">+SAR 2,934,477</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="22">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع اتصالات - مؤسسة السلام</span>
+                      </div>
+                    </td>
+                    <td>11/06/2026</td>
+                    <td class="txn-amount in">+SAR 3,039,580</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="23">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - دينا بنت محمد</span>
+                      </div>
+                    </td>
+                    <td>10/06/2026</td>
+                    <td class="txn-amount out">-EUR 4,060,209</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="24">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - مؤسسة السلام</span>
+                      </div>
+                    </td>
+                    <td>01/06/2026</td>
+                    <td class="txn-amount in">+USD 4,930,372</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="25">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - مؤسسة الابتكار</span>
+                      </div>
+                    </td>
+                    <td>01/06/2026</td>
+                    <td class="txn-amount in">+USD 2,089,075</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="26">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - مؤسسة السلام</span>
+                      </div>
+                    </td>
+                    <td>31/05/2026</td>
+                    <td class="txn-amount in">+USD 2,514,404</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="27">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع صحي - مؤسسة الإغاثة</span>
+                      </div>
+                    </td>
+                    <td>27/05/2026</td>
+                    <td class="txn-amount in">+SAR 3,054,715</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="28">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية الفنون</span>
+                      </div>
+                    </td>
+                    <td>27/05/2026</td>
+                    <td class="txn-amount in">+EUR 2,247,870</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="29">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع تعليمي - مؤسسة الثقافة</span>
+                      </div>
+                    </td>
+                    <td>27/05/2026</td>
+                    <td class="txn-amount in">+USD 4,710,571</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="30">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - سعاد بنت عبدالله</span>
+                      </div>
+                    </td>
+                    <td>26/05/2026</td>
+                    <td class="txn-amount out">-USD 3,518,649</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="31">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - بندر بن سعد</span>
+                      </div>
+                    </td>
+                    <td>25/05/2026</td>
+                    <td class="txn-amount out">-EUR 3,483,965</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="32">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية ريادة الأعمال</span>
+                      </div>
+                    </td>
+                    <td>22/05/2026</td>
+                    <td class="txn-amount in">+EUR 3,970,147</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="33">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - صندوق ذوي الاحتياجات الخاصة</span>
+                      </div>
+                    </td>
+                    <td>21/05/2026</td>
+                    <td class="txn-amount in">+EUR 1,628,522</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="34">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع تنموي - جمعية البركة</span>
+                      </div>
+                    </td>
+                    <td>21/05/2026</td>
+                    <td class="txn-amount in">+USD 4,257,761</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="35">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع بيئي - مؤسسة العون</span>
+                      </div>
+                    </td>
+                    <td>20/05/2026</td>
+                    <td class="txn-amount in">+USD 3,914,575</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="36">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع سياحي - جمعية السلام العالمي</span>
+                      </div>
+                    </td>
+                    <td>20/05/2026</td>
+                    <td class="txn-amount in">+USD 1,714,409</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="37">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع ثقافي - صندوق دعم المشاريع</span>
+                      </div>
+                    </td>
+                    <td>19/05/2026</td>
+                    <td class="txn-amount in">+USD 2,105,215</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="38">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية المرأة</span>
+                      </div>
+                    </td>
+                    <td>17/05/2026</td>
+                    <td class="txn-amount in">+SAR 1,311,604</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="39">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع زراعي - صندوق البحث العلمي</span>
+                      </div>
+                    </td>
+                    <td>16/05/2026</td>
+                    <td class="txn-amount in">+USD 1,675,744</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="40">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - عفاف بنت أحمد</span>
+                      </div>
+                    </td>
+                    <td>15/05/2026</td>
+                    <td class="txn-amount out">-USD 3,119,388</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="41">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - منى بنت خالد</span>
+                      </div>
+                    </td>
+                    <td>13/05/2026</td>
+                    <td class="txn-amount out">-USD 4,833,808</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="42">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - سلطان بن محمد</span>
+                      </div>
+                    </td>
+                    <td>12/05/2026</td>
+                    <td class="txn-amount out">-EUR 4,184,899</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="43">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - صندوق دعم المشاريع</span>
+                      </div>
+                    </td>
+                    <td>12/05/2026</td>
+                    <td class="txn-amount in">+EUR 1,399,132</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="44">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - مؤسسة التعليم العالي</span>
+                      </div>
+                    </td>
+                    <td>08/05/2026</td>
+                    <td class="txn-amount in">+SAR 4,068,575</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="45">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع إسكان - جمعية الصيادين</span>
+                      </div>
+                    </td>
+                    <td>08/05/2026</td>
+                    <td class="txn-amount in">+USD 4,954,840</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="46">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - وفاء بنت محمد</span>
+                      </div>
+                    </td>
+                    <td>07/05/2026</td>
+                    <td class="txn-amount out">-SAR 3,292,217</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="47">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - أمل بنت فهد</span>
+                      </div>
+                    </td>
+                    <td>05/05/2026</td>
+                    <td class="txn-amount out">-SAR 3,307,904</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="48">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية المجتمع</span>
+                      </div>
+                    </td>
+                    <td>04/05/2026</td>
+                    <td class="txn-amount in">+USD 2,532,430</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="49">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية التطوع</span>
+                      </div>
+                    </td>
+                    <td>30/04/2026</td>
+                    <td class="txn-amount in">+USD 3,941,245</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="50">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع بنية تحتية - مؤسسة الشباب</span>
+                      </div>
+                    </td>
+                    <td>29/04/2026</td>
+                    <td class="txn-amount in">+USD 1,945,932</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="51">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - هبة بنت سعد</span>
+                      </div>
+                    </td>
+                    <td>27/04/2026</td>
+                    <td class="txn-amount out">-EUR 2,318,383</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="52">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع صناعي - مؤسسة الشباب</span>
+                      </div>
+                    </td>
+                    <td>26/04/2026</td>
+                    <td class="txn-amount in">+USD 3,083,319</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="53">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية البيئة</span>
+                      </div>
+                    </td>
+                    <td>26/04/2026</td>
+                    <td class="txn-amount in">+SAR 1,270,371</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="54">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية المجتمع</span>
+                      </div>
+                    </td>
+                    <td>26/04/2026</td>
+                    <td class="txn-amount in">+SAR 1,719,842</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="55">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع مياه - مؤسسة الشباب</span>
+                      </div>
+                    </td>
+                    <td>22/04/2026</td>
+                    <td class="txn-amount in">+SAR 2,011,745</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="56">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع ثقافي - جمعية السلام العالمي</span>
+                      </div>
+                    </td>
+                    <td>18/04/2026</td>
+                    <td class="txn-amount in">+SAR 4,938,183</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="57">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - وفاء بنت فهد</span>
+                      </div>
+                    </td>
+                    <td>18/04/2026</td>
+                    <td class="txn-amount out">-USD 1,899,446</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="58">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع طاقة - مؤسسة الشباب</span>
+                      </div>
+                    </td>
+                    <td>18/04/2026</td>
+                    <td class="txn-amount in">+EUR 2,729,877</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="59">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع اجتماعي - مؤسسة الشباب</span>
+                      </div>
+                    </td>
+                    <td>18/04/2026</td>
+                    <td class="txn-amount in">+USD 1,360,406</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="60">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - ماجدة بنت محمد</span>
+                      </div>
+                    </td>
+                    <td>17/04/2026</td>
+                    <td class="txn-amount out">-SAR 3,763,572</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="61">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - مها بنت محمد</span>
+                      </div>
+                    </td>
+                    <td>14/04/2026</td>
+                    <td class="txn-amount out">-USD 2,667,954</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="62">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - سعد بن محمد</span>
+                      </div>
+                    </td>
+                    <td>14/04/2026</td>
+                    <td class="txn-amount out">-USD 2,571,482</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="63">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية البركة</span>
+                      </div>
+                    </td>
+                    <td>10/04/2026</td>
+                    <td class="txn-amount in">+USD 1,456,523</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="64">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية البركة</span>
+                      </div>
+                    </td>
+                    <td>10/04/2026</td>
+                    <td class="txn-amount in">+USD 4,592,615</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="65">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع تعليمي - صندوق دعم المشاريع</span>
+                      </div>
+                    </td>
+                    <td>09/04/2026</td>
+                    <td class="txn-amount in">+EUR 3,470,287</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="66">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - أيمن بن عبدالله</span>
+                      </div>
+                    </td>
+                    <td>09/04/2026</td>
+                    <td class="txn-amount out">-SAR 2,586,140</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="67">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - سارة بنت عبدالله</span>
+                      </div>
+                    </td>
+                    <td>08/04/2026</td>
+                    <td class="txn-amount out">-USD 1,235,367</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="68">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع اتصالات - مؤسسة سلمان الإنسانية</span>
+                      </div>
+                    </td>
+                    <td>08/04/2026</td>
+                    <td class="txn-amount in">+USD 1,685,222</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="69">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - مؤسسة العون</span>
+                      </div>
+                    </td>
+                    <td>06/04/2026</td>
+                    <td class="txn-amount in">+EUR 2,738,180</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="70">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - منى بنت فهد</span>
+                      </div>
+                    </td>
+                    <td>06/04/2026</td>
+                    <td class="txn-amount out">-EUR 1,222,856</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="71">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية السلام العالمي</span>
+                      </div>
+                    </td>
+                    <td>03/04/2026</td>
+                    <td class="txn-amount in">+EUR 4,559,682</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="72">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية المرأة</span>
+                      </div>
+                    </td>
+                    <td>31/03/2026</td>
+                    <td class="txn-amount in">+USD 4,475,084</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="73">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع تنموي - مؤسسة الابتكار</span>
+                      </div>
+                    </td>
+                    <td>30/03/2026</td>
+                    <td class="txn-amount in">+EUR 4,575,197</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="74">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع اتصالات - جمعية الصيادين</span>
+                      </div>
+                    </td>
+                    <td>29/03/2026</td>
+                    <td class="txn-amount in">+EUR 1,966,486</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="75">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - وفاء بنت طلال</span>
+                      </div>
+                    </td>
+                    <td>25/03/2026</td>
+                    <td class="txn-amount out">-SAR 4,660,516</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="76">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع إغاثي - جمعية الإحسان</span>
+                      </div>
+                    </td>
+                    <td>25/03/2026</td>
+                    <td class="txn-amount in">+EUR 1,453,166</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="77">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - صندوق الحرفيين</span>
+                      </div>
+                    </td>
+                    <td>24/03/2026</td>
+                    <td class="txn-amount in">+EUR 4,811,723</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="78">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - صندوق المحافظة</span>
+                      </div>
+                    </td>
+                    <td>23/03/2026</td>
+                    <td class="txn-amount in">+SAR 3,307,735</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="79">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - منى بنت فهد</span>
+                      </div>
+                    </td>
+                    <td>22/03/2026</td>
+                    <td class="txn-amount out">-USD 4,558,952</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="80">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - بندر بن خالد</span>
+                      </div>
+                    </td>
+                    <td>21/03/2026</td>
+                    <td class="txn-amount out">-SAR 2,151,800</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="81">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع إغاثي - جمعية التنمية</span>
+                      </div>
+                    </td>
+                    <td>19/03/2026</td>
+                    <td class="txn-amount in">+USD 1,003,133</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="82">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - لؤي بن عبدالله</span>
+                      </div>
+                    </td>
+                    <td>12/03/2026</td>
+                    <td class="txn-amount out">-USD 3,597,067</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="83">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - صندوق ذوي الاحتياجات الخاصة</span>
+                      </div>
+                    </td>
+                    <td>11/03/2026</td>
+                    <td class="txn-amount in">+USD 1,130,678</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="84">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - عبدالرحمن بن خالد</span>
+                      </div>
+                    </td>
+                    <td>09/03/2026</td>
+                    <td class="txn-amount out">-USD 3,194,269</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="85">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - صندوق الطوارئ</span>
+                      </div>
+                    </td>
+                    <td>09/03/2026</td>
+                    <td class="txn-amount in">+SAR 4,977,937</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="86">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - صندوق الرياضة</span>
+                      </div>
+                    </td>
+                    <td>09/03/2026</td>
+                    <td class="txn-amount in">+EUR 1,552,709</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="87">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية ريادة الأعمال</span>
+                      </div>
+                    </td>
+                    <td>05/03/2026</td>
+                    <td class="txn-amount in">+USD 4,002,978</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="88">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية السلام العالمي</span>
+                      </div>
+                    </td>
+                    <td>05/03/2026</td>
+                    <td class="txn-amount in">+EUR 2,163,574</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="89">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - مؤسسة الرعاية</span>
+                      </div>
+                    </td>
+                    <td>03/03/2026</td>
+                    <td class="txn-amount in">+SAR 1,123,315</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="90">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع مياه - مؤسسة الصناع</span>
+                      </div>
+                    </td>
+                    <td>02/03/2026</td>
+                    <td class="txn-amount in">+EUR 1,743,617</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="91">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - عماد بن محمد</span>
+                      </div>
+                    </td>
+                    <td>01/03/2026</td>
+                    <td class="txn-amount out">-USD 2,477,747</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="92">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع تنموي - مؤسسة الإسكان</span>
+                      </div>
+                    </td>
+                    <td>25/02/2026</td>
+                    <td class="txn-amount in">+EUR 1,079,011</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="93">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - طارق بن فهد</span>
+                      </div>
+                    </td>
+                    <td>23/02/2026</td>
+                    <td class="txn-amount out">-EUR 4,283,170</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="94">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - بدر بن محمد</span>
+                      </div>
+                    </td>
+                    <td>23/02/2026</td>
+                    <td class="txn-amount out">-EUR 2,159,024</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="95">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - مؤسسة الإحسان الخيرية</span>
+                      </div>
+                    </td>
+                    <td>20/02/2026</td>
+                    <td class="txn-amount in">+SAR 2,389,031</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="96">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - علي بن عبدالعزيز</span>
+                      </div>
+                    </td>
+                    <td>16/02/2026</td>
+                    <td class="txn-amount out">-SAR 1,761,954</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="97">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - مؤسسة سلمان الإنسانية</span>
+                      </div>
+                    </td>
+                    <td>15/02/2026</td>
+                    <td class="txn-amount in">+EUR 4,147,818</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="98">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - وفاء بنت سعد</span>
+                      </div>
+                    </td>
+                    <td>11/02/2026</td>
+                    <td class="txn-amount out">-USD 1,498,823</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="99">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية خيرية</span>
+                      </div>
+                    </td>
+                    <td>11/02/2026</td>
+                    <td class="txn-amount in">+SAR 4,966,857</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="100">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - صندوق الزكاة</span>
+                      </div>
+                    </td>
+                    <td>09/02/2026</td>
+                    <td class="txn-amount in">+EUR 4,952,342</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="101">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - منى بنت خالد</span>
+                      </div>
+                    </td>
+                    <td>08/02/2026</td>
+                    <td class="txn-amount out">-SAR 2,965,017</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="102">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع سياحي - مؤسسة الابتكار</span>
+                      </div>
+                    </td>
+                    <td>07/02/2026</td>
+                    <td class="txn-amount in">+USD 4,126,438</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="103">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - مؤسسة سلمان الإنسانية</span>
+                      </div>
+                    </td>
+                    <td>04/02/2026</td>
+                    <td class="txn-amount in">+SAR 2,880,727</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="104">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - صندوق دعم المشاريع</span>
+                      </div>
+                    </td>
+                    <td>01/02/2026</td>
+                    <td class="txn-amount in">+EUR 4,736,299</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="105">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع تعليمي - جمعية التطوع</span>
+                      </div>
+                    </td>
+                    <td>28/01/2026</td>
+                    <td class="txn-amount in">+SAR 4,662,271</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="106">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية الصحة</span>
+                      </div>
+                    </td>
+                    <td>27/01/2026</td>
+                    <td class="txn-amount in">+USD 2,832,361</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="107">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية التنمية</span>
+                      </div>
+                    </td>
+                    <td>21/01/2026</td>
+                    <td class="txn-amount in">+USD 2,284,532</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="108">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - باسمة بنت عبدالله</span>
+                      </div>
+                    </td>
+                    <td>20/01/2026</td>
+                    <td class="txn-amount out">-SAR 1,587,824</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="109">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - ريما بنت عبدالعزيز</span>
+                      </div>
+                    </td>
+                    <td>19/01/2026</td>
+                    <td class="txn-amount out">-USD 3,711,177</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="110">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع إسكان - مؤسسة الإغاثة</span>
+                      </div>
+                    </td>
+                    <td>19/01/2026</td>
+                    <td class="txn-amount in">+USD 4,811,636</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="111">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon out">📤</div>
+                        <span>تحويل - طارق بن سعد</span>
+                      </div>
+                    </td>
+                    <td>15/01/2026</td>
+                    <td class="txn-amount out">-EUR 2,505,963</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="112">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع بيئي - مؤسسة الإسكان</span>
+                      </div>
+                    </td>
+                    <td>14/01/2026</td>
+                    <td class="txn-amount in">+USD 1,591,534</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="113">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية التجار</span>
+                      </div>
+                    </td>
+                    <td>12/01/2026</td>
+                    <td class="txn-amount in">+SAR 2,587,420</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="114">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع رياضي - جمعية ريادة الأعمال</span>
+                      </div>
+                    </td>
+                    <td>08/01/2026</td>
+                    <td class="txn-amount in">+EUR 4,798,242</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="115">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - مؤسسة العون</span>
+                      </div>
+                    </td>
+                    <td>06/01/2026</td>
+                    <td class="txn-amount in">+USD 1,834,657</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="116">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع نقل - جمعية الإحسان</span>
+                      </div>
+                    </td>
+                    <td>05/01/2026</td>
+                    <td class="txn-amount in">+SAR 1,534,252</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="117">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - صندوق دعم المشاريع</span>
+                      </div>
+                    </td>
+                    <td>05/01/2026</td>
+                    <td class="txn-amount in">+USD 2,764,244</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="118">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مشروع سياحي - جمعية الطفولة</span>
+                      </div>
+                    </td>
+                    <td>03/01/2026</td>
+                    <td class="txn-amount in">+USD 4,244,727</td>
+                  </tr>
+          <tr class="txn-row hidden-row" data-index="119">
+                    <td>
+                      <div class="txn-type">
+                        <div class="txn-icon in">📥</div>
+                        <span>مساعدة - جمعية البيئة</span>
+                      </div>
+                    </td>
+                    <td>02/01/2026</td>
+                    <td class="txn-amount in">+EUR 1,762,841</td>
                   </tr>
                 </tbody>
               </table>
@@ -368,6 +1528,21 @@
       else toastIcon.textContent = 'ℹ';
       setTimeout(() => { toast.classList.remove('show'); }, 3000);
     }
+    function toggleTransactions() {
+      const container = document.getElementById('transactionsContainer');
+      const btn = document.getElementById('showMoreBtn');
+      const card = container.closest('.section-card');
+
+      if (card.classList.contains('transactions-expanded')) {
+        card.classList.remove('transactions-expanded');
+        btn.textContent = 'عرض المزيد';
+        container.scrollTop = 0;
+      } else {
+        card.classList.add('transactions-expanded');
+        btn.textContent = 'عرض أقل';
+      }
+    }
+
     document.querySelectorAll('.stat-card, .section-card, .account-item, .bill-item').forEach((el, i) => {
       el.style.opacity = '0';
       el.style.animation = 'fadeIn 0.4s ease ' + (i * 0.05) + 's forwards';
