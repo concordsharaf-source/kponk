@@ -2,13 +2,13 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>تحويل فوري | البنك السعودي</title>
   <style>
     :root {
-      --bg-primary: #0f172a;
+      --bg-primary: #0b1120;
       --bg-secondary: #1e293b;
-      --bg-card: #1e293b;
+      --bg-card: #162032;
       --bg-hover: #334155;
       --text-primary: #f1f5f9;
       --text-secondary: #94a3b8;
@@ -20,17 +20,22 @@
       --accent-red: #ef4444;
       --radius: 12px;
       --radius-sm: 8px;
+      --sidebar-width: 260px;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: var(--bg-primary);
       color: var(--text-primary);
       direction: rtl;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-    .app-container { display: flex; min-height: 100vh; }
+
+    /* ===== SIDEBAR ===== */
     .sidebar {
-      width: 260px;
+      width: var(--sidebar-width);
       background: var(--bg-secondary);
       border-left: 1px solid var(--border-color);
       padding: 20px 0;
@@ -39,8 +44,9 @@
       top: 0;
       height: 100vh;
       overflow-y: auto;
-      z-index: 100;
-      transition: transform 0.3s;
+      z-index: 1000;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      transform: translateX(0);
     }
     .sidebar-brand {
       display: flex;
@@ -77,19 +83,26 @@
       border-right: 3px solid var(--accent-gold);
     }
     .nav-item .icon { font-size: 18px; }
+
+    /* ===== OVERLAY ===== */
     .sidebar-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 99;
+      background: rgba(0,0,0,0.6);
+      z-index: 999;
+      backdrop-filter: blur(2px);
     }
     .sidebar-overlay.active { display: block; }
+
+    /* ===== MAIN CONTENT ===== */
     .main-content {
-      flex: 1;
-      margin-right: 260px;
+      margin-right: var(--sidebar-width);
       min-height: 100vh;
+      transition: margin-right 0.35s;
     }
+
+    /* ===== HEADER ===== */
     .top-header {
       display: flex;
       justify-content: space-between;
@@ -99,10 +112,12 @@
       border-bottom: 1px solid var(--border-color);
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 100;
+      gap: 12px;
     }
-    .header-title { font-size: 20px; font-weight: 700; }
-    .header-actions { display: flex; align-items: center; gap: 12px; }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .header-title { font-size: 20px; font-weight: 700; white-space: nowrap; }
+    .header-actions { display: flex; align-items: center; gap: 10px; }
     .header-btn {
       background: var(--bg-hover);
       border: 1px solid var(--border-color);
@@ -112,6 +127,9 @@
       border-radius: var(--radius-sm);
       cursor: pointer;
       font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .user-profile {
       display: flex;
@@ -128,7 +146,7 @@
       border-radius: 50%;
       background: linear-gradient(135deg, var(--accent-gold), #b8860b);
       display: flex; align-items: center; justify-content: center;
-      font-weight: 700; color: #fff;
+      font-weight: 700; color: #fff; flex-shrink: 0;
     }
     .user-name { font-size: 14px; font-weight: 600; }
     .user-role { font-size: 11px; color: var(--accent-gold); }
@@ -137,8 +155,14 @@
       background: none; border: none;
       color: var(--text-primary);
       font-size: 24px; cursor: pointer;
+      width: 40px; height: 40px;
+      align-items: center; justify-content: center;
     }
-    .page-content { padding: 24px; max-width: 1400px; }
+
+    /* ===== PAGE CONTENT ===== */
+    .page-content { padding: 20px; max-width: 1400px; margin: 0 auto; }
+
+    /* ===== TOP SERVICES BAR ===== */
     .top-services-bar {
       display: flex;
       gap: 8px;
@@ -148,13 +172,15 @@
       overflow-x: auto;
       margin-bottom: 20px;
       width: 100%;
+      scrollbar-width: none;
     }
+    .top-services-bar::-webkit-scrollbar { display: none; }
     .top-service-btn {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
-      padding: 8px 16px;
+      padding: 8px 14px;
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-sm);
@@ -163,7 +189,8 @@
       font-size: 11px;
       white-space: nowrap;
       transition: all 0.2s;
-      min-width: 70px;
+      min-width: 64px;
+      flex-shrink: 0;
     }
     .top-service-btn:hover, .top-service-btn.active {
       background: var(--bg-hover);
@@ -171,13 +198,18 @@
       border-color: var(--accent-gold);
     }
     .top-service-btn .icon { font-size: 20px; }
+
+    /* ===== TRANSFER LAYOUT ===== */
     .transfer-layout { display: flex; gap: 20px; }
     .transfer-main { flex: 1; min-width: 0; }
+
+    /* ===== STEPS ===== */
     .transfer-steps {
       display: flex;
       justify-content: center;
-      gap: 32px;
+      gap: 24px;
       margin-bottom: 24px;
+      flex-wrap: wrap;
     }
     .step { display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0.4; }
     .step.active { opacity: 1; }
@@ -191,6 +223,8 @@
     }
     .step.active .step-number { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
     .step-label { font-size: 12px; color: var(--text-secondary); }
+
+    /* ===== CARDS ===== */
     .transfer-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -208,7 +242,9 @@
       justify-content: space-between;
       align-items: center;
     }
-    .transfer-card-body { padding: 24px; }
+    .transfer-card-body { padding: 20px; }
+
+    /* ===== FORMS ===== */
     .form-group { margin-bottom: 16px; }
     .form-label {
       display: block;
@@ -227,6 +263,8 @@
       font-family: inherit;
       font-size: 14px;
       transition: border-color 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
     }
     .form-select:focus, .form-input:focus {
       outline: none;
@@ -265,12 +303,14 @@
       font-size: 13px;
     }
     .add-btn:hover { border-color: var(--accent-gold); }
+
+    /* ===== AMOUNT INPUT ===== */
     .amount-input-wrapper {
       display: flex;
       border: 1px solid var(--border-color);
       border-radius: var(--radius-sm);
-      overflow: hidden;
       background: var(--bg-secondary);
+      position: relative;
     }
     .amount-input-wrapper input {
       flex: 1;
@@ -282,23 +322,57 @@
       font-weight: 700;
       text-align: center;
       font-family: inherit;
+      min-width: 0;
     }
     .amount-input-wrapper input:focus { outline: none; }
     .amount-currency {
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 0 16px;
+      padding: 0 14px;
       background: linear-gradient(135deg, #1e3a5f, #2d4a6f);
       color: white;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
       border: none;
       font-family: inherit;
       white-space: nowrap;
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+      flex-shrink: 0;
     }
     .amount-currency:hover { background: linear-gradient(135deg, #2d4a6f, #3d5a7f); }
+
+    /* ===== CURRENCY DROPDOWN (FIXED INSIDE PAGE BOUNDARIES) ===== */
+    .currency-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      z-index: 200;
+      display: none;
+      min-width: 200px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .currency-dropdown.show { display: block; }
+    .currency-option {
+      padding: 12px 16px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+    .currency-option:last-child { border-bottom: none; }
+    .currency-option:hover { background: var(--bg-hover); color: var(--accent-gold); }
+    .currency-wrapper { position: relative; display: inline-block; }
+
     .fees-box {
       display: inline-block;
       padding: 10px 20px;
@@ -309,6 +383,8 @@
     }
     .fees-label { font-size: 13px; color: var(--text-secondary); }
     .fees-value { font-size: 16px; font-weight: 700; color: var(--accent-gold-light); }
+
+    /* ===== DETAILS CARD ===== */
     .details-card {
       background: var(--bg-card);
       border: 2px solid var(--accent-red);
@@ -339,6 +415,8 @@
       font-weight: 700;
       color: var(--accent-gold-light);
     }
+
+    /* ===== ACTIONS ===== */
     .bottom-actions {
       display: flex;
       gap: 16px;
@@ -368,7 +446,9 @@
       font-weight: 700;
       cursor: pointer;
     }
-    .btn-next:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ===== RIGHT SIDEBAR ===== */
     .right-sidebar {
       width: 280px;
       flex-shrink: 0;
@@ -407,20 +487,26 @@
       color: var(--accent-gold);
     }
     .right-menu-item:last-child { border-bottom: none; }
+
+    /* ===== CHECKBOX ===== */
     .checkbox-label {
       display: flex;
       align-items: center;
       gap: 8px;
       cursor: pointer;
       font-size: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
-    .checkbox-label input { width: 18px; height: 18px; accent-color: var(--accent-gold); }
+    .checkbox-label input { width: 18px; height: 18px; accent-color: var(--accent-gold); flex-shrink: 0; }
     .link-gold { color: var(--accent-gold); text-decoration: underline; }
+
+    /* ===== TOAST ===== */
     .toast {
       position: fixed;
       bottom: 24px;
       left: 50%;
-      transform: translateX(-50%) translateY(100px);
+      transform: translateX(-50%) translateY(120px);
       background: var(--bg-secondary);
       border: 1px solid var(--border-color);
       padding: 14px 24px;
@@ -428,55 +514,45 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      z-index: 1000;
+      z-index: 2000;
       opacity: 0;
       transition: all 0.3s;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      max-width: 90vw;
     }
     .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-    .toast-icon { font-size: 20px; }
+    .toast-icon { font-size: 20px; flex-shrink: 0; }
     .toast-success { border-color: var(--accent-green); }
     .toast-error { border-color: var(--accent-red); }
     .toast-info { border-color: var(--accent-gold); }
-    .currency-dropdown {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-sm);
-      overflow: hidden;
-      z-index: 10;
-      display: none;
-      min-width: 140px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-    .currency-dropdown.show { display: block; }
-    .currency-option {
-      padding: 10px 16px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .currency-option:hover { background: var(--bg-hover); color: var(--accent-gold); }
-    .currency-wrapper { position: relative; display: inline-block; }
-    @media (max-width: 992px) {
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px) {
       .right-sidebar { display: none; }
-      .transfer-layout { flex-direction: column; }
     }
     @media (max-width: 768px) {
       .sidebar { transform: translateX(100%); }
       .sidebar.open { transform: translateX(0); }
       .main-content { margin-right: 0; }
-      .mobile-menu-btn { display: block; }
-      .form-row-flex { flex-direction: column; }
-      .form-group-flex { width: 100%; }
-      .bottom-actions { flex-direction: column; }
+      .mobile-menu-btn { display: flex; }
       .top-header { padding: 12px 16px; }
-      .page-content { padding: 16px; }
+      .header-title { font-size: 16px; }
+      .user-info { display: none; }
+      .page-content { padding: 12px; }
+      .form-row-flex { flex-direction: column; gap: 12px; }
+      .form-group-flex { width: 100%; min-width: auto; }
+      .bottom-actions { flex-direction: column; gap: 12px; }
+      .transfer-steps { gap: 12px; }
+      .step-label { font-size: 10px; }
+      .transfer-card-body { padding: 16px; }
+      .details-card-body { padding: 16px; font-size: 13px; }
+      .amount-currency { padding: 0 10px; font-size: 12px; }
+      .top-service-btn { padding: 6px 10px; min-width: 56px; }
+    }
+    @media (max-width: 400px) {
+      .header-title { font-size: 14px; }
+      .step-number { width: 30px; height: 30px; font-size: 12px; }
+      .amount-input-wrapper input { font-size: 14px; padding: 10px 8px; }
     }
   </style>
 </head>
@@ -485,7 +561,10 @@
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-brand">
         <div class="brand-icon">🏦</div>
-        <div><div class="brand-text">البنك السعودي</div><div class="brand-sub">نظام الخدمات المصرفية</div></div>
+        <div>
+          <div class="brand-text">البنك السعودي</div>
+          <div class="brand-sub">نظام الخدمات المصرفية</div>
+        </div>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
@@ -509,22 +588,28 @@
         </div>
       </nav>
     </aside>
+
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <main class="main-content">
       <header class="top-header">
-        <div style="display:flex;align-items:center;gap:16px;">
-          <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="القائمة">☰</button>
           <h1 class="header-title">تحويل فوري ⚡</h1>
         </div>
         <div class="header-actions">
-          <button class="header-btn" onclick="showToast('لا توجد إشعارات جديدة','info')">🔔</button>
-          <button class="header-btn" onclick="showToast('قريباً','info')">⚙️</button>
+          <button class="header-btn" onclick="showToast('لا توجد إشعارات جديدة','info')" aria-label="الإشعارات">🔔</button>
+          <button class="header-btn" onclick="showToast('قريباً','info')" aria-label="الإعدادات">⚙️</button>
           <div class="user-profile" onclick="location.href='profile.html'">
             <div class="user-avatar">و</div>
-            <div class="user-info"><div class="user-name">الوليد بن طلال</div><div class="user-role">عميل بريميوم</div></div>
+            <div class="user-info">
+              <div class="user-name">الوليد بن طلال</div>
+              <div class="user-role">عميل بريميوم</div>
+            </div>
           </div>
         </div>
       </header>
+
       <div class="page-content">
         <div class="top-services-bar">
           <a href="index.html" class="top-service-btn"><span class="icon">🏠</span><span>الرئيسية</span></a>
@@ -542,16 +627,17 @@
           <div class="transfer-main">
             <div style="text-align:center;margin-bottom:16px;">
               <div style="font-size:14px;color:var(--accent-gold);font-weight:600;">فوري ← التحويل إلى مستفيد فوري</div>
-              <div style="font-size:24px;font-weight:700;margin-top:8px;">⭐ تحويل فوري</div>
+              <div style="font-size:22px;font-weight:700;margin-top:8px;">⭐ تحويل فوري</div>
             </div>
 
-            <div class="transfer-steps" style="margin-bottom:24px;">
+            <div class="transfer-steps">
               <div class="step active"><div class="step-number">1</div><div class="step-label">التنفيذ</div></div>
               <div class="step"><div class="step-number">2</div><div class="step-label">التأكيد</div></div>
               <div class="step"><div class="step-number">3</div><div class="step-label">التعميد</div></div>
               <div class="step"><div class="step-number">4</div><div class="step-label">النتيجة</div></div>
             </div>
 
+            <!-- CARD: TO -->
             <div class="transfer-card">
               <div class="transfer-card-header"><span>إلى</span></div>
               <div class="transfer-card-body">
@@ -567,8 +653,8 @@
                         <option value="aljazira">بنك الجزيرة</option>
                         <option value="sab">بنك ساب (السعودي البريطاني)</option>
                         <option value="anb">البنك العربي الوطني</option>
-                        <option value="bsf">البنك السعودي الفرنسي</option>
-                        <option value="saib">البنك السعودي للاستثمار</option>
+                        <option value="bsf">بنك السعودي الفرنسي</option>
+                        <option value="saib">بنك السعودي للاستثمار</option>
                         <option value="alinma">بنك الإنماء</option>
                         <option value="albaraka">بنك البركة</option>
                         <option value="gib">بنك الخليج الدولي</option>
@@ -691,30 +777,30 @@
               </div>
             </div>
 
+            <!-- CARD: FROM -->
             <div class="transfer-card">
               <div class="transfer-card-header"><span>من</span></div>
               <div class="transfer-card-body">
-                <div class="form-group" style="margin-bottom:16px;">
+                <div class="form-group">
                   <label class="form-label">* من حساب</label>
                   <select class="form-select" id="fromAccount">
                     <option value="waleed">مؤسسة الوليد بن طلال للإنسانية</option>
                     <option value="gold">الحساب الجاري الذهبي</option>
                   </select>
                 </div>
-                <div class="form-group" style="margin-bottom:16px;">
+                <div class="form-group">
                   <label class="form-label">* المبلغ</label>
                   <div class="amount-input-wrapper">
-                    <input type="text" id="amount" value="" placeholder="0.00" maxlength="16">
                     <div class="currency-wrapper">
-                      <button class="amount-currency" id="currencyBtn" onclick="toggleCurrency()">▼ USD 🇺🇸</button>
+                      <button type="button" class="amount-currency" id="currencyBtn" onclick="toggleCurrency()">▼ USD 🇺🇸</button>
                       <div class="currency-dropdown" id="currencyDropdown">
                         <div class="currency-option" onclick="setCurrency('USD','🇺🇸')">🇺🇸 USD - دولار أمريكي</div>
                         <div class="currency-option" onclick="setCurrency('SAR','🇸🇦')">🇸🇦 SAR - ريال سعودي</div>
                         <div class="currency-option" onclick="setCurrency('EUR','🇪🇺')">🇪🇺 EUR - يورو</div>
                       </div>
                     </div>
+                    <input type="text" id="amount" value="" placeholder="0.00" inputmode="decimal">
                   </div>
-                  <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">الحد الأقصى: 999,999,999,999.99</div>
                 </div>
                 <div class="fees-box">
                   <span class="fees-label">رسوم التحويل (0.5%): </span>
@@ -723,6 +809,7 @@
               </div>
             </div>
 
+            <!-- CARD: DETAILS -->
             <div class="details-card">
               <div class="details-card-header">3. تفاصيل التحويل</div>
               <div class="details-card-body">
@@ -737,7 +824,7 @@
                 <div>المالية إيداع المنحة بعد استكمال ما تم التوجيه به للمستفيد:</div>
                 <div style="margin-top:8px;"><strong id="detailName2">—</strong></div>
                 <div style="margin-top:16px;">
-                  <label class="checkbox-label" style="justify-content:center;">
+                  <label class="checkbox-label">
                     <input type="checkbox" id="agreeTerms">
                     <span>لقد قرأت وافقت على <a href="#" class="link-gold">الشروط والأحكام الخاصة</a></span>
                   </label>
@@ -745,12 +832,14 @@
               </div>
             </div>
 
+            <!-- ACTIONS -->
             <div class="bottom-actions">
               <button class="btn-cancel" onclick="location.href='transfers.html'">إلغاء</button>
               <button class="btn-next" id="btnNext" onclick="goToConfirm()" disabled>متابعة ←</button>
             </div>
           </div>
 
+          <!-- RIGHT SIDEBAR -->
           <aside class="right-sidebar">
             <div class="right-menu">
               <div class="right-menu-header"><span>فوري</span><span>▼</span></div>
@@ -782,11 +871,19 @@
       </div>
     </main>
   </div>
-  <div class="toast" id="toast"><span class="toast-icon" id="toastIcon">✓</span><span id="toastMessage">تمت العملية بنجاح</span></div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toastIcon">✓</span>
+    <span id="toastMessage">تمت العملية بنجاح</span>
+  </div>
+
   <script>
+    // ===== SIDEBAR TOGGLE =====
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const sidebar = document.getElementById('sidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
+
     if(mobileMenuBtn) {
       mobileMenuBtn.addEventListener('click', () => {
         sidebar.classList.toggle('open');
@@ -799,6 +896,8 @@
         sidebarOverlay.classList.remove('active');
       });
     }
+
+    // ===== TOAST =====
     function showToast(message, type) {
       const toast = document.getElementById('toast');
       const toastIcon = document.getElementById('toastIcon');
@@ -811,9 +910,9 @@
       setTimeout(() => { toast.classList.remove('show'); }, 3000);
     }
 
+    // ===== CURRENCY =====
     let currentCurrency = 'USD';
     let currentFlag = '🇺🇸';
-    const currencySymbols = { 'USD': '$', 'SAR': 'ر.س', 'EUR': '€' };
 
     function toggleCurrency() {
       document.getElementById('currencyDropdown').classList.toggle('show');
@@ -831,6 +930,7 @@
       }
     });
 
+    // ===== FORM ELEMENTS =====
     const amountInput = document.getElementById('amount');
     const feesDisplay = document.getElementById('feesDisplay');
     const detailAmount = document.getElementById('detailAmount');
@@ -840,24 +940,11 @@
     const btnNext = document.getElementById('btnNext');
     const agreeTerms = document.getElementById('agreeTerms');
 
-    function formatNumber(numStr) {
-      let clean = numStr.replace(/[^0-9.]/g, '');
-      let parts = clean.split('.');
-      if(parts.length > 2) clean = parts[0] + '.' + parts.slice(1).join('');
-      if(parts[0].length > 12) parts[0] = parts[0].slice(0, 12);
-      clean = parts[0] + (parts[1] !== undefined ? '.' + parts[1].slice(0, 2) : '');
-      if(!clean || clean === '.') return '';
-      let num = parseFloat(clean);
-      if(isNaN(num)) return '';
-      return num.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 2});
-    }
-
     function updateAmountDisplay() {
       let val = amountInput.value.replace(/,/g, '');
       let num = parseFloat(val);
       if(!isNaN(num) && num > 0) {
         let formatted = num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        amountInput.value = formatted;
         let fees = (num * 0.005).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         feesDisplay.textContent = currentCurrency + ' ' + fees;
         detailAmount.textContent = currentCurrency + ' ' + formatted;
@@ -870,14 +957,20 @@
     amountInput.addEventListener('input', function() {
       let raw = this.value.replace(/[^0-9.]/g, '');
       let parts = raw.split('.');
-      if(parts[0].length > 12) parts[0] = parts[0].slice(0, 12);
-      raw = parts[0] + (parts[1] !== undefined ? '.' + parts[1].slice(0, 2) : '');
+      if (parts.length > 2) {
+        raw = parts[0] + '.' + parts.slice(1).join('');
+      }
       this.value = raw;
       updateAmountDisplay();
       validateForm();
     });
 
     amountInput.addEventListener('blur', function() {
+      let val = this.value.replace(/,/g, '');
+      let num = parseFloat(val);
+      if (!isNaN(num) && num > 0) {
+        this.value = num.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 2});
+      }
       updateAmountDisplay();
     });
 
@@ -916,4 +1009,4 @@
     }
   </script>
 </body>
-  </html>
+</html>
