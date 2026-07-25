@@ -28,7 +28,7 @@
             width: 100%;
             max-width: 420px;
             margin: 0 auto;
-            line-height: 0; /* لمنع أي فراغات أسفل الصورة */
+            line-height: 0;
             container-type: inline-size;
         }
 
@@ -39,22 +39,21 @@
             display: block;
         }
 
-        //* المربع الأحمر المتموضع بدقة فوق رقم 3,475.5 */
-.balance-overlay-box {
-    position: absolute;
-    top: 12.2%;         /* الموقع الدقيق للرقم من الأعلى */
-    right: 25.5%;        /* الموقع الدقيق من اليمين */
-    width: 38%;         /* عرض تغطية الرقم */
-    height: 3.8%;       /* ارتفاع تغطية الرقم */
-    background-color: #ea1a3a; /* نفس درجة أحمر البطاقة */
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* التعديل هنا: محاذاة للبداية (اليمين في RTL) */
-    padding-right: 1cqi;        /* التعديل هنا: مسافة بسيطة من جهة اليمين */
-    z-index: 5;
-    border-radius: 3px;
-}
-
+        /* المربع الأحمر المتموضع فوق رقم 3,475.5 محاذى لليمين */
+        .balance-overlay-box {
+            position: absolute;
+            top: 10.2%;         /* الموقع من الأعلى */
+            right: 25.5%;       /* الموقع من اليمين */
+            width: 38%;         /* عرض تغطية الرقم */
+            height: 3.8%;       /* ارتفاع تغطية الرقم */
+            background-color: #ea1a3a; /* نفس درجة أحمر البطاقة */
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* محاذاة النص لليمين (في وضع RTL) */
+            padding-right: 2cqi;       /* مسافة بسيطة من جهة اليمين */
+            z-index: 5;
+            border-radius: 3px;
+        }
 
         /* نص الرصيد والنقاط */
         .balance-text {
@@ -76,10 +75,10 @@
         /* زر العين المخفي الشفاف فوق أيقونة العين بالبطاقة */
         .eye-click-trigger {
             position: absolute;
-            top: 27%;           /* موقع عين البطاقة الحمراء */
-            right: 26.5%;       /* موقع العين من اليمين */
-            width: 14%;         /* مساحة الضغط */
-            height: 4%;         /* ارتفاع مساحة الضغط */
+            top: 16.8%;         /* تم ضبط ارتفاع زر العين ليتناسب مع الـ top الجديد */
+            right: 26.5%;
+            width: 14%;
+            height: 4%;
             background: transparent;
             border: none;
             outline: none;
@@ -94,7 +93,7 @@
         <!-- صورة الواجهة الكاملة -->
         <img src="image/app.jpg" alt="Jaib App" class="app-screen">
 
-        <!-- المربع الأحمر المتفاعل -->
+        <!-- المربع الأحمر التفاعلي -->
         <div class="balance-overlay-box">
             <span id="balanceText" class="balance-text dots">•••••</span>
         </div>
