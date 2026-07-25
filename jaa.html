@@ -22,63 +22,66 @@
             min-height: 100vh;
         }
 
-        /* حاوية التطبيق الذكية - تفعل خاصية Container Queries */
+        /* حاوية التطبيق */
         .app-wrapper {
             position: relative;
             width: 100%;
-            max-width: 430px; /* ليتناسب مع حجم الشاشات الكبيرة مثل S24 Ultra */
+            max-width: 420px;
             margin: 0 auto;
-            overflow: hidden;
-            container-type: inline-size; /* يجعل الحسابات نسبية لعرض الحاوية نفسها */
+            line-height: 0; /* لمنع أي فراغات أسفل الصورة */
+            container-type: inline-size;
         }
 
-        /* صورة خلفية التطبيق */
+        /* صورة الواجهة الكاملة */
         .app-screen {
             width: 100%;
-            display: block;
             height: auto;
+            display: block;
         }
 
         /* المربع الأحمر المتموضع بدقة فوق رقم 3,475.5 */
         .balance-overlay-box {
             position: absolute;
-            top: 29.8%;         /* إحداثيات دقيقة موجهة لصورة الشاشة الكاملة */
-            right: 26.5%;
-            width: 38%;
-            height: 4.2%;
-            background-color: #eb1938; /* نفس درجة أحمر البطاقة بالظبط */
+            top: 20.2%;         /* الموقع الدقيق للرقم من الأعلى */
+            right: 25.5%;        /* الموقع الدقيق من اليمين */
+            width: 38%;         /* عرض تغطية الرقم */
+            height: 3.8%;       /* ارتفاع تغطية الرقم */
+            background-color: #ea1a3a; /* نفس درجة أحمر البطاقة */
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding-left: 2cqi;
+            padding-left: 1cqi;
             z-index: 5;
-            border-radius: 2px;
+            border-radius: 3px;
+            
+            /* يمكنك إزالة التعليق عن السطر التالي لترى إطاراً أصفر يحدد موقع المربع للتأكد */
+            /* border: 1px solid yellow; */
         }
 
-        /* نص الرصيد - يتغير حجمه تلقائياً بناءً على عرض الشاشة */
+        /* نص الرصيد والنقاط */
         .balance-text {
             color: #ffffff;
             font-family: 'Cairo', sans-serif;
             font-weight: 800;
-            font-size: 5.3cqi;  /* يتصاغر ويتكبر بنسبة مئوية مع الصورة */
+            font-size: 5.2cqi;
             line-height: 1;
             letter-spacing: 0.2cqi;
             user-select: none;
         }
 
-        /* شكل النقاط في حالة الإخفاء */
+        /* شكل النقاط في حالة المخفي */
         .balance-text.dots {
-            font-size: 5.8cqi;
-            letter-spacing: 0.5cqi;
+            font-size: 5.5cqi;
+            letter-spacing: 0.4cqi;
         }
 
-        /* زر العين الشفاف التفاعلي */
+        /* زر العين المخفي الشفاف فوق أيقونة العين بالبطاقة */
         .eye-click-trigger {
             position: absolute;
-            top: 38.5%;        /* تموضع الزر فوق عين البطاقة الحمراء */
-            right: 27%;
-            width: 14%;
-            height: 4.5%;
+            top: 27%;           /* موقع عين البطاقة الحمراء */
+            right: 26.5%;       /* موقع العين من اليمين */
+            width: 14%;         /* مساحة الضغط */
+            height: 4%;         /* ارتفاع مساحة الضغط */
             background: transparent;
             border: none;
             outline: none;
@@ -93,12 +96,12 @@
         <!-- صورة الواجهة الكاملة -->
         <img src="image/app.jpg" alt="Jaib App" class="app-screen">
 
-        <!-- المربع الأحمر التفاعلي -->
+        <!-- المربع الأحمر المتفاعل -->
         <div class="balance-overlay-box">
             <span id="balanceText" class="balance-text dots">•••••</span>
         </div>
 
-        <!-- زر شفاف فوق أيقونة العين -->
+        <!-- زر شفاف مخفي فوق أيقونة العين -->
         <button class="eye-click-trigger" onclick="toggleBalance()" aria-label="إظهار/إخفاء الرصيد"></button>
     </div>
 
