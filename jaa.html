@@ -22,14 +22,14 @@
             min-height: 100vh;
         }
 
-        /* الحاوية الرئيسية للتطبيق */
+        /* حاوية التطبيق الذكية - تفعل خاصية Container Queries */
         .app-wrapper {
             position: relative;
             width: 100%;
-            max-width: 414px; /* حجم الشاشة القياسي للجوال */
+            max-width: 430px; /* ليتناسب مع حجم الشاشات الكبيرة مثل S24 Ultra */
             margin: 0 auto;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            container-type: inline-size; /* يجعل الحسابات نسبية لعرض الحاوية نفسها */
         }
 
         /* صورة خلفية التطبيق */
@@ -39,46 +39,46 @@
             height: auto;
         }
 
-        /* المربع الأحمر المغطي لمكان المبلغ */
+        /* المربع الأحمر المتموضع بدقة فوق رقم 3,475.5 */
         .balance-overlay-box {
             position: absolute;
-            top: 29.3%;         /* التموضع العمودي فوق الرقم */
-            right: 27.5%;        /* التموضع الأفقي من اليمين */
-            width: 36%;         /* عرض المربع لتغطية الرقم بالكامل */
-            height: 4.8%;       /* ارتفاع المربع */
-            background-color: #ea1a3a; /* نفس درجة اللون الأحمر المحددة من البطاقة */
+            top: 29.8%;         /* إحداثيات دقيقة موجهة لصورة الشاشة الكاملة */
+            right: 26.5%;
+            width: 38%;
+            height: 4.2%;
+            background-color: #eb1938; /* نفس درجة أحمر البطاقة بالظبط */
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding-left: 5px;
+            padding-left: 2cqi;
             z-index: 5;
-            border-radius: 4px; /* تنعيم بسيط للحواف للتداخل مع البطاقة */
+            border-radius: 2px;
         }
 
-        /* النص داخل المربع الأحمر */
+        /* نص الرصيد - يتغير حجمه تلقائياً بناءً على عرض الشاشة */
         .balance-text {
             color: #ffffff;
             font-family: 'Cairo', sans-serif;
             font-weight: 800;
-            font-size: 21px;
+            font-size: 5.3cqi;  /* يتصاغر ويتكبر بنسبة مئوية مع الصورة */
             line-height: 1;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.2cqi;
             user-select: none;
         }
 
-        /* شكل النقاط في حالة المخفي */
+        /* شكل النقاط في حالة الإخفاء */
         .balance-text.dots {
-            font-size: 24px;
-            letter-spacing: 2px;
+            font-size: 5.8cqi;
+            letter-spacing: 0.5cqi;
         }
 
-        /* زر شفاف مخفي تماماً يوضع فوق أيقونة العين في الصورة */
+        /* زر العين الشفاف التفاعلي */
         .eye-click-trigger {
             position: absolute;
-            top: 39%;           /* موقع علامة العين بالعمود */
-            right: 28%;         /* موقع علامة العين بالفق */
-            width: 12%;         /* مساحة الضغط */
-            height: 4.5%;       /* ارتفاع مساحة الضغط */
+            top: 38.5%;        /* تموضع الزر فوق عين البطاقة الحمراء */
+            right: 27%;
+            width: 14%;
+            height: 4.5%;
             background: transparent;
             border: none;
             outline: none;
@@ -90,23 +90,21 @@
 <body>
 
     <div class="app-wrapper">
-        <!-- مسار صورة الواجهة الكاملة التي أرفقتها -->
+        <!-- صورة الواجهة الكاملة -->
         <img src="image/app.jpg" alt="Jaib App" class="app-screen">
 
-        <!-- المربع الأحمر الذي يغطي المبلغ الأصلي بالصورة -->
+        <!-- المربع الأحمر التفاعلي -->
         <div class="balance-overlay-box">
             <span id="balanceText" class="balance-text dots">•••••</span>
         </div>
 
-        <!-- زر شفاف مخفي فوق عين البطاقة -->
+        <!-- زر شفاف فوق أيقونة العين -->
         <button class="eye-click-trigger" onclick="toggleBalance()" aria-label="إظهار/إخفاء الرصيد"></button>
     </div>
 
     <script>
-        // المبلغ المراد إظهاره عند الضغط بنفس خط وحجم التطبيق
         const actualAmount = "3,475.5";
         const hiddenDots = "•••••";
-
         let isVisible = false;
 
         function toggleBalance() {
