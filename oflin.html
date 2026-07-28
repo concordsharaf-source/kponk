@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حافظة الروابط الذكية</title>
+  
+  <!-- إعدادات تطبيق الشاشة الرئيسية (PWA) -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="روابطي">
+  <meta name="theme-color" content="#4f46e5">
+
+  <!-- ملف Manifest مدمج للعمل بدون نت والتثبيت -->
+  <link rel="manifest" href='data:application/manifest+json,{
+    "name": "حافظة الروابط الذكية",
+    "short_name": "روابطي",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#f8fafc",
+    "theme_color": "#4f46e5",
+    "icons": [
+      {
+        "src": "https://cdn-icons-png.flaticon.com/512/1006/1006771.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }'>
+
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 1.5rem; max-width: 800px; margin: 0 auto; line-height: 1.5; }
+
+    header { text-align: center; margin-bottom: 1.5rem; }
+    header h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 0.25rem; }
+    header p { color: var(--text-muted); font-size: 0.9rem; }
+
+    .controls { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+    .search-input { flex: 1; }
+
+    .links-grid { 
+      display: grid; 
+      gap: 1rem; 
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+      margin-bottom: 2.5rem;
+    }
+
+    .link-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 1.25rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 6px solid var(--tag-color, var(--primary));
+    }
+
+    .link-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    
+    /* أيقونة الحرف الأول المصممة محلياً لتعمل بدون إنترنت */
+    .link-icon { 
+      width: 32px; 
+      height: 32px; 
+      border-radius: 8px; 
+      background-color: var(--tag-color, var(--primary));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .link-title { font-size: 1.1rem; font-weight: 700; text-decoration: none; color: var(--text); word-break: break-word; }
+    .link-title:hover { color: var(--primary); }
+
+    .link-notes { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; white-space: pre-wrap; }
+
+    .link-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
+    .category-badge {
+      background: rgba(0,0,0,0.05);
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-weight: 600;
+      color: var(--tag-color, var(--text-muted));
+    }
+
+    .btn-delete {
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+    }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-control:focus { border-color: var(--primary); }
+    textarea.form-control { resize: vertical; min-height: 70px; }
+
+    .form-row { display: flex; gap: 1rem; }
+    .form-row > div { flex: 1; }
+
+    .btn {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.85rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.9; }
+
+    .empty-state { 
+      text-align: center; 
+      color: var(--text-muted); 
+      padding: 2.5rem 1rem; 
+      grid-column: 1 / -1; 
+      background: var(--card-bg);
+      border-radius: 14px;
+      border: 1px dashed var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🔖 حافظة الروابط</h1>
+    <p>روابطك وملاحظاتك تعمل بكفاءة حتى بدون إنترنت</p>
+  </header>
+
+  <!-- أولاً: البحث والروابط المحفوظة -->
+  <div class="controls">
+    <input type="text" id="searchInput" class="form-control search-input" placeholder="🔍 بحث في الروابط والملاحظات...">
+  </div>
+
+  <div id="linksContainer" class="links-grid"></div>
+
+  <!-- ثانياً: استمارة إضافة رابط جديد في الأسفل -->
+  <div class="section-title">
+    <span>➕ إضافة رابط جديد</span>
+  </div>
+
+  <div class="form-card">
+    <form id="linkForm">
+      <div class="form-group">
+        <label>رابط الموقع (URL)*</label>
+        <input type="url" id="linkUrl" class="form-control" placeholder="https://example.com" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>اسم الرابط*</label>
+          <input type="text" id="linkTitle" class="form-control" placeholder="مثال: موقع كورس البرمجة" required>
+        </div>
+        <div class="form-group">
+          <label>التصنيف واللون</label>
+          <select id="linkCategory" class="form-control">
+            <option value="عام|#64748b">عام 📁</option>
+            <option value="عمل|#2563eb">عمل 💼</option>
+            <option value="دراسة|#059669">دراسة 🎓</option>
+            <option value="ترفيه|#d97706">ترفيه 🎬</option>
+            <option value="أدوات|#7c3aed">أدوات 🛠️</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>ملاحظات (اختياري)</label>
+        <textarea id="linkNotes" class="form-control" placeholder="اكتب تفاصيل أو تذكيرات حول هذا الرابط..."></textarea>
+      </div>
+
+      <button type="submit" class="btn">حفظ الرابط</button>
+    </form>
+  </div>
+
+  <script>
+    // تفعيل العمل بدون إنترنت عبر Service Worker الداخلي
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        const swCode = `
+          self.addEventListener('install', (e) => e.waitUntil(self.skipWaiting()));
+          self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
+          self.addEventListener('fetch', (e) => {
+            e.respondWith(
+              caches.match(e.request).then((response) => response || fetch(e.request)).catch(() => {})
+            );
+          });
+        `;
+        const blob = new Blob([swCode], { type: 'text/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+      });
+    }
+
+    let links = JSON.parse(localStorage.getItem('my_saved_links')) || [];
+
+    const linkForm = document.getElementById('linkForm');
+    const linksContainer = document.getElementById('linksContainer');
+    const searchInput = document.getElementById('searchInput');
+
+    // حفظ رابط جديد
+    linkForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const url = document.getElementById('linkUrl').value.trim();
+      const title = document.getElementById('linkTitle').value.trim();
+      const [category, color] = document.getElementById('linkCategory').value.split('|');
+      const notes = document.getElementById('linkNotes').value.trim();
+
+      const newLink = {
+        id: Date.now(),
+        url,
+        title,
+        category,
+        color,
+        notes
+      };
+
+      links.unshift(newLink);
+      saveAndRender();
+      linkForm.reset();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // حذف رابط
+    function deleteLink(id) {
+      if(confirm('هل أنت متأكد من حذف هذا الرابط؟')) {
+        links = links.filter(link => link.id !== id);
+        saveAndRender();
+      }
+    }
+
+    // حفظ البيانات في localStorage وعرضها
+    function saveAndRender() {
+      localStorage.setItem('my_saved_links', JSON.stringify(links));
+      renderLinks(links);
+    }
+
+    // عرض القائمة
+    function renderLinks(data) {
+      linksContainer.innerHTML = '';
+
+      if (data.length === 0) {
+        linksContainer.innerHTML = `<div class="empty-state">لا يوجد روابط محفوظة بعد. استخدم الاستمارة في الأسفل لإضافة أول رابط!</div>`;
+        return;
+      }
+
+      data.forEach(link => {
+        const card = document.createElement('div');
+        card.className = 'link-card';
+        card.style.setProperty('--tag-color', link.color);
+
+        // استخراج الحرف الأول من الاسم لتكوين الأيقونة بدون نت
+        const firstLetter = link.title ? link.title.charAt(0) : '🔗';
+
+        card.innerHTML = `
+          <div>
+            <div class="link-header">
+              <div class="link-icon" style="background-color: ${link.color}">${escapeHtml(firstLetter)}</div>
+              <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="link-title">${escapeHtml(link.title)}</a>
+            </div>
+            ${link.notes ? `<div class="link-notes">${escapeHtml(link.notes)}</div>` : ''}
+          </div>
+          <div class="link-footer">
+            <span class="category-badge">${escapeHtml(link.category)}</span>
+            <button class="btn-delete" onclick="deleteLink(${link.id})">حذف 🗑️</button>
+          </div>
+        `;
+
+        linksContainer.appendChild(card);
+      });
+    }
+
+    // البحث الفوري
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const filtered = links.filter(l => 
+        l.title.toLowerCase().includes(query) || 
+        l.notes.toLowerCase().includes(query) ||
+        l.url.toLowerCase().includes(query)
+      );
+      renderLinks(filtered);
+    });
+
+    // حماية من ثغرات HTML
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, match => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[match]));
+    }
+
+    // التشغيل عند التحميل
+    renderLinks(links);
+  </script>
+</body>
+</html>
