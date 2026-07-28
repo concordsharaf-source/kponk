@@ -2,19 +2,17 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="روابطي">
     <title>روابطي - مدير الروابط</title>
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
@@ -22,76 +20,35 @@
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        cairo: ['Cairo', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: '#3b82f6',
-                        secondary: '#8b5cf6',
-                        accent: '#06b6d4',
-                    }
+                    fontFamily: { cairo: ['Cairo', 'sans-serif'] },
+                    colors: { primary: '#3b82f6', secondary: '#8b5cf6', accent: '#06b6d4' }
                 }
             }
         }
     </script>
 
     <style>
-        body { font-family: 'Cairo', sans-serif; }
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .slide-in {
-            animation: slideIn 0.4s ease-out;
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .color-dot {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: all 0.2s;
-        }
-        .color-dot.active {
-            border-color: #fff;
-            box-shadow: 0 0 0 2px #000;
-        }
-        .dark .color-dot.active {
-            border-color: #1f2937;
-            box-shadow: 0 0 0 2px #fff;
-        }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* PWA Install Button */
-        #installBtn {
-            display: none;
-        }
-        #installBtn.show {
-            display: flex;
-        }
+        body { font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .card-hover { transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); }
+        .slide-in { animation: slideIn 0.4s ease-out; }
+        @keyframes slideIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        .color-dot { width:24px; height:24px; border-radius:50%; cursor:pointer; border:3px solid transparent; transition:all 0.2s; }
+        .color-dot.active { border-color:#fff; box-shadow:0 0 0 2px #000; }
+        .dark .color-dot.active { border-color:#1f2937; box-shadow:0 0 0 2px #fff; }
+        .scrollbar-hide::-webkit-scrollbar { display:none; }
+        .scrollbar-hide { -ms-overflow-style:none; scrollbar-width:none; }
+        #installBtn { display:none; }
+        #installBtn.show { display:flex; }
+        .install-guide { display:none; }
+        .install-guide.show { display:block; animation: slideIn 0.4s ease-out; }
+        .ios-guide { display:none; }
+        .ios-guide.show { display:block; }
     </style>
 
-    <!-- PWA Manifest -->
     <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi8mPYtdmI2LHYpyAtINmE2YTYudmE2YjZhNmI2KfYqiIsInNob3J0X25hbWUiOiLyp9i12YjYsdinIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwZjE3MmEiLCJ0aGVtZV9jb2xvciI6IiMwZjE3MmEiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCbWFXeHNQU0ozYUdsdVp5SWdkMmxrZEdnOUlqSXdNQ0lnYUdWcFoyaDBQU0l3TUNJZ1ptbHNiRDBpSTNSb1pYSmxJZz09Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-300">
@@ -108,22 +65,67 @@
                     <p class="text-xs text-gray-500 dark:text-gray-400" id="linksCount">0 رابط</p>
                 </div>
             </div>
-
             <div class="flex items-center gap-2">
                 <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-colors">
                     <i class="fas fa-moon dark:hidden text-gray-600"></i>
                     <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
                 </button>
-                <button id="installBtn" onclick="installPWA()" class="show gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors items-center">
-                    <i class="fas fa-download"></i>
-                    <span>تثبيت</span>
+                <button id="installBtn" onclick="installPWA()" class="gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors items-center">
+                    <i class="fas fa-download"></i><span>تثبيت</span>
+                </button>
+                <button onclick="showInstallGuide()" class="w-10 h-10 rounded-xl bg-green-600 hover:bg-green-700 text-white flex items-center justify-center transition-colors" title="كيف أثبت التطبيق؟">
+                    <i class="fas fa-mobile-alt"></i>
                 </button>
             </div>
         </div>
     </header>
 
     <main class="max-w-6xl mx-auto px-4 py-6">
-        <!-- Search & Filter Bar -->
+
+        <!-- Install Guide Banner -->
+        <div id="installGuide" class="install-guide mb-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-5 text-white shadow-lg">
+            <div class="flex items-start justify-between mb-3">
+                <h3 class="font-bold text-lg"><i class="fas fa-magic ml-2"></i> حوّل الصفحة لتطبيق على شاشتك!</h3>
+                <button onclick="hideInstallGuide()" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Android Guide -->
+            <div id="androidGuide" class="mb-3">
+                <p class="text-sm opacity-90 mb-2">📱 <strong>Chrome على Android:</strong></p>
+                <ol class="text-sm space-y-1 mr-5 list-decimal opacity-90">
+                    <li>اضغط القائمة <strong>(⋮)</strong> أعلى اليمين</li>
+                    <li>اختر <strong>"إضافة إلى الشاشة الرئيسية"</strong> أو <strong>"Install"</strong></li>
+                    <li>اضغط <strong>"إضافة"</strong></li>
+                </ol>
+            </div>
+
+            <!-- iOS Guide -->
+            <div id="iosGuide" class="ios-guide mb-3">
+                <p class="text-sm opacity-90 mb-2">🍎 <strong>Safari على iPhone/iPad:</strong></p>
+                <ol class="text-sm space-y-1 mr-5 list-decimal opacity-90">
+                    <li>اضغط زر <strong>المشاركة (□⬆️)</strong> أسفل الشاشة</li>
+                    <li>اسحب لأسفل واختر <strong>"Add to Home Screen"</strong></li>
+                    <li>اضغط <strong>"Add"</strong></li>
+                </ol>
+            </div>
+
+            <!-- Desktop Guide -->
+            <div id="desktopGuide" class="mb-3">
+                <p class="text-sm opacity-90 mb-2">💻 <strong>Chrome/Edge على الكمبيوتر:</strong></p>
+                <ol class="text-sm space-y-1 mr-5 list-decimal opacity-90">
+                    <li>اضغط الأيقونة <strong>📥</strong> في شريط العنوان (أعلى اليمين)</li>
+                    <li>أو من القائمة: <strong>⋮ → Cast, save and share → Install page as app</strong></li>
+                </ol>
+            </div>
+
+            <div class="mt-3 pt-3 border-t border-white/20">
+                <p class="text-xs opacity-75">💡 بعد التثبيت يعمل بدون إنترنت ويفتح كتطبيق مستقل!</p>
+            </div>
+        </div>
+
+        <!-- Search & Filter -->
         <div class="mb-6 flex flex-col sm:flex-row gap-3">
             <div class="flex-1 relative">
                 <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
@@ -132,33 +134,18 @@
                     oninput="filterLinks()">
             </div>
             <div class="flex gap-2 overflow-x-auto scrollbar-hide pb-1" id="categoryFilters">
-                <button onclick="filterByCategory('all')" class="category-btn active px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium whitespace-nowrap transition-all" data-cat="all">
-                    الكل
-                </button>
-                <button onclick="filterByCategory('work')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="work">
-                    <i class="fas fa-briefcase ml-1"></i>عمل
-                </button>
-                <button onclick="filterByCategory('personal')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="personal">
-                    <i class="fas fa-user ml-1"></i>شخصي
-                </button>
-                <button onclick="filterByCategory('learning')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="learning">
-                    <i class="fas fa-graduation-cap ml-1"></i>تعلم
-                </button>
-                <button onclick="filterByCategory('entertainment')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="entertainment">
-                    <i class="fas fa-gamepad ml-1"></i>ترفيه
-                </button>
-                <button onclick="filterByCategory('other')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="other">
-                    <i class="fas fa-tag ml-1"></i>أخرى
-                </button>
+                <button onclick="filterByCategory('all')" class="category-btn active px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium whitespace-nowrap transition-all" data-cat="all">الكل</button>
+                <button onclick="filterByCategory('work')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="work"><i class="fas fa-briefcase ml-1"></i>عمل</button>
+                <button onclick="filterByCategory('personal')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="personal"><i class="fas fa-user ml-1"></i>شخصي</button>
+                <button onclick="filterByCategory('learning')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="learning"><i class="fas fa-graduation-cap ml-1"></i>تعلم</button>
+                <button onclick="filterByCategory('entertainment')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="entertainment"><i class="fas fa-gamepad ml-1"></i>ترفيه</button>
+                <button onclick="filterByCategory('other')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="other"><i class="fas fa-tag ml-1"></i>أخرى</button>
             </div>
         </div>
 
-        <!-- Add New Link Form -->
+        <!-- Add Form -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 mb-6 shadow-sm">
-            <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
-                <i class="fas fa-plus-circle text-blue-500"></i>
-                إضافة رابط جديد
-            </h2>
+            <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-plus-circle text-blue-500"></i> إضافة رابط جديد</h2>
             <form id="addLinkForm" onsubmit="addLink(event)">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
@@ -172,98 +159,53 @@
                             class="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm">
                     </div>
                 </div>
-
                 <div class="mb-4">
                     <label class="block text-sm font-medium mb-1.5 text-gray-600 dark:text-gray-400">ملاحظات</label>
                     <textarea id="linkNotes" rows="2" placeholder="أضف ملاحظات أو وصف للرابط..." 
                         class="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm resize-none"></textarea>
                 </div>
-
                 <div class="flex flex-col sm:flex-row gap-4 mb-4">
                     <div>
                         <label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">التصنيف</label>
                         <div class="flex gap-2 flex-wrap">
-                            <label class="cursor-pointer">
-                                <input type="radio" name="category" value="work" class="hidden peer">
-                                <span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-blue-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-blue-600">
-                                    <i class="fas fa-briefcase ml-1"></i>عمل
-                                </span>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="category" value="personal" class="hidden peer" checked>
-                                <span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-green-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-green-600">
-                                    <i class="fas fa-user ml-1"></i>شخصي
-                                </span>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="category" value="learning" class="hidden peer">
-                                <span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-purple-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-purple-600">
-                                    <i class="fas fa-graduation-cap ml-1"></i>تعلم
-                                </span>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="category" value="entertainment" class="hidden peer">
-                                <span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-pink-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-pink-600">
-                                    <i class="fas fa-gamepad ml-1"></i>ترفيه
-                                </span>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="category" value="other" class="hidden peer">
-                                <span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-gray-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-gray-600">
-                                    <i class="fas fa-tag ml-1"></i>أخرى
-                                </span>
-                            </label>
+                            <label class="cursor-pointer"><input type="radio" name="category" value="work" class="hidden peer"><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-blue-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-blue-600"><i class="fas fa-briefcase ml-1"></i>عمل</span></label>
+                            <label class="cursor-pointer"><input type="radio" name="category" value="personal" class="hidden peer" checked><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-green-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-green-600"><i class="fas fa-user ml-1"></i>شخصي</span></label>
+                            <label class="cursor-pointer"><input type="radio" name="category" value="learning" class="hidden peer"><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-purple-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-purple-600"><i class="fas fa-graduation-cap ml-1"></i>تعلم</span></label>
+                            <label class="cursor-pointer"><input type="radio" name="category" value="entertainment" class="hidden peer"><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-pink-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-pink-600"><i class="fas fa-gamepad ml-1"></i>ترفيه</span></label>
+                            <label class="cursor-pointer"><input type="radio" name="category" value="other" class="hidden peer"><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-gray-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-gray-600"><i class="fas fa-tag ml-1"></i>أخرى</span></label>
                         </div>
                     </div>
-
                     <div>
                         <label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">لون البطاقة</label>
                         <div class="flex gap-2">
-                            <div class="color-dot active bg-blue-500" onclick="selectColor(this, 'blue')" data-color="blue"></div>
-                            <div class="color-dot bg-green-500" onclick="selectColor(this, 'green')" data-color="green"></div>
-                            <div class="color-dot bg-purple-500" onclick="selectColor(this, 'purple')" data-color="purple"></div>
-                            <div class="color-dot bg-pink-500" onclick="selectColor(this, 'pink')" data-color="pink"></div>
-                            <div class="color-dot bg-orange-500" onclick="selectColor(this, 'orange')" data-color="orange"></div>
-                            <div class="color-dot bg-red-500" onclick="selectColor(this, 'red')" data-color="red"></div>
-                            <div class="color-dot bg-cyan-500" onclick="selectColor(this, 'cyan')" data-color="cyan"></div>
-                            <div class="color-dot bg-gray-500" onclick="selectColor(this, 'gray')" data-color="gray"></div>
+                            <div class="color-dot active bg-blue-500" onclick="selectColor(this,'blue')" data-color="blue"></div>
+                            <div class="color-dot bg-green-500" onclick="selectColor(this,'green')" data-color="green"></div>
+                            <div class="color-dot bg-purple-500" onclick="selectColor(this,'purple')" data-color="purple"></div>
+                            <div class="color-dot bg-pink-500" onclick="selectColor(this,'pink')" data-color="pink"></div>
+                            <div class="color-dot bg-orange-500" onclick="selectColor(this,'orange')" data-color="orange"></div>
+                            <div class="color-dot bg-red-500" onclick="selectColor(this,'red')" data-color="red"></div>
+                            <div class="color-dot bg-cyan-500" onclick="selectColor(this,'cyan')" data-color="cyan"></div>
+                            <div class="color-dot bg-gray-500" onclick="selectColor(this,'gray')" data-color="gray"></div>
                         </div>
                     </div>
                 </div>
-
                 <div class="flex gap-2">
-                    <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2">
-                        <i class="fas fa-plus"></i>
-                        إضافة الرابط
-                    </button>
-                    <button type="button" onclick="clearForm()" class="px-6 py-3 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 font-medium transition-all">
-                        إلغاء
-                    </button>
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2"><i class="fas fa-plus"></i> إضافة الرابط</button>
+                    <button type="button" onclick="clearForm()" class="px-6 py-3 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 font-medium transition-all">إلغاء</button>
                 </div>
             </form>
         </div>
 
         <!-- Links Grid -->
-        <div id="linksContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Links will be rendered here -->
-        </div>
-
-        <!-- Empty State -->
+        <div id="linksContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         <div id="emptyState" class="hidden text-center py-16">
-            <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                <i class="fas fa-link text-4xl text-gray-300 dark:text-gray-600"></i>
-            </div>
+            <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"><i class="fas fa-link text-4xl text-gray-300 dark:text-gray-600"></i></div>
             <h3 class="text-xl font-bold text-gray-400 mb-2">لا توجد روابط</h3>
             <p class="text-gray-400 text-sm">أضف رابطك الأول بالأعلى</p>
         </div>
     </main>
 
-    <!-- Floating Action Button for Mobile -->
-    <button onclick="scrollToTop()" class="fixed bottom-6 left-6 w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 flex items-center justify-center transition-all z-40 md:hidden">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-
-    <!-- Toast Notification -->
+    <!-- Toast -->
     <div id="toast" class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
         <div class="bg-gray-800 dark:bg-white text-white dark:text-gray-900 px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3">
             <i id="toastIcon" class="fas fa-check-circle text-green-400 dark:text-green-600"></i>
@@ -280,29 +222,19 @@
                 <form id="editForm" onsubmit="saveEdit(event)">
                     <input type="hidden" id="editId">
                     <div class="space-y-4 mb-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-1 text-gray-600 dark:text-gray-400">الرابط</label>
-                            <input type="url" id="editUrl" required class="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 focus:border-blue-500 outline-none text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1 text-gray-600 dark:text-gray-400">الاسم</label>
-                            <input type="text" id="editName" required class="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 focus:border-blue-500 outline-none text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1 text-gray-600 dark:text-gray-400">ملاحظات</label>
-                            <textarea id="editNotes" rows="2" class="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 focus:border-blue-500 outline-none text-sm resize-none"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">لون البطاقة</label>
+                        <div><label class="block text-sm font-medium mb-1 text-gray-600 dark:text-gray-400">الرابط</label><input type="url" id="editUrl" required class="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 focus:border-blue-500 outline-none text-sm"></div>
+                        <div><label class="block text-sm font-medium mb-1 text-gray-600 dark:text-gray-400">الاسم</label><input type="text" id="editName" required class="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 focus:border-blue-500 outline-none text-sm"></div>
+                        <div><label class="block text-sm font-medium mb-1 text-gray-600 dark:text-gray-400">ملاحظات</label><textarea id="editNotes" rows="2" class="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 focus:border-blue-500 outline-none text-sm resize-none"></textarea></div>
+                        <div><label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">لون البطاقة</label>
                             <div class="flex gap-2">
-                                <div class="color-dot bg-blue-500" onclick="selectEditColor(this, 'blue')" data-edit-color="blue"></div>
-                                <div class="color-dot bg-green-500" onclick="selectEditColor(this, 'green')" data-edit-color="green"></div>
-                                <div class="color-dot bg-purple-500" onclick="selectEditColor(this, 'purple')" data-edit-color="purple"></div>
-                                <div class="color-dot bg-pink-500" onclick="selectEditColor(this, 'pink')" data-edit-color="pink"></div>
-                                <div class="color-dot bg-orange-500" onclick="selectEditColor(this, 'orange')" data-edit-color="orange"></div>
-                                <div class="color-dot bg-red-500" onclick="selectEditColor(this, 'red')" data-edit-color="red"></div>
-                                <div class="color-dot bg-cyan-500" onclick="selectEditColor(this, 'cyan')" data-edit-color="cyan"></div>
-                                <div class="color-dot bg-gray-500" onclick="selectEditColor(this, 'gray')" data-edit-color="gray"></div>
+                                <div class="color-dot bg-blue-500" onclick="selectEditColor(this,'blue')" data-edit-color="blue"></div>
+                                <div class="color-dot bg-green-500" onclick="selectEditColor(this,'green')" data-edit-color="green"></div>
+                                <div class="color-dot bg-purple-500" onclick="selectEditColor(this,'purple')" data-edit-color="purple"></div>
+                                <div class="color-dot bg-pink-500" onclick="selectEditColor(this,'pink')" data-edit-color="pink"></div>
+                                <div class="color-dot bg-orange-500" onclick="selectEditColor(this,'orange')" data-edit-color="orange"></div>
+                                <div class="color-dot bg-red-500" onclick="selectEditColor(this,'red')" data-edit-color="red"></div>
+                                <div class="color-dot bg-cyan-500" onclick="selectEditColor(this,'cyan')" data-edit-color="cyan"></div>
+                                <div class="color-dot bg-gray-500" onclick="selectEditColor(this,'gray')" data-edit-color="gray"></div>
                             </div>
                         </div>
                     </div>
@@ -315,82 +247,90 @@
         </div>
     </div>
 
-    <!-- Import/Export Modal -->
+    <!-- Data Modal -->
     <div id="dataModal" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDataModal()"></div>
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg px-4">
             <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-2xl slide-in">
                 <h3 class="text-lg font-bold mb-4">نسخ احتياطي واستعادة</h3>
                 <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">تصدير البيانات</label>
-                        <button onclick="exportData()" class="w-full py-2.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-medium transition-all flex items-center justify-center gap-2">
-                            <i class="fas fa-download"></i> تحميل ملف النسخ الاحتياطي
-                        </button>
-                    </div>
-                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-                        <label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">استيراد البيانات</label>
-                        <input type="file" id="importFile" accept=".json" onchange="importData(this)" class="hidden">
-                        <label for="importFile" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
-                            <i class="fas fa-upload"></i> اختيار ملف للاستيراد
-                        </label>
-                    </div>
+                    <div><label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">تصدير البيانات</label><button onclick="exportData()" class="w-full py-2.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-medium transition-all flex items-center justify-center gap-2"><i class="fas fa-download"></i> تحميل ملف النسخ الاحتياطي</button></div>
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4"><label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">استيراد البيانات</label><input type="file" id="importFile" accept=".json" onchange="importData(this)" class="hidden"><label for="importFile" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all flex items-center justify-center gap-2 cursor-pointer"><i class="fas fa-upload"></i> اختيار ملف للاستيراد</label></div>
                 </div>
                 <button onclick="closeDataModal()" class="mt-4 w-full py-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 font-medium transition-all">إغلاق</button>
             </div>
         </div>
     </div>
 
-    <!-- Footer Actions -->
+    <!-- FAB -->
+    <button onclick="scrollToTop()" class="fixed bottom-6 left-6 w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 flex items-center justify-center transition-all z-40 md:hidden"><i class="fas fa-arrow-up"></i></button>
     <div class="fixed bottom-6 left-6 z-40 hidden md:flex flex-col gap-2">
-        <button onclick="openDataModal()" class="w-12 h-12 rounded-full bg-gray-800 dark:bg-white text-white dark:text-gray-900 shadow-lg flex items-center justify-center hover:scale-110 transition-all" title="نسخ احتياطي">
-            <i class="fas fa-database"></i>
-        </button>
+        <button onclick="openDataModal()" class="w-12 h-12 rounded-full bg-gray-800 dark:bg-white text-white dark:text-gray-900 shadow-lg flex items-center justify-center hover:scale-110 transition-all" title="نسخ احتياطي"><i class="fas fa-database"></i></button>
     </div>
 
     <script>
-        // State
-        let links = JSON.parse(localStorage.getItem('myLinks')) || [];
-        let selectedColor = 'blue';
-        let editSelectedColor = 'blue';
-        let currentFilter = 'all';
-        let deferredPrompt = null;
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            const swCode = `self.addEventListener('install',e=>{self.skipWaiting()});self.addEventListener('activate',e=>{e.waitUntil(clients.claim())});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)))});`;
+            const swBlob = new Blob([swCode], {type: 'application/javascript'});
+            const swUrl = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swUrl).catch(()=>{});
+        }
 
-        // Category Config
+        let links = JSON.parse(localStorage.getItem('myLinks')) || [];
+        let selectedColor = 'blue', editSelectedColor = 'blue', currentFilter = 'all', deferredPrompt = null;
+
         const categoryConfig = {
-            work: { icon: 'fa-briefcase', label: 'عمل', color: 'text-blue-500' },
-            personal: { icon: 'fa-user', label: 'شخصي', color: 'text-green-500' },
-            learning: { icon: 'fa-graduation-cap', label: 'تعلم', color: 'text-purple-500' },
-            entertainment: { icon: 'fa-gamepad', label: 'ترفيه', color: 'text-pink-500' },
-            other: { icon: 'fa-tag', label: 'أخرى', color: 'text-gray-500' }
+            work: {icon:'fa-briefcase', label:'عمل', color:'text-blue-500'},
+            personal: {icon:'fa-user', label:'شخصي', color:'text-green-500'},
+            learning: {icon:'fa-graduation-cap', label:'تعلم', color:'text-purple-500'},
+            entertainment: {icon:'fa-gamepad', label:'ترفيه', color:'text-pink-500'},
+            other: {icon:'fa-tag', label:'أخرى', color:'text-gray-500'}
         };
 
         const colorConfig = {
-            blue: { bg: 'bg-blue-50 dark:bg-blue-900/20', border: 'border-blue-200 dark:border-blue-800', accent: 'bg-blue-500', text: 'text-blue-600 dark:text-blue-400', gradient: 'from-blue-500 to-blue-600' },
-            green: { bg: 'bg-green-50 dark:bg-green-900/20', border: 'border-green-200 dark:border-green-800', accent: 'bg-green-500', text: 'text-green-600 dark:text-green-400', gradient: 'from-green-500 to-green-600' },
-            purple: { bg: 'bg-purple-50 dark:bg-purple-900/20', border: 'border-purple-200 dark:border-purple-800', accent: 'bg-purple-500', text: 'text-purple-600 dark:text-purple-400', gradient: 'from-purple-500 to-purple-600' },
-            pink: { bg: 'bg-pink-50 dark:bg-pink-900/20', border: 'border-pink-200 dark:border-pink-800', accent: 'bg-pink-500', text: 'text-pink-600 dark:text-pink-400', gradient: 'from-pink-500 to-pink-600' },
-            orange: { bg: 'bg-orange-50 dark:bg-orange-900/20', border: 'border-orange-200 dark:border-orange-800', accent: 'bg-orange-500', text: 'text-orange-600 dark:text-orange-400', gradient: 'from-orange-500 to-orange-600' },
-            red: { bg: 'bg-red-50 dark:bg-red-900/20', border: 'border-red-200 dark:border-red-800', accent: 'bg-red-500', text: 'text-red-600 dark:text-red-400', gradient: 'from-red-500 to-red-600' },
-            cyan: { bg: 'bg-cyan-50 dark:bg-cyan-900/20', border: 'border-cyan-200 dark:border-cyan-800', accent: 'bg-cyan-500', text: 'text-cyan-600 dark:text-cyan-400', gradient: 'from-cyan-500 to-cyan-600' },
-            gray: { bg: 'bg-gray-50 dark:bg-gray-800/50', border: 'border-gray-200 dark:border-gray-700', accent: 'bg-gray-500', text: 'text-gray-600 dark:text-gray-400', gradient: 'from-gray-500 to-gray-600' }
+            blue: {bg:'bg-blue-50 dark:bg-blue-900/20', border:'border-blue-200 dark:border-blue-800', accent:'bg-blue-500', text:'text-blue-600 dark:text-blue-400', gradient:'from-blue-500 to-blue-600'},
+            green: {bg:'bg-green-50 dark:bg-green-900/20', border:'border-green-200 dark:border-green-800', accent:'bg-green-500', text:'text-green-600 dark:text-green-400', gradient:'from-green-500 to-green-600'},
+            purple: {bg:'bg-purple-50 dark:bg-purple-900/20', border:'border-purple-200 dark:border-purple-800', accent:'bg-purple-500', text:'text-purple-600 dark:text-purple-400', gradient:'from-purple-500 to-purple-600'},
+            pink: {bg:'bg-pink-50 dark:bg-pink-900/20', border:'border-pink-200 dark:border-pink-800', accent:'bg-pink-500', text:'text-pink-600 dark:text-pink-400', gradient:'from-pink-500 to-pink-600'},
+            orange: {bg:'bg-orange-50 dark:bg-orange-900/20', border:'border-orange-200 dark:border-orange-800', accent:'bg-orange-500', text:'text-orange-600 dark:text-orange-400', gradient:'from-orange-500 to-orange-600'},
+            red: {bg:'bg-red-50 dark:bg-red-900/20', border:'border-red-200 dark:border-red-800', accent:'bg-red-500', text:'text-red-600 dark:text-red-400', gradient:'from-red-500 to-red-600'},
+            cyan: {bg:'bg-cyan-50 dark:bg-cyan-900/20', border:'border-cyan-200 dark:border-cyan-800', accent:'bg-cyan-500', text:'text-cyan-600 dark:text-cyan-400', gradient:'from-cyan-500 to-cyan-600'},
+            gray: {bg:'bg-gray-50 dark:bg-gray-800/50', border:'border-gray-200 dark:border-gray-700', accent:'bg-gray-500', text:'text-gray-600 dark:text-gray-400', gradient:'from-gray-500 to-gray-600'}
         };
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            renderLinks();
-            updateCount();
-            checkDarkMode();
-
-            // PWA Install
+            renderLinks(); updateCount(); checkDarkMode(); detectDevice();
             window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
+                e.preventDefault(); deferredPrompt = e;
                 document.getElementById('installBtn').classList.add('show');
             });
+            // Show install guide on first visit
+            if (!localStorage.getItem('installGuideDismissed')) {
+                setTimeout(showInstallGuide, 1500);
+            }
         });
 
-        // Dark Mode
+        function detectDevice() {
+            const ua = navigator.userAgent;
+            const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+            const isAndroid = /Android/.test(ua);
+            const isDesktop = !isIOS && !isAndroid;
+
+            document.getElementById('androidGuide').style.display = isAndroid ? 'block' : 'none';
+            document.getElementById('iosGuide').style.display = isIOS ? 'block' : 'none';
+            document.getElementById('desktopGuide').style.display = isDesktop ? 'block' : 'none';
+        }
+
+        function showInstallGuide() {
+            document.getElementById('installGuide').classList.add('show');
+        }
+
+        function hideInstallGuide() {
+            document.getElementById('installGuide').classList.remove('show');
+            localStorage.setItem('installGuideDismissed', 'true');
+        }
+
         function checkDarkMode() {
             if (localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
@@ -402,288 +342,141 @@
             localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
         }
 
-        // Color Selection
         function selectColor(el, color) {
             document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
-            el.classList.add('active');
-            selectedColor = color;
+            el.classList.add('active'); selectedColor = color;
         }
 
         function selectEditColor(el, color) {
             document.querySelectorAll('[data-edit-color]').forEach(d => d.classList.remove('active'));
-            el.classList.add('active');
-            editSelectedColor = color;
+            el.classList.add('active'); editSelectedColor = color;
         }
 
-        // Add Link
         function addLink(e) {
             e.preventDefault();
-
             const url = document.getElementById('linkUrl').value.trim();
             const name = document.getElementById('linkName').value.trim();
             const notes = document.getElementById('linkNotes').value.trim();
             const category = document.querySelector('input[name="category"]:checked').value;
-
             if (!url || !name) return;
-
-            const link = {
-                id: Date.now(),
-                url: url.startsWith('http') ? url : 'https://' + url,
-                name,
-                notes,
-                category,
-                color: selectedColor,
-                createdAt: new Date().toISOString()
-            };
-
-            links.unshift(link);
-            saveLinks();
-            renderLinks();
-            clearForm();
-            showToast('تم إضافة الرابط بنجاح', 'success');
+            const link = { id: Date.now(), url: url.startsWith('http') ? url : 'https://' + url, name, notes, category, color: selectedColor, createdAt: new Date().toISOString() };
+            links.unshift(link); saveLinks(); renderLinks(); clearForm(); showToast('تم إضافة الرابط بنجاح', 'success');
         }
 
-        function clearForm() {
-            document.getElementById('addLinkForm').reset();
-            selectColor(document.querySelector('[data-color="blue"]'), 'blue');
-        }
+        function clearForm() { document.getElementById('addLinkForm').reset(); selectColor(document.querySelector('[data-color="blue"]'), 'blue'); }
 
-        // Render Links
         function renderLinks() {
             const container = document.getElementById('linksContainer');
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-
             let filtered = links.filter(link => {
-                const matchesSearch = link.name.toLowerCase().includes(searchTerm) || 
-                                    link.notes.toLowerCase().includes(searchTerm) ||
-                                    link.url.toLowerCase().includes(searchTerm);
+                const matchesSearch = link.name.toLowerCase().includes(searchTerm) || link.notes.toLowerCase().includes(searchTerm) || link.url.toLowerCase().includes(searchTerm);
                 const matchesCategory = currentFilter === 'all' || link.category === currentFilter;
                 return matchesSearch && matchesCategory;
             });
-
-            if (filtered.length === 0) {
-                container.innerHTML = '';
-                document.getElementById('emptyState').classList.remove('hidden');
-                return;
-            }
-
+            if (filtered.length === 0) { container.innerHTML = ''; document.getElementById('emptyState').classList.remove('hidden'); return; }
             document.getElementById('emptyState').classList.add('hidden');
-
             container.innerHTML = filtered.map(link => {
                 const cat = categoryConfig[link.category] || categoryConfig.other;
                 const col = colorConfig[link.color] || colorConfig.blue;
                 const date = new Date(link.createdAt).toLocaleDateString('ar-SA');
-
-                return `
-                    <div class="group relative bg-white dark:bg-gray-800 rounded-2xl border ${col.border} overflow-hidden card-hover slide-in">
-                        <div class="absolute top-0 right-0 w-full h-1 bg-gradient-to-l ${col.gradient}"></div>
-                        <div class="p-5">
-                            <div class="flex items-start justify-between mb-3">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-8 h-8 rounded-lg ${col.bg} flex items-center justify-center">
-                                        <i class="fas ${cat.icon} ${col.text} text-sm"></i>
-                                    </span>
-                                    <span class="text-xs font-medium text-gray-400">${cat.label}</span>
-                                </div>
-                                <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button onclick="editLink(${link.id})" class="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-blue-500 transition-colors">
-                                        <i class="fas fa-pen text-xs"></i>
-                                    </button>
-                                    <button onclick="deleteLink(${link.id})" class="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors">
-                                        <i class="fas fa-trash text-xs"></i>
-                                    </button>
-                                </div>
+                return `<div class="group relative bg-white dark:bg-gray-800 rounded-2xl border ${col.border} overflow-hidden card-hover slide-in">
+                    <div class="absolute top-0 right-0 w-full h-1 bg-gradient-to-l ${col.gradient}"></div>
+                    <div class="p-5">
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="w-8 h-8 rounded-lg ${col.bg} flex items-center justify-center"><i class="fas ${cat.icon} ${col.text} text-sm"></i></span>
+                                <span class="text-xs font-medium text-gray-400">${cat.label}</span>
                             </div>
-
-                            <h3 class="font-bold text-lg mb-1 text-gray-800 dark:text-gray-100 truncate">${escapeHtml(link.name)}</h3>
-
-                            ${link.notes ? `<p class="text-sm text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">${escapeHtml(link.notes)}</p>` : '<div class="mb-3"></div>'}
-
-                            <a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" 
-                                class="flex items-center gap-2 w-full py-2.5 px-4 rounded-xl ${col.bg} ${col.text} hover:opacity-80 transition-all text-sm font-medium group/link">
-                                <i class="fas fa-external-link-alt text-xs transition-transform group-hover/link:-translate-x-1"></i>
-                                <span class="truncate flex-1 text-right">${escapeHtml(link.url)}</span>
-                            </a>
-
-                            <div class="mt-3 flex items-center justify-between text-xs text-gray-400">
-                                <span>${date}</span>
-                                <span class="w-2 h-2 rounded-full ${col.accent}"></span>
+                            <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="editLink(${link.id})" class="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-blue-500 transition-colors"><i class="fas fa-pen text-xs"></i></button>
+                                <button onclick="deleteLink(${link.id})" class="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors"><i class="fas fa-trash text-xs"></i></button>
                             </div>
                         </div>
+                        <h3 class="font-bold text-lg mb-1 text-gray-800 dark:text-gray-100 truncate">${escapeHtml(link.name)}</h3>
+                        ${link.notes ? `<p class="text-sm text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">${escapeHtml(link.notes)}</p>` : '<div class="mb-3"></div>'}
+                        <a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 w-full py-2.5 px-4 rounded-xl ${col.bg} ${col.text} hover:opacity-80 transition-all text-sm font-medium group/link">
+                            <i class="fas fa-external-link-alt text-xs transition-transform group-hover/link:-translate-x-1"></i>
+                            <span class="truncate flex-1 text-right">${escapeHtml(link.url)}</span>
+                        </a>
+                        <div class="mt-3 flex items-center justify-between text-xs text-gray-400"><span>${date}</span><span class="w-2 h-2 rounded-full ${col.accent}"></span></div>
                     </div>
-                `;
+                </div>`;
             }).join('');
-
             updateCount();
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Filter
-        function filterLinks() {
-            renderLinks();
-        }
-
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+        function filterLinks() { renderLinks(); }
         function filterByCategory(cat) {
             currentFilter = cat;
             document.querySelectorAll('.category-btn').forEach(btn => {
-                if (btn.dataset.cat === cat) {
-                    btn.classList.add('bg-blue-600', 'text-white');
-                    btn.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-800', 'dark:text-gray-100');
-                } else {
-                    btn.classList.remove('bg-blue-600', 'text-white');
-                    btn.classList.add('bg-white', 'dark:bg-gray-800');
-                }
+                if (btn.dataset.cat === cat) { btn.classList.add('bg-blue-600','text-white'); btn.classList.remove('bg-white','dark:bg-gray-800','text-gray-800','dark:text-gray-100'); }
+                else { btn.classList.remove('bg-blue-600','text-white'); btn.classList.add('bg-white','dark:bg-gray-800'); }
             });
             renderLinks();
         }
 
-        // Edit
         function editLink(id) {
-            const link = links.find(l => l.id === id);
-            if (!link) return;
-
+            const link = links.find(l => l.id === id); if (!link) return;
             document.getElementById('editId').value = id;
             document.getElementById('editUrl').value = link.url;
             document.getElementById('editName').value = link.name;
             document.getElementById('editNotes').value = link.notes;
-
-            document.querySelectorAll('[data-edit-color]').forEach(d => {
-                d.classList.toggle('active', d.dataset.editColor === link.color);
-            });
+            document.querySelectorAll('[data-edit-color]').forEach(d => d.classList.toggle('active', d.dataset.editColor === link.color));
             editSelectedColor = link.color;
-
             document.getElementById('editModal').classList.remove('hidden');
         }
 
         function saveEdit(e) {
             e.preventDefault();
             const id = parseInt(document.getElementById('editId').value);
-            const link = links.find(l => l.id === id);
-            if (!link) return;
-
+            const link = links.find(l => l.id === id); if (!link) return;
             link.url = document.getElementById('editUrl').value.trim();
             link.name = document.getElementById('editName').value.trim();
             link.notes = document.getElementById('editNotes').value.trim();
             link.color = editSelectedColor;
-
-            saveLinks();
-            renderLinks();
-            closeEditModal();
-            showToast('تم تحديث الرابط بنجاح', 'success');
+            saveLinks(); renderLinks(); closeEditModal(); showToast('تم تحديث الرابط بنجاح', 'success');
         }
 
-        function closeEditModal() {
-            document.getElementById('editModal').classList.add('hidden');
-        }
+        function closeEditModal() { document.getElementById('editModal').classList.add('hidden'); }
+        function deleteLink(id) { if (!confirm('هل أنت متأكد من حذف هذا الرابط؟')) return; links = links.filter(l => l.id !== id); saveLinks(); renderLinks(); showToast('تم حذف الرابط', 'success'); }
+        function saveLinks() { localStorage.setItem('myLinks', JSON.stringify(links)); updateCount(); }
+        function updateCount() { const count = links.length; document.getElementById('linksCount').textContent = count + ' ' + (count === 1 ? 'رابط' : count === 2 ? 'رابطان' : count < 11 ? 'روابط' : 'رابط'); }
 
-        // Delete
-        function deleteLink(id) {
-            if (!confirm('هل أنت متأكد من حذف هذا الرابط؟')) return;
-            links = links.filter(l => l.id !== id);
-            saveLinks();
-            renderLinks();
-            showToast('تم حذف الرابط', 'success');
-        }
-
-        // Data Management
-        function saveLinks() {
-            localStorage.setItem('myLinks', JSON.stringify(links));
-            updateCount();
-        }
-
-        function updateCount() {
-            const count = links.length;
-            document.getElementById('linksCount').textContent = count + ' ' + (count === 1 ? 'رابط' : count === 2 ? 'رابطان' : count < 11 ? 'روابط' : 'رابط');
-        }
-
-        // Export/Import
-        function openDataModal() {
-            document.getElementById('dataModal').classList.remove('hidden');
-        }
-
-        function closeDataModal() {
-            document.getElementById('dataModal').classList.add('hidden');
-        }
-
+        function openDataModal() { document.getElementById('dataModal').classList.remove('hidden'); }
+        function closeDataModal() { document.getElementById('dataModal').classList.add('hidden'); }
         function exportData() {
             const dataStr = JSON.stringify(links, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
+            const blob = new Blob([dataStr], {type:'application/json'});
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `روابطي_${new Date().toLocaleDateString('ar-SA')}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
+            const a = document.createElement('a'); a.href = url; a.download = `روابطي_${new Date().toLocaleDateString('ar-SA')}.json`; a.click(); URL.revokeObjectURL(url);
             showToast('تم تصدير البيانات بنجاح', 'success');
         }
-
         function importData(input) {
-            const file = input.files[0];
-            if (!file) return;
-
+            const file = input.files[0]; if (!file) return;
             const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const imported = JSON.parse(e.target.result);
-                    if (Array.isArray(imported)) {
-                        links = imported;
-                        saveLinks();
-                        renderLinks();
-                        showToast('تم استيراد البيانات بنجاح', 'success');
-                        closeDataModal();
-                    } else {
-                        throw new Error('Invalid format');
-                    }
-                } catch (err) {
-                    showToast('ملف غير صالح', 'error');
-                }
-            };
-            reader.readAsText(file);
-            input.value = '';
+            reader.onload = (e) => { try { const imported = JSON.parse(e.target.result); if (Array.isArray(imported)) { links = imported; saveLinks(); renderLinks(); showToast('تم استيراد البيانات بنجاح', 'success'); closeDataModal(); } else throw new Error('Invalid'); } catch { showToast('ملف غير صالح', 'error'); } };
+            reader.readAsText(file); input.value = '';
         }
 
-        // Toast
-        function showToast(message, type = 'success') {
+        function showToast(message, type='success') {
             const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            const toastIcon = document.getElementById('toastIcon');
-
-            toastMessage.textContent = message;
-            toastIcon.className = type === 'success' ? 'fas fa-check-circle text-green-400 dark:text-green-600' : 'fas fa-exclamation-circle text-red-400 dark:text-red-600';
-
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+            document.getElementById('toastMessage').textContent = message;
+            document.getElementById('toastIcon').className = type === 'success' ? 'fas fa-check-circle text-green-400 dark:text-green-600' : 'fas fa-exclamation-circle text-red-400 dark:text-red-600';
+            toast.classList.remove('translate-y-20','opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20','opacity-0'), 3000);
         }
 
-        // PWA Install
         async function installPWA() {
-            if (!deferredPrompt) return;
+            if (!deferredPrompt) { showToast('اضغط زر (⋮) ثم "إضافة للشاشة الرئيسية"', 'error'); showInstallGuide(); return; }
             deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') {
-                document.getElementById('installBtn').classList.remove('show');
-            }
+            const {outcome} = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') { document.getElementById('installBtn').classList.remove('show'); showToast('تم تثبيت التطبيق!', 'success'); }
             deferredPrompt = null;
         }
 
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 'f') {
-                e.preventDefault();
-                document.getElementById('searchInput').focus();
-            }
-        });
+        function scrollToTop() { window.scrollTo({top:0, behavior:'smooth'}); }
+        document.addEventListener('keydown', (e) => { if (e.ctrlKey && e.key === 'f') { e.preventDefault(); document.getElementById('searchInput').focus(); } });
     </script>
 </body>
 </html>
