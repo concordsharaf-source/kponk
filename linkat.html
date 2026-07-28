@@ -9,6 +9,9 @@
     <meta name="apple-mobile-web-app-title" content="روابطي">
     <title>روابطي - مدير الروابط</title>
 
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/192/1828/1828884.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,13 +47,9 @@
         .install-guide { display:none; }
         .install-guide.show { display:block; animation: slideIn 0.4s ease-out; }
     </style>
-
-    <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/fontawesome/fontawesome-free@6.4.0/svgs/solid/144/fa-link.svg">
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-300">
 
-    <!-- Header -->
     <header class="sticky top-0 z-50 glass bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -79,7 +78,6 @@
 
     <main class="max-w-6xl mx-auto px-4 py-6">
 
-        <!-- Install Guide Banner -->
         <div id="installGuide" class="install-guide mb-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-5 text-white shadow-lg">
             <div class="flex items-start justify-between mb-3">
                 <h3 class="font-bold text-lg"><i class="fas fa-magic ml-2"></i> حوّل الصفحة لتطبيق على شاشتك!</h3>
@@ -87,39 +85,34 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-
             <div id="androidGuide" class="mb-3" style="display:none">
                 <p class="text-sm opacity-90 mb-2">📱 <strong>Chrome على Android:</strong></p>
                 <ol class="text-sm space-y-1 mr-5 list-decimal opacity-90">
                     <li>اضغط القائمة <strong>(⋮)</strong> أعلى اليمين</li>
-                    <li>اختر <strong>"إضافة إلى الشاشة الرئيسية"</strong> أو <strong>"Install"</strong></li>
+                    <li>اختر <strong>"إضافة إلى الشاشة الرئيسية"</strong></li>
                     <li>اضغط <strong>"إضافة"</strong></li>
                 </ol>
             </div>
-
             <div id="iosGuide" class="mb-3" style="display:none">
-                <p class="text-sm opacity-90 mb-2">🍎 <strong>Safari على iPhone/iPad:</strong></p>
+                <p class="text-sm opacity-90 mb-2">🍎 <strong>Safari على iPhone:</strong></p>
                 <ol class="text-sm space-y-1 mr-5 list-decimal opacity-90">
-                    <li>اضغط زر <strong>المشاركة (□⬆️)</strong> أسفل الشاشة</li>
-                    <li>اسحب لأسفل واختر <strong>"Add to Home Screen"</strong></li>
+                    <li>اضغط زر <strong>المشاركة (□⬆️)</strong></li>
+                    <li>اختر <strong>"Add to Home Screen"</strong></li>
                     <li>اضغط <strong>"Add"</strong></li>
                 </ol>
             </div>
-
             <div id="desktopGuide" class="mb-3" style="display:none">
-                <p class="text-sm opacity-90 mb-2">💻 <strong>Chrome/Edge على الكمبيوتر:</strong></p>
+                <p class="text-sm opacity-90 mb-2">💻 <strong>Chrome على الكمبيوتر:</strong></p>
                 <ol class="text-sm space-y-1 mr-5 list-decimal opacity-90">
-                    <li>اضغط الأيقونة <strong>📥</strong> في شريط العنوان (أعلى اليمين)</li>
-                    <li>أو من القائمة: <strong>⋮ → Cast, save and share → Install page as app</strong></li>
+                    <li>اضغط الأيقونة <strong>📥</strong> في شريط العنوان</li>
+                    <li>أو: <strong>⋮ → Cast, save and share → Install</strong></li>
                 </ol>
             </div>
-
             <div class="mt-3 pt-3 border-t border-white/20">
-                <p class="text-xs opacity-75">💡 بعد التثبيت يعمل بدون إنترنت ويفتح كتطبيق مستقل!</p>
+                <p class="text-xs opacity-75">💡 بعد التثبيت يعمل بدون إنترنت وبدون شريط عنوان!</p>
             </div>
         </div>
 
-        <!-- Search & Filter -->
         <div class="mb-6 flex flex-col sm:flex-row gap-3">
             <div class="flex-1 relative">
                 <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
@@ -137,7 +130,6 @@
             </div>
         </div>
 
-        <!-- Add Form -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 mb-6 shadow-sm">
             <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-plus-circle text-blue-500"></i> إضافة رابط جديد</h2>
             <form id="addLinkForm" onsubmit="addLink(event)">
@@ -190,7 +182,6 @@
             </form>
         </div>
 
-        <!-- Links Grid -->
         <div id="linksContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         <div id="emptyState" class="hidden text-center py-16">
             <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"><i class="fas fa-link text-4xl text-gray-300 dark:text-gray-600"></i></div>
@@ -199,7 +190,6 @@
         </div>
     </main>
 
-    <!-- Toast -->
     <div id="toast" class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
         <div class="bg-gray-800 dark:bg-white text-white dark:text-gray-900 px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3">
             <i id="toastIcon" class="fas fa-check-circle text-green-400 dark:text-green-600"></i>
@@ -207,7 +197,6 @@
         </div>
     </div>
 
-    <!-- Edit Modal -->
     <div id="editModal" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeEditModal()"></div>
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg px-4">
@@ -241,7 +230,6 @@
         </div>
     </div>
 
-    <!-- Data Modal -->
     <div id="dataModal" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDataModal()"></div>
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg px-4">
@@ -256,76 +244,18 @@
         </div>
     </div>
 
-    <!-- FAB -->
     <button onclick="scrollToTop()" class="fixed bottom-6 left-6 w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 flex items-center justify-center transition-all z-40 md:hidden"><i class="fas fa-arrow-up"></i></button>
     <div class="fixed bottom-6 left-6 z-40 hidden md:flex flex-col gap-2">
         <button onclick="openDataModal()" class="w-12 h-12 rounded-full bg-gray-800 dark:bg-white text-white dark:text-gray-900 shadow-lg flex items-center justify-center hover:scale-110 transition-all" title="نسخ احتياطي"><i class="fas fa-database"></i></button>
     </div>
 
     <script>
-        // ====== PWA - Manifest & Service Worker (Dynamic) ======
-        (function() {
-            const path = location.pathname;
-            const filename = path.split('/').pop() || 'index.html';
-            const folder = path.substring(0, path.lastIndexOf('/') + 1);
-
-            // Create dynamic manifest
-            const manifest = {
-                name: "روابطي - مدير الروابط",
-                short_name: "روابطي",
-                start_url: path,
-                scope: folder,
-                display: "standalone",
-                background_color: "#0f172a",
-                theme_color: "#0f172a",
-                display_override: ["standalone", "fullscreen"],
-                icons: [
-                    { src: "https://cdn.jsdelivr.net/gh/fontawesome/fontawesome-free@6.4.0/svgs/solid/144/fa-link.svg", sizes: "144x144", type: "image/svg+xml" },
-                    { src: "https://cdn.jsdelivr.net/gh/fontawesome/fontawesome-free@6.4.0/svgs/solid/192/fa-link.svg", sizes: "192x192", type: "image/svg+xml" },
-                    { src: "https://cdn.jsdelivr.net/gh/fontawesome/fontawesome-free@6.4.0/svgs/solid/512/fa-link.svg", sizes: "512x512", type: "image/svg+xml" }
-                ]
-            };
-
-            const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
-            const manifestUrl = URL.createObjectURL(manifestBlob);
-            const link = document.createElement('link');
-            link.rel = 'manifest';
-            link.href = manifestUrl;
-            document.head.appendChild(link);
-
-            // Create dynamic Service Worker
-            if ('serviceWorker' in navigator) {
-                const swCode = `
-                    const CACHE_NAME = 'rowati-v2';
-                    const CACHE_URLS = ['${path}'];
-
-                    self.addEventListener('install', e => {
-                        e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CACHE_URLS)));
-                        self.skipWaiting();
-                    });
-
-                    self.addEventListener('activate', e => {
-                        e.waitUntil(clients.claim());
-                    });
-
-                    self.addEventListener('fetch', e => {
-                        e.respondWith(
-                            caches.match(e.request).then(response => {
-                                if (response) return response;
-                                return fetch(e.request).catch(() => {
-                                    if (e.request.mode === 'navigate') {
-                                        return caches.match('${path}');
-                                    }
-                                });
-                            })
-                        );
-                    });
-                `;
-                const swBlob = new Blob([swCode], {type: 'application/javascript'});
-                const swUrl = URL.createObjectURL(swBlob);
-                navigator.serviceWorker.register(swUrl).catch(() => {});
-            }
-        })();
+        // Register Service Worker from file
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('SW registered'))
+                .catch(err => console.log('SW error', err));
+        }
 
         let links = JSON.parse(localStorage.getItem('myLinks')) || [];
         let selectedColor = 'blue', editSelectedColor = 'blue', currentFilter = 'all', deferredPrompt = null;
