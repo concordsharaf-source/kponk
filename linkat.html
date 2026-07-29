@@ -44,8 +44,6 @@
         .scrollbar-hide { -ms-overflow-style:none; scrollbar-width:none; }
         #installBtn { display:none; }
         #installBtn.show { display:flex; }
-        .install-guide { display:none; }
-        .install-guide.show { display:block; animation: slideIn 0.4s ease-out; }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-300">
@@ -69,50 +67,13 @@
                 <button id="installBtn" onclick="installPWA()" class="gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors items-center">
                     <i class="fas fa-download"></i><span>تثبيت</span>
                 </button>
-                <button onclick="showInstallGuide()" class="w-10 h-10 rounded-xl bg-green-600 hover:bg-green-700 text-white flex items-center justify-center transition-colors" title="كيف أثبت التطبيق؟">
-                    <i class="fas fa-mobile-alt"></i>
-                </button>
             </div>
         </div>
     </header>
 
     <main class="max-w-6xl mx-auto px-4 py-6">
 
-        <div id="installGuide" class="install-guide mb-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-5 text-white shadow-lg">
-            <div class="flex items-start justify-between mb-3">
-                <h3 class="font-bold text-lg"><i class="fas fa-magic ml-2"></i> حوّل الصفحة لتطبيق على شاشتك!</h3>
-                <button onclick="hideInstallGuide()" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div id="androidGuide" class="mb-3" style="display:none">
-                <p class="text-sm opacity-90 mb-2">📱 <strong>Chrome على Android:</strong></p>
-                <ol class="text-sm space-y-1 mr-5 list-decimal opacity-90">
-                    <li>اضغط القائمة <strong>(⋮)</strong> أعلى اليمين</li>
-                    <li>اختر <strong>"إضافة إلى الشاشة الرئيسية"</strong></li>
-                    <li>اضغط <strong>"إضافة"</strong></li>
-                </ol>
-            </div>
-            <div id="iosGuide" class="mb-3" style="display:none">
-                <p class="text-sm opacity-90 mb-2">🍎 <strong>Safari على iPhone:</strong></p>
-                <ol class="text-sm space-y-1 mr-5 list-decimal opacity-90">
-                    <li>اضغط زر <strong>المشاركة (□⬆️)</strong></li>
-                    <li>اختر <strong>"Add to Home Screen"</strong></li>
-                    <li>اضغط <strong>"Add"</strong></li>
-                </ol>
-            </div>
-            <div id="desktopGuide" class="mb-3" style="display:none">
-                <p class="text-sm opacity-90 mb-2">💻 <strong>Chrome على الكمبيوتر:</strong></p>
-                <ol class="text-sm space-y-1 mr-5 list-decimal opacity-90">
-                    <li>اضغط الأيقونة <strong>📥</strong> في شريط العنوان</li>
-                    <li>أو: <strong>⋮ → Cast, save and share → Install</strong></li>
-                </ol>
-            </div>
-            <div class="mt-3 pt-3 border-t border-white/20">
-                <p class="text-xs opacity-75">💡 بعد التثبيت يعمل بدون إنترنت وبدون شريط عنوان!</p>
-            </div>
-        </div>
-
+        <!-- البحث والتصنيف -->
         <div class="mb-6 flex flex-col sm:flex-row gap-3">
             <div class="flex-1 relative">
                 <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
@@ -130,6 +91,35 @@
             </div>
         </div>
 
+        <!-- الروابط المحفوظة (أعلى الصفحة) -->
+        <div id="linksContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
+        <div id="emptyState" class="hidden text-center py-16 mb-8">
+            <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"><i class="fas fa-link text-4xl text-gray-300 dark:text-gray-600"></i></div>
+            <h3 class="text-xl font-bold text-gray-400 mb-2">لا توجد روابط</h3>
+            <p class="text-gray-400 text-sm">أضف رابطك الأول بالأسفل</p>
+        </div>
+
+        <!-- نسخ احتياطي واستعادة (ظاهر) -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 mb-6 shadow-sm">
+            <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-database text-green-500"></i> نسخ احتياطي واستعادة</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">تصدير البيانات</label>
+                    <button onclick="exportData()" class="w-full py-2.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-medium transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-download"></i> تحميل ملف النسخ الاحتياطي
+                    </button>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">استيراد البيانات</label>
+                    <input type="file" id="importFile" accept=".json" onchange="importData(this)" class="hidden">
+                    <label for="importFile" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fas fa-upload"></i> اختيار ملف للاستيراد
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- إضافة رابط جديد (أسفل الصفحة) -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 mb-6 shadow-sm">
             <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-plus-circle text-blue-500"></i> إضافة رابط جديد</h2>
             <form id="addLinkForm" onsubmit="addLink(event)">
@@ -182,12 +172,6 @@
             </form>
         </div>
 
-        <div id="linksContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-        <div id="emptyState" class="hidden text-center py-16">
-            <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"><i class="fas fa-link text-4xl text-gray-300 dark:text-gray-600"></i></div>
-            <h3 class="text-xl font-bold text-gray-400 mb-2">لا توجد روابط</h3>
-            <p class="text-gray-400 text-sm">أضف رابطك الأول بالأعلى</p>
-        </div>
     </main>
 
     <div id="toast" class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
@@ -230,24 +214,7 @@
         </div>
     </div>
 
-    <div id="dataModal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDataModal()"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg px-4">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-2xl slide-in">
-                <h3 class="text-lg font-bold mb-4">نسخ احتياطي واستعادة</h3>
-                <div class="space-y-4">
-                    <div><label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">تصدير البيانات</label><button onclick="exportData()" class="w-full py-2.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-medium transition-all flex items-center justify-center gap-2"><i class="fas fa-download"></i> تحميل ملف النسخ الاحتياطي</button></div>
-                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4"><label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">استيراد البيانات</label><input type="file" id="importFile" accept=".json" onchange="importData(this)" class="hidden"><label for="importFile" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all flex items-center justify-center gap-2 cursor-pointer"><i class="fas fa-upload"></i> اختيار ملف للاستيراد</label></div>
-                </div>
-                <button onclick="closeDataModal()" class="mt-4 w-full py-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 font-medium transition-all">إغلاق</button>
-            </div>
-        </div>
-    </div>
-
-    <button onclick="scrollToTop()" class="fixed bottom-6 left-6 w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 flex items-center justify-center transition-all z-40 md:hidden"><i class="fas fa-arrow-up"></i></button>
-    <div class="fixed bottom-6 left-6 z-40 hidden md:flex flex-col gap-2">
-        <button onclick="openDataModal()" class="w-12 h-12 rounded-full bg-gray-800 dark:bg-white text-white dark:text-gray-900 shadow-lg flex items-center justify-center hover:scale-110 transition-all" title="نسخ احتياطي"><i class="fas fa-database"></i></button>
-    </div>
+    <button onclick="scrollToTop()" class="fixed bottom-6 left-6 w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 flex items-center justify-center transition-all z-40"><i class="fas fa-arrow-up"></i></button>
 
     <script>
         // Register Service Worker from file
@@ -280,28 +247,13 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderLinks(); updateCount(); checkDarkMode(); detectDevice();
+            renderLinks(); updateCount(); checkDarkMode();
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault(); deferredPrompt = e;
                 document.getElementById('installBtn').classList.add('show');
             });
-            if (!localStorage.getItem('installGuideDismissed')) {
-                setTimeout(showInstallGuide, 1500);
-            }
         });
 
-        function detectDevice() {
-            const ua = navigator.userAgent;
-            const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-            const isAndroid = /Android/.test(ua);
-            const isDesktop = !isIOS && !isAndroid;
-            document.getElementById('androidGuide').style.display = isAndroid ? 'block' : 'none';
-            document.getElementById('iosGuide').style.display = isIOS ? 'block' : 'none';
-            document.getElementById('desktopGuide').style.display = isDesktop ? 'block' : 'none';
-        }
-
-        function showInstallGuide() { document.getElementById('installGuide').classList.add('show'); }
-        function hideInstallGuide() { document.getElementById('installGuide').classList.remove('show'); localStorage.setItem('installGuideDismissed', 'true'); }
         function checkDarkMode() { if (localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); }
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); localStorage.setItem('darkMode', document.documentElement.classList.contains('dark')); }
         function selectColor(el, color) { document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active')); el.classList.add('active'); selectedColor = color; }
@@ -398,8 +350,6 @@
         function saveLinks() { localStorage.setItem('myLinks', JSON.stringify(links)); updateCount(); }
         function updateCount() { const count = links.length; document.getElementById('linksCount').textContent = count + ' ' + (count === 1 ? 'رابط' : count === 2 ? 'رابطان' : count < 11 ? 'روابط' : 'رابط'); }
 
-        function openDataModal() { document.getElementById('dataModal').classList.remove('hidden'); }
-        function closeDataModal() { document.getElementById('dataModal').classList.add('hidden'); }
         function exportData() {
             const dataStr = JSON.stringify(links, null, 2);
             const blob = new Blob([dataStr], {type:'application/json'});
@@ -410,7 +360,7 @@
         function importData(input) {
             const file = input.files[0]; if (!file) return;
             const reader = new FileReader();
-            reader.onload = (e) => { try { const imported = JSON.parse(e.target.result); if (Array.isArray(imported)) { links = imported; saveLinks(); renderLinks(); showToast('تم استيراد البيانات بنجاح', 'success'); closeDataModal(); } else throw new Error('Invalid'); } catch { showToast('ملف غير صالح', 'error'); } };
+            reader.onload = (e) => { try { const imported = JSON.parse(e.target.result); if (Array.isArray(imported)) { links = imported; saveLinks(); renderLinks(); showToast('تم استيراد البيانات بنجاح', 'success'); } else throw new Error('Invalid'); } catch { showToast('ملف غير صالح', 'error'); } };
             reader.readAsText(file); input.value = '';
         }
 
@@ -423,7 +373,7 @@
         }
 
         async function installPWA() {
-            if (!deferredPrompt) { showToast('اضغط زر (⋮) ثم "إضافة للشاشة الرئيسية"', 'error'); showInstallGuide(); return; }
+            if (!deferredPrompt) { showToast('اضغط زر (⋮) ثم "إضافة للشاشة الرئيسية"', 'error'); return; }
             deferredPrompt.prompt();
             const {outcome} = await deferredPrompt.userChoice;
             if (outcome === 'accepted') { document.getElementById('installBtn').classList.remove('show'); showToast('تم تثبيت التطبيق!', 'success'); }
