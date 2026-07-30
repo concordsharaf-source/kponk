@@ -743,12 +743,15 @@ body.en .modal-box{border-radius:16px 16px 0 0}
 <!-- FINANCE REQUEST MODAL -->
 <div class="modal-overlay" id="finRequestModal">
   <div class="modal-box extra-wide">
-    <div class="modal-header gold">
-      <span class="modal-header-icon">💼</span>
-      <div>
-        <div class="modal-header-title" id="finModalTitle">طلب تمويل مشروع</div>
-        <div class="modal-header-sub">رسوم إدارية وتنفيذية 10% من المبلغ المطلوب</div>
+    <div class="modal-header gold" style="justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="modal-header-icon">💼</span>
+        <div>
+          <div class="modal-header-title" id="finModalTitle">طلب تمويل مشروع</div>
+          <div class="modal-header-sub">رسوم إدارية وتنفيذية 10% من المبلغ المطلوب</div>
+        </div>
       </div>
+      <button class="fin-close-x" style="background:none;border:none;color:white;font-size:22px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:4px;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='none'">&#10005;</button>
     </div>
     <div class="modal-body" style="max-height:75vh;overflow-y:auto">
       <!-- Photo upload -->
@@ -1937,30 +1940,47 @@ window.submitFinRequest = function() {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-    // 1. الحصول على العناصر من الصفحة
-    const modalOverlay = document.querySelector(".modal-overlay");
-    const cancelBtn = document.getElementById("finCancelBtn");
-    const submitBtn = document.getElementById("finSubmitBtn");
+    var finModal = document.getElementById('finRequestModal');
+    var finCancelBtn = document.getElementById('finCancelBtn');
+    var finSubmitBtn = document.getElementById('finSubmitBtn');
+    var finCloseX = finModal ? finModal.querySelector('.fin-close-x') : null;
 
-    // 2. تفعيل زر الإغلاق / الإلغاء
-    if (cancelBtn) {
-        cancelBtn.addEventListener("click", function(e) {
-            e.preventDefault(); // منع أي سلوك افتراضي
-            modalOverlay.classList.remove("open"); // إخفاء المودال
-        });
+    function closeFinModal() {
+        if (finModal) {
+            finModal.classList.remove('open');
+            finModal.style.display = '';
+        }
     }
 
-    // 3. تفعيل زر تقديم طلب التمويل
-    if (submitBtn) {
-        submitBtn.addEventListener("click", function(e) {
+    if (finCancelBtn) {
+        finCancelBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            
-            // هنا يمكنك كتابة الأكواد الخاصة بك عند إرسال البيانات (مثل التحقق من الحقول)
-            alert("تم تقديم طلب التمويل بنجاح!");
-            
-            modalOverlay.classList.remove("open"); // إغفاء المودال بعد التقديم
+            closeFinModal();
         });
     }
+
+    if (finCloseX) {
+        finCloseX.addEventListener('click', function(e) {
+            e.preventDefault();
+            closeFinModal();
+        });
+    }
+
+    if (finSubmitBtn) {
+        finSubmitBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            submitFinRequest();
+        });
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            if (finModal && finModal.classList.contains('open')) {
+                closeFinModal();
+            }
+        }
+    });
 });
 
 
@@ -1998,7 +2018,7 @@ function selectCurrency(c) {
   document.getElementById('currencyFlag').textContent = c.flag;
   document.getElementById('currencyCode').textContent = c.code;
   closeModal('currencyModal');
-  updateSummary();م
+  updateSummary();
 }
 
 // ===================================================
@@ -2095,7 +2115,7 @@ var VIA_OPTIONS = {
   ],
   foreign: [
     // الولايات المتحدة
-    {v:'us_jpm',ar:'🇺🇸 JP Morgan Chase',en:'🇺🇸 JP Morgan Chase'},
+    {v:'us_jpm',ar:'🇺?? JP Morgan Chase',en:'🇺🇸 JP Morgan Chase'},
     {v:'us_boa',ar:'🇺🇸 بنك أوف أمريكا',en:'🇺🇸 Bank of America'},
     {v:'us_citi',ar:'🇺🇸 سيتي بنك',en:'🇺🇸 Citibank'},
     {v:'us_wells',ar:'🇺🇸 ويلز فارغو',en:'🇺🇸 Wells Fargo'},
@@ -3255,7 +3275,7 @@ function init() {
   document.getElementById('printReceiptBtn').addEventListener('click', printReceipt);
 
   // CLOSE MODALS ON OVERLAY CLICK
-  ['currencyModal','addBenModal','errorModal','receiptModal'].forEach(function(id) {
+  ['currencyModal','addBenModal','errorModal','receiptModal','finRequestModal','finReceiptModal'].forEach(function(id) {
     document.getElementById(id).addEventListener('click', function(e) {
       if (e.target === this) closeModal(id);
     });
