@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" id="html-root">
 <head>
@@ -1302,25 +1301,7 @@ body.en .modal-box{border-radius:16px 16px 0 0}
         <a class="side-link" href="#" id="newMsgLink">&#9993; <span data-k="side-msg">رسالة جديدة</span></a>
       </div>
     </div>
-    <div class="form-row" style="margin-top:4px">
-            <label class="form-label" data-k="lbl-fee-manual">رسوم التحويل <span class="required">*</span></label>
-            <div class="amount-wrap">
-              <button class="currency-btn" style="cursor:default"><span id="feeCurrencyFlag">&#127482;&#127480;</span> <span id="feeCurrencyCode">USD</span></button>
-              <input type="text" class="amount-input" id="manualFee" value="0.00"/>
-            </div>
-          </div>
-          <div class="form-row">
-            <label class="form-label" data-k="lbl-fee-type">نوع الرسوم</label>
-            <select class="form-control" id="feeType">
-              <option value="transfer" data-ar="رسوم تحويل" data-en="Transfer Fee">رسوم تحويل</option>
-              <option value="admin" data-ar="رسوم إدارية" data-en="Admin Fee">رسوم إدارية</option>
- <option value="admin" data-ar="رسوم إيداع" data-en="Admin Fee">رسوم إيداع</option>
-<option value="admin" data-ar="رسوم تأمين" data-en="Admin Fee">رسوم تأمين</option>
-              <option value="service" data-ar="رسوم خدمة" data-en="Service Fee">رسوم خدمة</option>
-              <option value="other" data-ar="أخرى" data-en="Other">أخرى</option>
-            </select>
-          </div>
-    <div class="side-card">
+       <div class="side-card">
       <div class="banks-logo">
         <div class="sb-icon">&#127970;</div>
         <span style="font-weight:bold;color:#1a6040;font-size:13px" data-k="saudi-banks">البنـوك السعودية</span><br>
@@ -1406,7 +1387,7 @@ body.en .modal-box{border-radius:16px 16px 0 0}
           <br>
           <p class="notice-text">
             <span data-k="notice-grant">يتم صرف المنحة المقدرة بمبلغ وقدره</span>
-            <span class="highlight-amount" id="summaryAmount">USD 1,000,000</span>
+            <span class="highlight-amount" id="summaryAmount">USD 1,000,000.00</span>
             <span data-k="notice-only"> لاغير</span>
           </p>
           <p class="notice-text"><span data-k="notice-dep">المالية إيداع المنحة بعد استكمال ما تم التوجيه به للمستفيد:</span> <input class="inline-input" id="finalBeneficiary" value="" placeholder="اسم المستفيد"/></p>
@@ -1421,6 +1402,22 @@ body.en .modal-box{border-radius:16px 16px 0 0}
         <button class="btn btn-cancel" id="cancelBtn" data-k="btn-cancel">إلغاء</button>
       </div>
     </div>
+ <div class="form-row" style="margin-top:4px">
+            <label class="form-label" data-k="lbl-fee-manual">رسوم التحويل <span class="required">*</span></label>
+            <div class="amount-wrap">
+              <button class="currency-btn" style="cursor:default"><span id="feeCurrencyFlag">&#127482;&#127480;</span> <span id="feeCurrencyCode">USD</span></button>
+              <input type="text" class="amount-input" id="manualFee" value="0.00"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-label" data-k="lbl-fee-type">نوع الرسوم</label>
+            <select class="form-control" id="feeType">
+              <option value="transfer" data-ar="رسوم تحويل" data-en="Transfer Fee">رسوم تحويل</option>
+              <option value="admin" data-ar="رسوم إدارية" data-en="Admin Fee">رسوم إدارية</option>
+              <option value="service" data-ar="رسوم خدمة" data-en="Service Fee">رسوم خدمة</option>
+              <option value="other" data-ar="أخرى" data-en="Other">أخرى</option>
+            </select>
+          </div>
 
     <!-- SCREEN 2 -->
     <div class="step-screen" id="screen2">
@@ -1433,7 +1430,7 @@ body.en .modal-box{border-radius:16px 16px 0 0}
             <tr><td data-k="lbl-ben">المستفيد</td><td id="cf-ben">—</td></tr>
             <tr><td data-k="lbl-acc">رقم الحساب / الهاتف</td><td id="cf-phone">—</td></tr>
             <tr><td data-k="lbl-amount">المبلغ</td><td><span class="confirm-amount-big" id="cf-amount">—</span></td></tr>
-            <tr><td data-k="lbl-fees">رسوم التحويل</td><td class="fee-highlight" id="cf-fees">—</td></tr>
+            <tr><td data-k="lbl-fees">رسوم التحويل (0.5%)</td><td class="fee-highlight" id="cf-fees">—</td></tr>
 
             <tr><td data-k="lbl-currency">العملة</td><td id="cf-currency">—</td></tr>
             <tr><td data-k="lbl-date">تاريخ التنفيذ</td><td id="cf-date">—</td></tr>
@@ -1490,7 +1487,7 @@ body.en .modal-box{border-radius:16px 16px 0 0}
       
       <div class="result-box" id="successBox" style="display:none; text-align:center;">
         <span class="result-icon-success" style="color:#2e7d32; font-size:40px;">✔️</span>
-        <div class="result-title-success" style="color:#2e7d32; font-size:18px; font-weight:bold; margin:10px 0;">تم إكمال اجراءات التحويل بنجاح</div>
+        <div class="result-title-success" style="color:#2e7d32; font-size:18px; font-weight:bold; margin:10px 0;">تم إكمال واجراءات التحويل بنجاح</div>
         <div class="result-ref" id="res-ref-success" style="margin-bottom:15px; color:#666;">#TXN-— | —</div>
         
         <div style="background:#f4fbf7; border:1px solid #b7e4c7; border-radius:8px; padding:14px 16px; margin-bottom:16px; text-align:right">
