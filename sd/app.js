@@ -1,0 +1,1998 @@
+// Mobile sidebar toggle
+(function(){
+  var menuBtn = document.getElementById('mobileMenuBtn');
+  var sidebar = document.querySelector('.sidebar');
+  if(menuBtn && sidebar){
+    menuBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      sidebar.classList.toggle('mobile-open');
+      this.innerHTML = sidebar.classList.contains('mobile-open') ? '&#10005;' : '&#9776;';
+    });
+    document.addEventListener('click', function(e){
+      if(sidebar.classList.contains('mobile-open') && !sidebar.contains(e.target) && e.target !== menuBtn){
+        sidebar.classList.remove('mobile-open');
+        menuBtn.innerHTML = '&#9776;';
+      }
+    });
+  }
+})();
+
+// ============================================================
+// APP SHELL - PAGE NAVIGATION
+// ============================================================
+var App = (function() {
+  var NAV_MAP = {
+    'nav-home':'page-home','nav-acc':'page-accounts','nav-cards':'page-cards',
+    'nav-tr':'page-transfer','nav-sadad':'page-sadad','nav-gov':'page-gov',
+    'nav-cap':'page-capital','nav-inst':'page-instant','nav-fin':'page-finance','nav-self':'page-self'
+  };
+  var currentPage = 'page-home';
+  var tabCounters = {};
+
+  function showPage(pageId) {
+    // hide all pages
+    document.querySelectorAll('.page-container').forEach(function(p) { p.classList.remove('active'); });
+    var target = document.getElementById(pageId);
+    if (target) {
+      target.classList.add('active');
+      currentPage = pageId;
+    }
+    // Update nav highlight
+    document.querySelectorAll('[data-nav-key]').forEach(function(el) {
+      var NAV_MAP2 = {'nav-home':'page-home','nav-acc':'page-accounts','nav-cards':'page-cards',
+        'nav-tr':'page-transfer','nav-sadad':'page-sadad','nav-gov':'page-gov',
+        'nav-cap':'page-capital','nav-inst':'page-instant','nav-fin':'page-finance','nav-self':'page-self'};
+      el.classList.toggle('active', NAV_MAP2[el.getAttribute('data-nav-key')] === pageId);
+    });
+    document.querySelectorAll('[data-nav-id]').forEach(function(el) {
+      el.classList.toggle('active', NAV_MAP[el.getAttribute('data-nav-id')] === pageId);
+    });
+    // Save to localStorage
+    try { localStorage.setItem('nb_current_page', pageId); } catch(e) {}
+    window.scrollTo({top:0,behavior:'smooth'});
+    // If instant page, reinit the inner app
+    if (pageId === 'page-instant' && window._bankAppInited) {
+      // already inited, just re-render beneficiary
+      if (typeof renderBeneficiarySelectInner === 'function') renderBeneficiarySelectInner();
+    }
+  }
+
+  function switchTab(btn, group) {
+    var container = btn.closest('.page-container') || btn.closest('[id^=page-]') || document.body;
+    var panes = container.querySelectorAll('.tab-pane');
+    var btns = container.querySelectorAll('.tab-btn');
+    var idx = Array.from(btns).indexOf(btn);
+    btns.forEach(function(b) { b.classList.remove('active'); });
+    panes.forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    if (panes[idx]) panes[idx].classList.add('active');
+  }
+
+  function init() {
+    // Wire nav items
+    document.querySelectorAll('[data-nav]').forEach(function(el) {
+      var navKey = el.getAttribute('data-nav-key');
+      if (!navKey) return;
+      el.setAttribute('data-nav-id', navKey);
+      el.addEventListener('click', function() {
+        var pid = NAV_MAP[navKey];
+        if (pid) showPage(pid);
+      });
+    });
+
+    // Restore last page
+    try {
+      var saved = localStorage.getItem('nb_current_page');
+      if (saved && document.getElementById(saved)) showPage(saved);
+      else showPage('page-home');
+    } catch(e) { showPage('page-home'); }
+
+    // Service card showToast wiring
+    document.querySelectorAll('.service-card, .gov-card, .sadad-cat, .fund-card, .bill-btn').forEach(function(el) {
+      if (!el.getAttribute('onclick')) {
+        el.addEventListener('click', function() {
+          if (typeof showToast === 'function') showToast(isEN ? 'Opening service...' : 'جاري فتح الخدمة...', 'success');
+        });
+      }
+    });
+  }
+
+  return { showPage: showPage, switchTab: switchTab, init: init };
+})();
+
+// ============================================================
+// EXISTING BANK APP CODE
+// ============================================================
+(function() {
+'use strict';
+
+// ===================================================
+// TRANSLATIONS
+// ===================================================
+var isEN = false;
+var TR = {
+  'exit':['خروج','Exit'],
+  'logo-sub':['الخدمات المصرفية<br>الإلكترونية','Online<br>Banking'],
+  'nav-home':['الرئيسية','Home'],'nav-acc':['الحسابات','Accounts'],
+  'nav-cards':['البطاقات','Cards'],'nav-tr':['التحويل','Transfer'],
+  'nav-gov':['خدمات حكومية','Gov. Services'],'nav-cap':['الجزيرة كابيتال','Al-Jazeera Capital'],
+  'nav-inst':['فوري','Instant'],'nav-fin':['التمويل','Finance'],'nav-self':['الخدمات الذاتية','Self Services'],
+  'side-transfers':['حوالات فورية','Instant Transfers'],'side-transfer':['تحويل فوري','Instant Transfer'],
+  'side-history':['سجل العمليات','Transaction History'],'side-manage':['إدارة خدمات فوري','Manage Services'],
+  'side-fav':['العمليات المفضلة','Favorites'],'side-shortcuts':['روابط مختصرة','Quick Links'],
+  'side-no-links':['لا توجد روابط مختصرة','No quick links'],'side-help':['للمساعدة','Help'],
+  'side-call':['خدمة العملاء','Customer Service'],'side-msg':['رسالة جديدة','New Message'],
+  'saudi-banks':['البنـوك السعودية','Saudi Banks'],
+  'breadcrumb':['التحويل إلى مستفيد فوري','Transfer to Instant Beneficiary'],
+  'page-title':['تحويل فوري','Instant Transfer'],
+  'step1':['1. التنفيذ','1. Execute'],'step2':['2. التأكيد','2. Confirm'],
+  'step3':['3. التعميد','3. Processing'],'step4':['4. النتيجة','4. Result'],
+  'sec-from':['1. من','1. From'],'lbl-from':['من حساب','From Account'],
+  'lbl-amount':['المبلغ','Amount'],'fee-label':['رسوم التحويل:'],
+  'lbl-fee-manual':['رسوم التحويل','Transfer Fee'],
+  'lbl-fee-type':['نوع الرسوم','Fee Type'],
+  'sec-to':['2. إلى','2. To'],'lbl-via':['التحويل بواسطة','Transfer Via'],
+  'lbl-ben':['المستفيد','Beneficiary'],'add-ben':['إضافة مستفيد جديد','Add New Beneficiary'],
+  'sec-notice':['3. المبلغ وتفاصيل التحويل','3. Amount & Transfer Details'],
+  'notice-1':['سيستم نظام الإجراءات لازم سرعات التنفيذ خلال 24 ساعة','The system requires execution within 24 hours'],
+  'notice-2':['الموافقة على نظام مراقبة البنوك بالصيغة المرافقة لهذا','Approval of bank monitoring system in the attached format'],
+  'notice-3':['نظام الإيداعات والتحويلات المالية','Deposits and Financial Transfers System'],
+  'notice-acct':['صاحب الحساب رقم -(Ministry)( 00218441001001-)','Account No. -(Ministry)( 00218441001001-)'],
+  'notice-ap-lbl':['اسم الحالة التي تم الموافقة:','Approved Case Name:'],
+  'notice-grant':['يتم صرف المنحة المقدرة بمبلغ وقدره','The estimated grant amount is'],
+  'notice-only':['مليون دولار أمريكي لاغير','only'],
+  'notice-dep':['المالية إيداع المنحة بعد استكمال ما تم التوجيه به للمستفيد:','Financial deposit after completing instructions to beneficiary:'],
+  'terms-text':['لقد قرأت وافقت على','I have read and agree to'],
+  'terms-link':['الشروط والأحكام الخاصة','Terms and Conditions'],
+  'btn-continue':['متابعة','Continue'],'btn-cancel':['إلغاء','Cancel'],
+  'btn-confirm':['تأكيد التحويل','Confirm Transfer'],'btn-back':['رجوع','Back'],
+  'btn-view-details':['عرض تفاصيل النتيجة','View Result Details'],
+  'btn-new':['تحويل جديد','New Transfer'],'btn-history':['سجل العمليات','History'],
+  'btn-close':['إغلاق','Close'],'btn-retry':['إعادة المحاولة','Retry'],
+  'btn-support':['الدعم','Support'],'btn-print':['طباعة','Print'],
+  'btn-clear':['مسح السجل','Clear History'],
+  'confirm-hdr':['مراجعة وتأكيد بيانات التحويل','Review & Confirm Transfer'],
+  'lbl-fees':['رسوم التحويل)'],'lbl-total':['الإجمالي','Total'],
+  'lbl-currency':['العملة','Currency'],'lbl-date':['تاريخ التنفيذ','Execution Date'],
+  'lbl-ref':['رقم العملية','Reference No.'],
+  'otp-hdr':['رمز التحقق (OTP)','Verification Code (OTP)'],
+  'otp-sent':['تم إرسال رمز التحقق إلى هاتفك المسجل ***456','OTP sent to your registered phone ***456'],
+  'otp-lbl':['رمز OTP','OTP Code'],'otp-resend':['إعادة إرسال الرمز','Resend Code'],
+  'proc-hdr':['جاري معالجة طلب التحويل...','Processing Transfer Request...'],
+  'proc-init':['جاري التحقق من البيانات...','Verifying data...'],
+  'ps1':['التحقق من هوية المستخدم','Verifying user identity'],
+  'ps2':['التحقق من رصيد الحساب','Verifying account balance'],
+  'ps3':['الاتصال بنظام التحويل البنكي','Connecting to banking system'],
+  'ps4':['التحقق من رسوم معاملة التحويل','Verifying transfer fees'],
+  'ps5':['إرسال الطلب للمستفيد','Sending request to beneficiary'],
+  'result-hdr':['نتيجة عملية التحويل','Transfer Result'],
+  'result-fail':['فشلت عملية التحويل','Transfer Failed'],
+  'result-desc':['لم يتم إتمام التحويل بسبب عدم سداد المستفيد للرسوم المتبقية.','Transfer failed due to unpaid fees by the beneficiary.'],
+  'lbl-reason':['سبب الفشل','Failure Reason'],'val-reason':['رسوم التحويل غير مسددة','Transfer fees unpaid'],
+  'history-hdr':['سجل التحويلات','Transfer History'],
+  'filter-all':['الكل','All'],'filter-ok':['ناجح','Success'],
+  'filter-fail':['فاشل','Failed'],'filter-pending':['معلق','Pending'],
+  'cur-title':['اختر العملة','Select Currency'],
+  'cur-sub':['يتم تحديث المبلغ وفق العملة المختارة','Amount updates based on selected currency'],
+  'addben-title':['إضافة مستفيد جديد','Add New Beneficiary'],
+  'addben-sub':['يتم الحفظ تلقائياً للاستخدام مستقبلاً','Auto-saved for future use'],
+  'addben-name':['الاسم','Name'],'addben-acc':['هاتف / حساب','Phone / Account'],
+  'addben-country':['الدولة','Country'],
+  'addben-auto':['حفظ تلقائي في القائمة (localStorage)','Auto-save to list (localStorage)'],
+  'addben-save':['حفظ المستفيد','Save Beneficiary'],
+  'err-title':['فشل التحويل','Transfer Failed'],
+  'err-code':['رسوم معاملة التحويل غير مسددة من قِبل المستفيد','Transfer fees unpaid by the beneficiary'],
+  'lbl-amount':['المبلغ','Amount'],'lbl-ben':['المستفيد','Beneficiary'],
+  'receipt-title':['تفاصيل العملية','Transaction Details'],
+  'calling':['جاري الاتصال بخدمة العملاء...','Connecting to customer service...'],
+  'open-msg':['فتح نموذج الرسائل','Opening messages form'],
+  'otp-resent':['تم إعادة إرسال الرمز','Code resent'],
+  'support-toast':['تم تحويلك إلى خدمة العملاء','Redirected to customer support'],
+  'exit-toast':['تم تسجيل الخروج','Logged out'],
+  'terms-ok':['تم قبول الشروط','Terms accepted'],
+  'terms-req':['يجب قبول الشروط أولاً','Must accept terms first'],
+  'otp-req':['يرجى إدخال رمز OTP','Please enter OTP code'],
+  'ben-name-req':['يرجى إدخال اسم المستفيد','Please enter beneficiary name'],
+  'ben-acc-req':['يرجى إدخال رقم الحساب','Please enter account number'],
+  'saved-ben':['تم حفظ المستفيد','Beneficiary saved'],
+  'cancel-q':['إلغاء عملية التحويل؟','Cancel transfer?'],
+  'cancelled':['تم الإلغاء','Cancelled'],
+  'new-ready':['يمكنك بدء تحويل جديد','You can start a new transfer'],
+  'hist-cleared':['تم مسح سجل التحويلات','History cleared'],
+  'proc-fail-msg':['اكتملت المعالجة — توجد مشكلة تحتاج مراجعتك','Processing complete — issue detected'],
+};
+
+var PS_MSGS_AR = ['جاري التحقق من هوية المستخدم...','جاري التحقق من رصيد الحساب...','جاري الاتصال بنظام التحويل البنكي...','جاري التحقق من رسوم معاملة التحويل...','جاري إرسال الطلب...'];
+var PS_MSGS_EN = ['Verifying user identity...','Verifying account balance...','Connecting to banking system...','Verifying transfer fees...','Sending request...'];
+
+function tr(key) {
+  var v = TR[key];
+  if (!v) return key;
+  return v[isEN ? 1 : 0];
+}
+
+function applyTranslations() {
+  document.querySelectorAll('[data-k]').forEach(function(el) {
+    var v = TR[el.getAttribute('data-k')];
+    if (v) el.innerHTML = v[isEN ? 1 : 0];
+  });
+  document.querySelectorAll('select option[data-ar]').forEach(function(o) {
+    o.text = isEN ? (o.getAttribute('data-en')||o.text) : (o.getAttribute('data-ar')||o.text);
+  });
+  document.querySelectorAll('#feeType option[data-ar]').forEach(function(o) {
+    o.text = isEN ? (o.getAttribute('data-en')||o.text) : (o.getAttribute('data-ar')||o.text);
+  });
+  document.querySelectorAll('[data-par]').forEach(function(el) {
+    el.placeholder = isEN ? (el.getAttribute('data-pen')||'') : (el.getAttribute('data-par')||'');
+  });
+  document.title = isEN ? 'Instant Transfer - National Bank' : 'تحويل فوري - National Bank';
+  var pt = document.getElementById('proc-title');
+  if (pt && pt.style.color !== 'rgb(204, 32, 32)') pt.textContent = tr('proc-init');
+  // rebuild dynamic selects
+  updateViaOptions();
+  renderBeneficiarySelect();
+  updateSummary();
+  var hw = document.getElementById('historyTableWrap');
+  if (hw && document.getElementById('screenHistory').classList.contains('active')) {
+    renderHistoryTable(currentHistoryFilter);
+  };
+}
+
+// ================================================================
+// TOAST
+// ================================================================
+function showToast(msg,type){
+  var el=document.getElementById('toast');
+  el.textContent=msg;
+  el.className='toast'+(type?' '+type:'');
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t=setTimeout(function(){el.classList.remove('show');},2800);
+}
+
+// ================================================================
+// FINANCE HISTORY
+// ================================================================
+function loadFinHistory(){try{var s=localStorage.getItem('nb_fin_hist');if(s)return JSON.parse(s);}catch(e){}return[];}
+function saveFinHistory(list){try{localStorage.setItem('nb_fin_hist',JSON.stringify(list));}catch(e){}}
+function addFinHistory(rec){var list=loadFinHistory();list.unshift(rec);saveFinHistory(list.slice(0,50));}
+
+function renderFinHistory(){
+  var list=loadFinHistory();
+  var wrap=document.getElementById('finHistoryWrap');
+  if(!wrap)return;
+  if(!list.length){
+    wrap.innerHTML='<div style="text-align:center;padding:28px;color:#999;font-size:14px">لا توجد طلبات تمويل مسجلة حتى الآن</div>';
+    return;
+  }
+  var html='<div style="overflow-x:auto"><table class="fin-history-table"><thead><tr><th>التاريخ</th><th>المستفيد</th><th>نوع التمويل</th><th>المبلغ</th><th>الرسوم (10%)</th><th>البريد</th><th>الحالة</th><th></th></tr></thead><tbody>';
+  list.forEach(function(r,i){
+    var typeLabel={'project':'تمويل مشروع','home':'تمويل عقاري','car':'تمويل سيارة','personal':'تمويل شخصي','business':'تمويل تجاري','refin':'إعادة تمويل','digital':'تمويل رقمي'}[r.finType]||r.finType;
+    html+='<tr>';
+    html+='<td style="font-size:11px;white-space:nowrap">'+r.date+'</td>';
+    html+='<td style="font-weight:bold">'+r.name+'</td>';
+    html+='<td>'+typeLabel+'</td>';
+    html+='<td style="font-weight:bold;color:#1e7a38">SAR '+fmtNum(r.amount)+'</td>';
+    html+='<td style="color:#cc2020;font-weight:bold">SAR '+fmtNum(r.fee)+'</td>';
+    html+='<td style="font-size:11px;direction:ltr;text-align:right">'+r.email+'</td>';
+    html+='<td><span class="badge badge-pending">⏳ قيد المراجعة</span></td>';
+    html+='<td><button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px" onclick="showFinReceipt('+i+')">إيصال</button></td>';
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+  wrap.innerHTML=html;
+}
+
+function showFinReceipt(idx){
+  var list=loadFinHistory();
+  var r=list[idx];
+  if(!r)return;
+  document.getElementById('finReceiptRef').textContent=r.ref;
+  var typeLabel={'project':'تمويل مشروع','home':'تمويل عقاري','car':'تمويل سيارة','personal':'تمويل شخصي','business':'تمويل تجاري','refin':'إعادة تمويل','digital':'تمويل رقمي'}[r.finType]||r.finType;
+  var photoHtml=r.photoUrl?'<img src="'+r.photoUrl+'" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #1e4878;display:block;margin:0 auto 12px">':'<div style="width:80px;height:80px;border-radius:50%;background:#e8f0ff;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 12px">👤</div>';
+  var rows=[
+    ['رقم المرجع','<span style="font-family:monospace">'+r.ref+'</span>'],
+    ['التاريخ',r.date],
+    ['المستفيد','<strong>'+r.name+'</strong>'],
+    ['رقم الهوية',r.idNum||'—'],
+    ['البريد الإلكتروني','<span style="direction:ltr;display:inline-block">'+r.email+'</span>'],
+    ['الجوال',r.phone||'—'],
+    ['نوع التمويل',typeLabel],
+    ['المبلغ المطلوب','<strong style="color:#1e7a38;font-size:16px">SAR '+fmtNum(r.amount)+'</strong>'],
+    ['الرسوم الإدارية (10%)','<strong style="color:#cc2020">SAR '+fmtNum(r.fee)+'</strong>'],
+    ['المبلغ الصافي للمستفيد','<strong>SAR '+fmtNum(r.amount-r.fee)+'</strong>'],
+    ['الغرض / الوصف',r.desc||'—'],
+    ['الجهة التنفيذية',r.entity||'—'],
+  ];
+  var rowsHtml=rows.map(function(rw){return'<div class="receipt-row"><span style="color:#777">'+rw[0]+'</span><span>'+rw[1]+'</span></div>';}).join('');
+  document.getElementById('finReceiptBody').innerHTML=
+    photoHtml+
+    '<div style="text-align:center;padding-bottom:14px;border-bottom:2px dashed #ddd;margin-bottom:12px">'+
+    '<div style="font-size:18px;font-weight:900;color:#1a3a5c">إيصال طلب التمويل</div>'+
+    '<div class="receipt-status-ok">✅ تم استلام الطلب — قيد المراجعة</div>'+
+    '</div>'+rowsHtml;
+  document.getElementById('finReceiptModal').classList.add('open');
+}
+
+// ================================================================
+// FINANCE REQUEST MODAL
+// ================================================================
+// ================================================================
+// FINANCE REQUEST MODAL (CORRECTED & EXPOSED)
+// ================================================================
+window._finType = 'project';
+
+// 1. دالة فتح نافذة التمويل وتحديد نوعه (مكشوفة للنظام الخارجي)
+window.openFinRequest = function(type) {
+    window._finType = type; 
+    
+    // جلب النافذة المودال
+    var finModal = document.getElementById('finRequestModal'); 
+    if (finModal) {
+        // إظهار النافذة عبر الكلاس المستخدم في مشروعك
+        finModal.classList.add('open');
+        finModal.style.display = 'block'; 
+        
+        // التمرير السلس إلى موضع الفورم ليراه المستخدم فوراً
+        finModal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+        console.error("لم يتم العثور على عنصر الواجهة الخاص بالنموذج (finRequestModal)!");
+    }
+};
+
+// 2. دالة تحديث الرسوم الإدارية تلقائياً
+window.updateFinFee = function() {
+    var amtEl = document.getElementById('fin-amount');
+    var feeDisplay = document.getElementById('finFeeDisplay');
+    if (!amtEl || !feeDisplay) return;
+
+    var val = parseFloat((amtEl.value || '0').replace(/,/g, '')) || 0;
+    var fee = val * 0.1;
+    
+    // التأكد من وجود دالة التنسيق الرقمي fmtNum
+    if (typeof fmtNum === 'function') {
+        feeDisplay.textContent = 'SAR ' + fmtNum(fee);
+    } else {
+        feeDisplay.textContent = 'SAR ' + fee.toFixed(2);
+    }
+};
+
+
+// 3. دالة فحص وإرسال طلب التمويل
+window.submitFinRequest = function() {
+    var name = document.getElementById('fin-name').value.trim();
+    var id = document.getElementById('fin-id').value.trim();
+    var email = document.getElementById('fin-email').value.trim();
+    var phone = document.getElementById('fin-phone').value.trim();
+    var amtRaw = parseFloat((document.getElementById('fin-amount').value || '0').replace(/,/g, '')) || 0;
+    var desc = document.getElementById('fin-desc').value.trim();
+    var terms = document.getElementById('fin-terms').checked;
+
+    if (!name) { showToast('يرجى إدخال اسم المستفيد', 'error'); return; }
+    if (!email || !email.includes('@')) { showToast('يرجى إدخال بريد إلكتروني صحيح', 'error'); return; }
+    if (!amtRaw || amtRaw <= 0) { showToast('يرجى إدخال المبلغ المطلوب', 'error'); return; }
+    if (!terms) { showToast('يجب الموافقة على الشروط والرسوم الإدارية أولاً', 'error'); return; }
+
+    var fee = amtRaw * 0.1;
+    var now = new Date();
+    var dateStr = now.toLocaleDateString('ar-SA') + ' ' + now.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+    var ref = '#FIN-' + now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0') + '-' + Math.floor(Math.random() * 9000 + 1000);
+
+    var rec = {
+        ref: ref,
+        date: dateStr,
+        finType: window._finType,
+        name: name,
+        idNum: id,
+        email: email,
+        phone: phone,
+        amount: amtRaw,
+        fee: fee,
+        desc: desc,
+        entity: document.getElementById('fin-entity') ? document.getElementById('fin-entity').value.trim() : '—',
+        photoUrl: window._finPhotoUrl || null,
+        status: 'pending'
+    };
+
+    // حفظ وتحديث السجل
+    if (typeof addFinHistory === 'function') addFinHistory(rec);
+    
+    // إغلاق المودال
+    var finModal = document.getElementById('finRequestModal');
+    if (finModal) {
+        finModal.classList.remove('open');
+    }
+    
+    if (typeof renderFinHistory === 'function') renderFinHistory();
+
+    // عرض الإيصال المالي بعد نجاح العملية
+    setTimeout(function() {
+        var receiptRef = document.getElementById('finReceiptRef');
+        if (receiptRef) receiptRef.textContent = ref;
+        if (typeof showFinReceipt === 'function') showFinReceipt(0);
+        showToast('تم تقديم طلب التمويل بنجاح ✅', 'success');
+    }, 300);
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+    var finModal = document.getElementById('finRequestModal');
+    var finCancelBtn = document.getElementById('finCancelBtn');
+    var finSubmitBtn = document.getElementById('finSubmitBtn');
+    var finCloseX = finModal ? finModal.querySelector('.fin-close-x') : null;
+
+    function closeFinModal() {
+        if (finModal) {
+            finModal.classList.remove('open');
+            finModal.style.display = '';
+        }
+    }
+
+    if (finCancelBtn) {
+        finCancelBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            closeFinModal();
+        });
+    }
+
+    if (finCloseX) {
+        finCloseX.addEventListener('click', function(e) {
+            e.preventDefault();
+            closeFinModal();
+        });
+    }
+
+    if (finSubmitBtn) {
+        finSubmitBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            submitFinRequest();
+        });
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            if (finModal && finModal.classList.contains('open')) {
+                closeFinModal();
+            }
+        }
+    });
+});
+
+
+
+// ===================================================
+// CURRENCIES
+// ===================================================
+var CURRENCIES = [
+  {code:'USD',flag:'🇺🇸',name_ar:'دولار أمريكي',name_en:'US Dollar'},
+  {code:'SAR',flag:'🇸🇦',name_ar:'ريال سعودي',name_en:'Saudi Riyal'},
+  {code:'EUR',flag:'🇪🇺',name_ar:'يورو',name_en:'Euro'},
+  {code:'GBP',flag:'🇬🇧',name_ar:'جنيه إسترليني',name_en:'British Pound'},
+  {code:'AED',flag:'🇦🇪',name_ar:'درهم إماراتي',name_en:'UAE Dirham'},
+  {code:'KWD',flag:'🇰🇼',name_ar:'دينار كويتي',name_en:'Kuwaiti Dinar'},
+  {code:'JPY',flag:'🇯🇵',name_ar:'ين ياباني',name_en:'Japanese Yen'},
+  {code:'CHF',flag:'🇨🇭',name_ar:'فرنك سويسري',name_en:'Swiss Franc'},
+  {code:'CAD',flag:'🇨🇦',name_ar:'دولار كندي',name_en:'Canadian Dollar'},
+];
+var selectedCurrency = CURRENCIES[0];
+
+function buildCurrencyGrid() {
+  var grid = document.getElementById('currencyGrid');
+  grid.innerHTML = '';
+  CURRENCIES.forEach(function(c) {
+    var div = document.createElement('div');
+    div.className = 'currency-item' + (c.code === selectedCurrency.code ? ' selected' : '');
+    div.innerHTML = '<span class="currency-flag">' + c.flag + '</span><div class="currency-code">' + c.code + '</div><div class="currency-name">' + (isEN ? c.name_en : c.name_ar) + '</div>';
+    div.addEventListener('click', function() { selectCurrency(c); });
+    grid.appendChild(div);
+  });
+}
+
+function selectCurrency(c) {
+  selectedCurrency = c;
+  document.getElementById('currencyFlag').textContent = c.flag;
+  document.getElementById('currencyCode').textContent = c.code;
+  closeModal('currencyModal');
+  updateSummary();
+}
+
+// ===================================================
+// VIA OPTIONS
+// ===================================================
+var VIA_OPTIONS = {
+  saudi: [
+    {v:'rajhi',ar:'مصرف الراجحي',en:'Al Rajhi Bank'},
+    {v:'ahli',ar:'البنك الأهلي السعودي (SNB)',en:'Saudi National Bank'},
+    {v:'riyadh',ar:'بنك الرياض',en:'Riyad Bank'},
+    {v:'alinma',ar:'بنك الإنماء',en:'Alinma Bank'},
+    {v:'bilad',ar:'بنك البلاد',en:'Bank Albilad'},
+    {v:'jazira',ar:'بنك الجزيرة',en:'Bank Al-Jazira'},
+    {v:'saib',ar:'البنك السعودي للاستثمار',en:'Saudi Investment Bank'},
+    {v:'fransi',ar:'البنك السعودي الفرنسي',en:'Banque Saudi Fransi'},
+    {v:'anb',ar:'البنك العربي الوطني',en:'Arab National Bank'},
+    {v:'sab',ar:'البنك السعودي الأول',en:'Saudi British Bank'},
+    {v:'bsf',ar:'بنك الاستثمار',en:'Bank AlJazira'},
+    {v:'gib',ar:'بنك الخليج الدولي',en:'Gulf International Bank'},
+  ],
+  arab: [
+    // الإمارات
+    {v:'uae_fab',ar:'🇦🇪 بنك أبوظبي الأول',en:'🇦🇪 First Abu Dhabi Bank'},
+    {v:'uae_enbd',ar:'🇦🇪 بنك الإمارات دبي الوطني',en:'🇦🇪 Emirates NBD'},
+    {v:'uae_adcb',ar:'🇦🇪 بنك أبوظبي التجاري',en:'🇦🇪 Abu Dhabi Commercial Bank'},
+    // الكويت
+    {v:'kw_nbk',ar:'🇰🇼 بنك الكويت الوطني',en:'🇰🇼 National Bank of Kuwait'},
+    {v:'kw_kfh',ar:'🇰🇼 بيت التمويل الكويتي',en:'🇰🇼 Kuwait Finance House'},
+    {v:'kw_boubyan',ar:'🇰🇼 بنك بوبيان',en:'🇰🇼 Boubyan Bank'},
+    // قطر
+    {v:'qa_qnb',ar:'🇶🇦 بنك قطر الوطني',en:'🇶🇦 Qatar National Bank'},
+    {v:'qa_cbq',ar:'🇶🇦 البنك التجاري القطري',en:'🇶🇦 Commercial Bank of Qatar'},
+    {v:'qa_doha',ar:'🇶🇦 بنك الدوحة',en:'🇶🇦 Doha Bank'},
+    // البحرين
+    {v:'bh_nbb',ar:'🇧🇭 بنك البحرين الوطني',en:'🇧🇭 National Bank of Bahrain'},
+    {v:'bh_bbk',ar:'🇧🇭 بنك البحرين والكويت',en:'🇧🇭 Bank of Bahrain and Kuwait'},
+    {v:'bh_salam',ar:'🇧🇭 بنك السلام',en:'🇧🇭 Al Salam Bank'},
+    // عُمان
+    {v:'om_muscat',ar:'🇴🇲 بنك مسقط',en:'🇴🇲 Bank Muscat'},
+    {v:'om_nbo',ar:'🇴🇲 البنك الوطني العماني',en:'🇴🇲 National Bank of Oman'},
+    {v:'om_sohar',ar:'🇴🇲 صحار الدولي',en:'🇴🇲 Sohar International'},
+    // الأردن
+    {v:'jo_arab',ar:'🇯🇴 البنك العربي',en:'🇯🇴 Arab Bank'},
+    {v:'jo_housing',ar:'🇯🇴 بنك الإسكان للتجارة والتمويل',en:'🇯🇴 Housing Bank for Trade & Finance'},
+    {v:'jo_islamic',ar:'🇯🇴 البنك الإسلامي الأردني',en:'🇯🇴 Jordan Islamic Bank'},
+    // مصر
+    {v:'eg_cib',ar:'🇪🇬 بنك CIB',en:'??🇬 Commercial International Bank'},
+    {v:'eg_qnb',ar:'🇪🇬 QNB الأهلي',en:'🇪🇬 QNB Al Ahli'},
+    {v:'eg_misr',ar:'🇪🇬 بنك مصر',en:'🇪🇬 Banque Misr'},
+    // لبنان
+    {v:'lb_blom',ar:'🇱🇧 بنك بيبلوم',en:'🇱🇧 BLOM Bank'},
+    {v:'lb_audi',ar:'🇱🇧 بنك عوده',en:'🇱🇧 Bank Audi'},
+    {v:'lb_byblos',ar:'🇱🇧 بنك بيبلوس',en:'🇱🇧 Byblos Bank'},
+    // العراق
+    {v:'iq_rafidain',ar:'🇮🇶 مصرف الرافدين',en:'🇮🇶 Rafidain Bank'},
+    {v:'iq_rasheed',ar:'🇮🇶 مصرف الرشيد',en:'🇮🇶 Rasheed Bank'},
+    {v:'iq_tbi',ar:'🇮🇶 المصرف التجاري العراقي',en:'🇮🇶 Trade Bank of Iraq'},
+    // الجزائر
+    {v:'dz_bea',ar:'🇩🇰 بنك الخارجية',en:'🇩🇿 BEA Bank'},
+    {v:'dz_badr',ar:'🇩🇰 بنك بدر',en:'🇩🇿 BADR Bank'},
+    {v:'dz_abc',ar:'🇩🇰 العربي الجزائري',en:'🇩🇿 ABC Bank'},
+    // المغرب
+    {v:'ma_attijari',ar:'🇲🇪 التجاري وفا بنك',en:'🇲🇦 Attijariwafa Bank'},
+    {v:'ma_bmce',ar:'🇲🇪 بنك المغرب للتجارة الخارجية',en:'🇲🇦 BMCE Bank'},
+    {v:'ma_cih',ar:'🇲🇪 CIH بنك',en:'🇲🇦 CIH Bank'},
+    // تونس
+    {v:'tn_stb',ar:'🇹🇳 بنك تونس والإمارات',en:'🇹🇳 STB Bank'},
+    {v:'tn_biat',ar:'🇹🇳 البنك التونسي العربي الدولي',en:'🇹🇳 BIAT Bank'},
+    {v:'tn_amen',ar:'🇹🇳 بنك الأمان',en:'🇹🇳 Amen Bank'},
+    // ليبيا
+    {v:'ly_jumhouria',ar:'🇱🇾 المصرف الجمهوري',en:'🇱🇾 Jumhouria Bank'},
+    {v:'ly_wahda',ar:'🇱🇾 مصرف الوحدة',en:'🇱🇾 Wahda Bank'},
+    {v:'ly_umma',ar:'🇱🇾 مصرف الأمة',en:'🇱🇾 Umma Bank'},
+    // السودان
+    {v:'sd_central',ar:'🇸🇩 بنك السودان المركزي',en:'🇸🇩 Central Bank of Sudan'},
+    {v:'sd_khartoum',ar:'🇸?? بنك الخرطوم',en:'🇸🇩 Bank of Khartoum'},
+    {v:'sd_faisal',ar:'🇸🇩 فيصل الإسلامي',en:'🇸🇩 Faisal Islamic Bank'},
+    // اليمن
+    {v:'ye_cac',ar:'🇾🇪 بنك التضامن',en:'🇾🇪 CAC Bank'},
+    {v:'ye_ykb',ar:'🇾🇪 بنك اليمن الدولي',en:'🇾🇪 Yemen Kuwait Bank'},
+    {v:'ye_tadhamon',ar:'🇾🇪 بنك التضامن',en:'🇾🇪 Tadhamon Bank'},
+    // سوريا
+    {v:'sy_commercial',ar:'🇸🇾 المصرف التجاري السوري',en:'🇸🇾 Commercial Bank of Syria'},
+    {v:'sy_bemo',ar:'🇸🇪 بنك بيمو',en:'🇸🇾 BEMO Bank'},
+    {v:'sy_cham',ar:'🇸🇪 بنك الشام',en:'🇸🇾 Cham Bank'},
+    // فلسطين
+    {v:'ps_bop',ar:'🇵🇸 بنك فلسطين',en:'🇵🇸 Bank of Palestine'},
+    {v:'ps_quds',ar:'🇵🇸 بنك القدس',en:'🇵🇸 Quds Bank'},
+    {v:'ps_pib',ar:'🇵🇸 البنك الإسلامي الفلسطيني',en:'🇵🇸 Palestinian Islamic Bank'},
+    // موريتانيا
+    {v:'mr_bcm',ar:'🇲🇷 بنك موريتانيا الجديد',en:'🇲🇷 BCM Bank'},
+    {v:'mr_bmci',ar:'🇲🇷 بنك موريتانيا للاستثمار',en:'🇲🇷 BMCI Bank'},
+    {v:'mr_generale',ar:'🇲🇷 بنك موريتانيا العام',en:'🇲🇷 Banque Générale'},
+  ],
+  foreign: [
+    // الولايات المتحدة
+    {v:'us_jpm',ar:'🇺?? JP Morgan Chase',en:'🇺🇸 JP Morgan Chase'},
+    {v:'us_boa',ar:'🇺🇸 بنك أوف أمريكا',en:'🇺🇸 Bank of America'},
+    {v:'us_citi',ar:'🇺🇸 سيتي بنك',en:'🇺🇸 Citibank'},
+    {v:'us_wells',ar:'🇺🇸 ويلز فارغو',en:'🇺🇸 Wells Fargo'},
+    {v:'us_goldman',ar:'🇺🇸 جولدمان ساكس',en:'🇺🇸 Goldman Sachs'},
+    // المملكة المتحدة
+    {v:'uk_hsbc',ar:'🇬🇧 HSBC',en:'🇬🇧 HSBC'},
+    {v:'uk_barclays',ar:'🇬🇧 باركليز',en:'🇬🇧 Barclays'},
+    {v:'uk_lloyds',ar:'🇬🇧 لويدز',en:'🇬🇧 Lloyds Bank'},
+    {v:'uk_natwest',ar:'🇬🇧 نات ويست',en:'🇬🇧 NatWest'},
+    {v:'uk_sc',ar:'🇬🇧 ستاندرد تشارترد',en:'🇬🇧 Standard Chartered'},
+    // إسبانيا
+    {v:'es_santander',ar:'🇪🇸 بنك سانتاندير',en:'🇪🇸 Banco Santander'},
+    {v:'es_bbva',ar:'🇪🇸 بنك بيلباو فيزكايا أرجنتاريا',en:'🇪🇸 BBVA'},
+    {v:'es_caixa',ar:'🇪🇸 كايا بانك',en:'🇪🇸 CaixaBank'},
+    {v:'es_sabadell',ar:'🇪🇸 بنك ساباديل',en:'🇪🇸 Banco Sabadell'},
+    // فرنسا
+    {v:'fr_bnp',ar:'🇫🇷 BNP باريبا',en:'🇫🇷 BNP Paribas'},
+    {v:'fr_sg',ar:'🇫🇷 سوسيتيه جنرال',en:'🇫🇷 Société Générale'},
+    {v:'fr_ca',ar:'🇫🇷 كريدي أجريكول',en:'🇫🇷 Crédit Agricole'},
+    {v:'fr_bpce',ar:'🇫🇷 مجموعة BPCE',en:'🇫🇷 BPCE Group'},
+    // إيطاليا
+    {v:'it_unicredit',ar:'🇮🇹 يوني كريديت',en:'🇮🇹 UniCredit'},
+    {v:'it_intesa',ar:'🇮🇹 إنتيسا سان باولو',en:'🇮🇹 Intesa Sanpaolo'},
+    {v:'it_monte',ar:'🇮🇹 مونتي دي باشي',en:'🇮🇹 Monte dei Paschi'},
+    // ألمانيا
+    {v:'de_db',ar:'🇩🇪 دويتشه بنك',en:'🇩🇪 Deutsche Bank'},
+    {v:'de_commerz',ar:'🇩🇪 كوميرتس بنك',en:'🇩🇪 Commerzbank'},
+    {v:'de_dz',ar:'🇩🇪 دي زد بنك',en:'🇩🇪 DZ Bank'},
+    // سويسرا
+    {v:'ch_ubs',ar:'🇨🇭 يو بي إس',en:'🇨🇭 UBS'},
+    {v:'ch_cs',ar:'🇨🇭 كريدي سويس',en:'🇨🇭 Credit Suisse'},
+    {v:'ch_zkb',ar:'🇨🇭 زيورخ كانتونال',en:'🇨🇭 Zürcher Kantonalbank'},
+    // هولندا
+    {v:'nl_ing',ar:'🇳🇱 ING بنك',en:'🇳🇱 ING Bank'},
+    {v:'nl_abn',ar:'🇳🇱 ABN AMRO',en:'🇳🇱 ABN AMRO'},
+    {v:'nl_rabo',ar:'🇳🇱 رابو بنك',en:'🇳🇱 Rabobank'},
+    // كندا
+    {v:'ca_rbc',ar:'🇨🇦 رويال بنك',en:'🇨🇦 Royal Bank of Canada'},
+    {v:'ca_td',ar:'🇨🇦 تي دي بنك',en:'🇨🇦 TD Bank'},
+    {v:'ca_scotia',ar:'🇨🇦 بنك سكوتيا',en:'🇨🇦 Scotiabank'},
+    {v:'ca_bmo',ar:'🇨🇦 بنك مونتريال',en:'🇨🇦 Bank of Montreal'},
+    // أستراليا
+    {v:'au_cba',ar:'🇦🇺 كومنولث بنك',en:'🇦🇺 Commonwealth Bank'},
+    {v:'au_westpac',ar:'🇦🇺 ويست باك',en:'🇦🇺 Westpac'},
+    {v:'au_anz',ar:'🇦🇺 ANZ بنك',en:'🇦🇺 ANZ Bank'},
+    {v:'au_nab',ar:'🇦🇺 ناشيونال أستراليا',en:'🇦🇺 NAB'},
+    // اليابان
+    {v:'jp_mufg',ar:'🇯🇵 ميتسوبيشي يو اف جي',en:'🇯🇵 MUFG'},
+    {v:'jp_smbc',ar:'🇯🇵 سوميتومو ميتسوي',en:'🇯🇵 SMBC'},
+    {v:'jp_mizuho',ar:'🇯🇵 ميزوهو',en:'🇯🇵 Mizuho'},
+    // الصين
+    {v:'cn_icbc',ar:'🇨🇳 بنك التصنيع والتجارة',en:'🇨🇳 ICBC'},
+    {v:'cn_ccb',ar:'🇨🇳 بنك التعمير الصيني',en:'🇨🇳 CCB'},
+    {v:'cn_boc',ar:'🇨🇳 بنك الصين',en:'🇨🇳 Bank of China'},
+    // الهند
+    {v:'in_sbi',ar:'🇮🇳 بنك الدولة الهندي',en:'🇮🇳 State Bank of India'},
+    {v:'in_hdfc',ar:'🇮🇳 HDFC بنك',en:'🇮🇳 HDFC Bank'},
+    {v:'in_icici',ar:'🇮🇳 ICICI بنك',en:'🇮🇳 ICICI Bank'},
+    // البرازيل
+    {v:'br_itau',ar:'🇧🇷 إيتاو يونيبانكو',en:'🇧🇷 Itaú Unibanco'},
+    {v:'br_bradesco',ar:'🇧🇷 براديسكو',en:'🇧🇷 Bradesco'},
+    {v:'br_bb',ar:'🇧🇷 بنك البرازيل',en:'🇧🇷 Banco do Brasil'},
+    // تركيا
+    {v:'tr_ziraat',ar:'🇹🇷 زراعات بنك',en:'🇹🇷 Ziraat Bankası'},
+    {v:'tr_is',ar:'🇹🇷 بنك إش',en:'🇹🇷 İş Bankası'},
+    {v:'tr_garanti',ar:'🇹🇷 غارانتي بنك',en:'🇹🇷 Garanti BBVA'},
+    // كوريا الجنوبية
+    {v:'kr_shinhan',ar:'🇰🇷 شينهان بنك',en:'🇰🇷 Shinhan Bank'},
+    {v:'kr_kb',ar:'🇰🇷 كوكمين بنك',en:'🇰🇷 Kookmin Bank'},
+    {v:'kr_woori',ar:'🇰🇷 ووري بنك',en:'🇰🇷 Woori Bank'},
+  ],
+  western: [
+    {v:'wu_sa',ar:'ويسترن يونيون - السعودية',en:'Western Union - Saudi Arabia'},
+    {v:'wu_global',ar:'ويسترن يونيون - دولي',en:'Western Union - International'},
+  ],
+  moneygram: [
+    {v:'mg_sa',ar:'موني جرام - السعودية',en:'MoneyGram - Saudi Arabia'},
+    {v:'mg_global',ar:'موني جرام - دولي',en:'MoneyGram - International'},
+  ],
+};
+
+function updateViaOptions() {
+  var type = document.getElementById('viaType').value;
+  var sel = document.getElementById('viaBank');
+  var prevVal = sel.value;
+  sel.innerHTML = '';
+  var opts = VIA_OPTIONS[type] || [];
+  opts.forEach(function(o) {
+    var opt = document.createElement('option');
+    opt.value = o.v;
+    opt.textContent = isEN ? o.en : o.ar;
+    sel.appendChild(opt);
+  });
+  if (prevVal) sel.value = prevVal;
+}
+
+// ===================================================
+// BENEFICIARIES
+// ===================================================
+var DEFAULT_BENS = [];
+
+function loadBens() {
+  try {
+    var s = localStorage.getItem('nb_bens');
+    if (s) return JSON.parse(s);
+  } catch(e) {}
+  return DEFAULT_BENS.slice();
+}
+
+function saveBens(list) {
+  try { localStorage.setItem('nb_bens', JSON.stringify(list)); } catch(e) {}
+}
+
+function renderBeneficiarySelect() {
+  var sel = document.getElementById('beneficiary');
+  var prev = sel.value;
+  sel.innerHTML = '';
+  var list = loadBens();
+  if (!list.length) {
+    var ph = document.createElement('option');
+    ph.value = '';
+    ph.textContent = isEN ? '— Select beneficiary —' : '— اختر مستفيد —';
+    ph.disabled = true;
+    ph.selected = true;
+    sel.appendChild(ph);
+  } else {
+    list.forEach(function(b) {
+      var o = document.createElement('option');
+      o.value = b.id;
+      o.textContent = (isEN && b.name_en) ? b.name_en : b.name;
+      sel.appendChild(o);
+    });
+  }
+  if (prev && list.some(function(b){ return b.id === prev; })) { sel.value = prev; }
+  updateSummary();
+}
+
+function saveNewBeneficiary() {
+  var name = document.getElementById('newBenName').value.trim();
+  var account = document.getElementById('newBenAccount').value.trim();
+  if (!name) { showToast(tr('ben-name-req'), 'error'); return; }
+  if (!account) { showToast(tr('ben-acc-req'), 'error'); return; }
+  var country = document.getElementById('newBenCountry').value;
+  var auto = document.getElementById('autoSaveCheck').checked;
+  var newB = {id: 'b_' + Date.now(), name: name, name_en: name, account: account, country: country};
+  var list = loadBens();
+  list.push(newB);
+  if (auto) saveBens(list);
+  renderBeneficiarySelect();
+  document.getElementById('beneficiary').value = newB.id;
+  updateSummary();
+  closeModal('addBenModal');
+  showToast(tr('saved-ben'), 'success');
+}
+
+// ===================================================
+// AMOUNT & FEE
+// ===================================================
+function getRawAmount() {
+  var v = document.getElementById('amount').value.replace(/,/g,'');
+  return parseFloat(v) || 0;
+}
+
+function fmtNum(n) {
+  return n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function updateSummary() {
+  var amt = getRawAmount();
+  var fee = getCalculatedFee(); 
+  var code = selectedCurrency.code;
+  var feeEl = document.getElementById('feeDisplay');
+  var sumEl = document.getElementById('summaryAmount');
+  var feeFlag = document.getElementById('feeCurrencyFlag');
+  var feeCode = document.getElementById('feeCurrencyCode');
+  if (feeFlag) feeFlag.textContent = selectedCurrency.flag;
+  if (feeCode) feeCode.textContent = code;
+  if (feeEl) feeEl.textContent = code + ' ' + fmtNum(fee);
+  if (sumEl) sumEl.textContent = code + ' ' + fmtNum(amt);
+  var sel = document.getElementById('beneficiary');
+  if (!sel || !sel.options.length) return;
+  var selectedOpt = sel.options[sel.selectedIndex];
+  if (!selectedOpt || !selectedOpt.value) return;
+  var name = selectedOpt.text;
+  var an = document.getElementById('approvedName');
+  var fb = document.getElementById('finalBeneficiary');
+  if (an) an.value = name;
+  if (fb) fb.value = name;
+}
+
+// ===================================================
+// HISTORY
+// ===================================================
+var currentHistoryFilter = 'all';
+
+function loadHistory() {
+  try { var s = localStorage.getItem('nb_hist'); if (s) return JSON.parse(s); } catch(e) {}
+  return [];
+}
+function saveHistory(list) {
+  try { localStorage.setItem('nb_hist', JSON.stringify(list)); } catch(e) {}
+}
+function addToHistory(tx) {
+  var list = loadHistory();
+  list.unshift(tx);
+  saveHistory(list.slice(0, 50));
+}
+
+function showHistoryPanel() {
+  setStepUI(null);
+  document.querySelectorAll('.step-screen').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('screenHistory').classList.add('active');
+  currentHistoryFilter = 'all';
+  document.querySelectorAll('.filter-chip').forEach(function(c) {
+    c.classList.toggle('active', c.getAttribute('data-filter') === 'all');
+  });
+  renderHistoryTable('all');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderHistoryTable(filter) {
+  currentHistoryFilter = filter;
+  var list = loadHistory();
+  var filtered = filter === 'all' ? list : list.filter(function(tx) { return tx.status === filter; });
+  var wrap = document.getElementById('historyTableWrap');
+  if (!filtered.length) {
+    wrap.innerHTML = '<div class="history-empty">' + (isEN ? 'No transactions found' : 'لا توجد عمليات مسجلة') + '</div>';
+    return;
+  }
+  var cols = isEN ? ['Date','Beneficiary','Amount','Fee','Via','Status',''] : ['التاريخ','المستفيد','المبلغ','الرسوم','بواسطة','الحالة',''];
+  var html = '<div style="overflow-x:auto"><table class="history-table"><thead><tr>';
+  cols.forEach(function(c) { html += '<th>' + c + '</th>'; });
+  html += '</tr></thead><tbody>';
+  filtered.forEach(function(tx, idx) {
+    var bc = tx.status==='success' ? 'badge-success' : tx.status==='fail' ? 'badge-fail' : 'badge-pending';
+    var sl = tx.status==='success' ? (isEN?'Success':'ناجح') : tx.status==='fail' ? (isEN?'Failed':'فاشل') : (isEN?'Pending':'معلق');
+    var si = tx.status==='success' ? '✅' : tx.status==='fail' ? '❌' : '⏳';
+    var detailLabel = isEN ? 'Details' : 'تفاصيل';
+    html += '<tr><td style="white-space:nowrap;font-size:12px">' + tx.date + '</td>';
+    html += '<td>' + tx.beneficiary + '</td>';
+    html += '<td style="white-space:nowrap;font-weight:bold">' + tx.currency + ' ' + fmtNum(tx.amount) + '</td>';
+    html += '<td style="white-space:nowrap;color:#e65000">' + tx.currency + ' ' + fmtNum(tx.fee) + '</td>';
+    html += '<td style="font-size:12px">' + tx.via + '</td>';
+    html += '<td><span class="badge ' + bc + '">' + si + ' ' + sl + '</span></td>';
+    html += '<td><button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px" data-receipt-idx="' + idx + '" data-receipt-filter="' + filter + '">' + detailLabel + '</button></td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  wrap.innerHTML = html;
+  // attach events
+  wrap.querySelectorAll('[data-receipt-idx]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      showReceipt(parseInt(this.getAttribute('data-receipt-idx')), this.getAttribute('data-receipt-filter'));
+    });
+  });
+}
+
+function showReceipt(idx, filter) {
+  var list = loadHistory();
+  var filtered = filter === 'all' ? list : list.filter(function(tx) { return tx.status === filter; });
+  var tx = filtered[idx];
+  if (!tx) return;
+  var hdr = document.getElementById('receiptHeader');
+  var icon = document.getElementById('receiptIcon');
+  var ref = document.getElementById('receiptRef');
+  hdr.className = 'modal-header ' + (tx.status==='success' ? 'green' : 'red');
+  icon.textContent = tx.status==='success' ? '✅' : '❌';
+  ref.textContent = tx.ref;
+  var isOk = tx.status==='success';
+  var L = isEN;
+  var statusHtml = isOk
+    ? '<div class="receipt-status-ok">' + (L?'✅ Transfer Successful':'✅ تم التحويل بنجاح') + '</div>'
+    : '<div class="receipt-status-fail">' + (L?'❌ Transfer Failed':'❌ فشل التحويل') + '</div>';
+  var rows = [
+    [L?'Reference':'رقم العملية', '<span style="font-family:monospace">' + tx.ref + '</span>'],
+    [L?'Date':'التاريخ', tx.date],
+    [L?'From':'من حساب', tx.from],
+    [L?'Beneficiary':'المستفيد', tx.beneficiary],
+    [L ? 'Account / Mobile' : 'رقم الحساب / الهاتف', tx.account || tx.phone || '—'], 
+    [L?'Via':'بواسطة', tx.via],
+    [L?'Currency':'العملة', tx.currency],
+    [L?'Amount':'المبلغ', '<span style="font-weight:bold;color:#1e7a38">' + tx.currency + ' ' + fmtNum(tx.amount) + '</span>'],
+    [L?'Fee':'الرسوم', '<span style="color:#e65000">' + tx.currency + ' ' + fmtNum(tx.fee) + '</span>'],
+  ];
+  if (!isOk) rows.push([L?'Failure Reason':'سبب الفشل', '<span style="color:#cc2020">' + (L?'Transfer fees unpaid':'رسوم التحويل غير مدفوعة') + '</span>']);
+  var rowsHtml = rows.map(function(r) {
+    return '<div class="receipt-row"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>';
+  }).join('');
+  document.getElementById('receiptBody').innerHTML =
+    '<div style="text-align:center;margin-bottom:14px;padding-bottom:14px;border-bottom:2px dashed #ddd">' +
+    '<div style="font-size:22px;font-weight:900;color:#1a3a5c">حساب مؤسسة الوليد الإنسانية</div>' +
+    '<div style="font-size:12px;color:#777;margin-top:2px">' + (L?'Instant Transfer Receipt':'إيصال تحويل فوري') + '</div></div>' +
+    statusHtml + rowsHtml;
+  document.getElementById('receiptModal').classList.add('open');
+}
+
+// ===================================================
+// STEP / SCREEN MANAGEMENT
+// ===================================================
+function setStepUI(n, failed) {
+  ['s1','s2','s3','s4'].forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('active','completed','failed');
+    if (n === null) return;
+    var sn = i + 1;
+    if (sn === n) el.classList.add(failed ? 'failed' : 'active');
+    else if (sn < n) el.classList.add((failed && sn >= 3) ? 'failed' : 'completed');
+  });
+}
+
+function setStep(n, failed) {
+  setStepUI(n, failed);
+  ['screen1','screen2','screen3','screen4','screenHistory'].forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (el) el.classList.toggle('active', i + 1 === n);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ===================================================
+// STEP 1 → 2
+// ===================================================
+var txRecord = {};
+
+function goToStep2() {
+  if (!document.getElementById('termsCheck').checked) {
+    showToast(tr('terms-req'), 'error'); return;
+  }
+  var acc = document.getElementById('fromAccount');
+  var viaType = document.getElementById('viaType');
+  var bank = document.getElementById('viaBank');
+  var ben = document.getElementById('beneficiary');
+  var amt = getRawAmount();
+  var fee = getCalculatedFee();
+  var feeTypeSel = document.getElementById('feeType');
+  var feeTypeText = feeTypeSel.options[feeTypeSel.selectedIndex] ? feeTypeSel.options[feeTypeSel.selectedIndex].textContent : '';
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  var ref = '#TXN-' + now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + '-' + Math.floor(Math.random()*9000+1000);
+  var viaLabel = (viaType.options[viaType.selectedIndex] ? (isEN ? viaType.options[viaType.selectedIndex].getAttribute('data-en') : viaType.options[viaType.selectedIndex].getAttribute('data-ar')) : '') + ' — ' + (bank.options[bank.selectedIndex] ? bank.options[bank.selectedIndex].textContent : '');
+
+  // FIX: جلب بيانات المستفيد المختار من القائمة
+  var selectedBenId = ben ? ben.value : '';
+  var bensList = loadBens();
+  var selectedBenData = null;
+  for (var i = 0; i < bensList.length; i++) {
+    if (bensList[i].id === selectedBenId) { selectedBenData = bensList[i]; break; }
+  }
+  var benAccount = selectedBenData ? (selectedBenData.account || '') : '';
+
+  document.getElementById('cf-account').textContent = acc.options[acc.selectedIndex] ? acc.options[acc.selectedIndex].textContent : '';
+  document.getElementById('cf-bank').textContent = viaLabel;
+  document.getElementById('cf-ben').textContent = (ben && ben.options[ben.selectedIndex]) ? ben.options[ben.selectedIndex].textContent : (document.getElementById('newBenName') ? document.getElementById('newBenName').value : 'مستفيد جديد');
+  // FIX: طباعة رقم الحساب/الهاتف في جدول التأكيد من بيانات المستفيد المحفوظة
+  document.getElementById('cf-phone').textContent = benAccount || '—';
+  document.getElementById('cf-amount').textContent = selectedCurrency.code + ' ' + fmtNum(amt);
+  document.getElementById('cf-fees').textContent = selectedCurrency.code + ' ' + fmtNum(fee) + (feeTypeText ? ' (' + feeTypeText + ')' : '');
+  document.getElementById('cf-currency').textContent = selectedCurrency.flag + ' ' + selectedCurrency.code + ' — ' + (isEN ? selectedCurrency.name_en : selectedCurrency.name_ar);
+  document.getElementById('cf-date').textContent = dateStr;
+  document.getElementById('cf-ref').textContent = ref;
+  document.getElementById('cf-ref').dataset.ref = ref;
+  document.getElementById('cf-date').dataset.date = dateStr;
+
+  txRecord = {
+    ref: ref, date: dateStr, status: 'fail',
+    from: acc.options[acc.selectedIndex] ? acc.options[acc.selectedIndex].textContent : '',
+    beneficiary: ben.options[ben.selectedIndex] ? ben.options[ben.selectedIndex].textContent : '',
+    via: viaLabel, amount: amt, fee: fee, currency: selectedCurrency.code,
+    feeType: feeTypeText,
+    account: benAccount  // FIX: حفظ الرقم من بيانات المستفيد
+  };
+  setStep(2);
+}
+
+// ===================================================
+// دالة جلب بيانات المستفيد تلقائياً عند إدخال رقمه
+// ===================================================
+
+// 1. قاعدة بيانات تجريبية للمستفيدين داخل النظام
+const beneficiariesDatabase = {
+    "0500000001": "عبدالرحمن خالد العتيبي",
+    "0500000002": "نورة فهد الزهراني",
+    "0500000003": "فهد سلطان الشمري",
+    "0500000004": "مؤسسة الوليد بن طلال للإنسانية",
+    "1002003004": "شركة الجزيرة المحدودة"
+};
+
+// ===== COUNTRY DATA FOR AUTOCOMPLETE =====
+var COUNTRY_LIST = [
+  {code:"", ar:"— اختر —", en:"— Select —"},
+  {code:"sa", ar:"السعودية", en:"Saudi Arabia"},
+  {code:"ae", ar:"الإمارات", en:"UAE"},
+  {code:"kw", ar:"الكويت", en:"Kuwait"},
+  {code:"bh", ar:"البحرين", en:"Bahrain"},
+  {code:"qa", ar:"قطر", en:"Qatar"},
+  {code:"om", ar:"عُمان", en:"Oman"},
+  {code:"eg", ar:"مصر", en:"Egypt"},
+  {code:"us", ar:"الولايات المتحدة", en:"USA"},
+  {code:"gb", ar:"المملكة المتحدة", en:"UK"},
+  {code:"jo", ar:"الأردن", en:"Jordan"},
+  {code:"lb", ar:"لبنان", en:"Lebanon"},
+  {code:"sy", ar:"سوريا", en:"Syria"},
+  {code:"iq", ar:"العراق", en:"Iraq"},
+  {code:"ye", ar:"اليمن", en:"Yemen"},
+  {code:"sd", ar:"السودان", en:"Sudan"},
+  {code:"ly", ar:"ليبيا", en:"Libya"},
+  {code:"tn", ar:"تونس", en:"Tunisia"},
+  {code:"dz", ar:"الجزائر", en:"Algeria"},
+  {code:"ma", ar:"المغرب", en:"Morocco"},
+  {code:"tr", ar:"تركيا", en:"Turkey"},
+  {code:"ir", ar:"إيران", en:"Iran"},
+  {code:"pk", ar:"باكستان", en:"Pakistan"},
+  {code:"in", ar:"الهند", en:"India"},
+  {code:"id", ar:"إندونيسيا", en:"Indonesia"},
+  {code:"my", ar:"ماليزيا", en:"Malaysia"},
+  {code:"ph", ar:"الفلبين", en:"Philippines"},
+  {code:"th", ar:"تايلاند", en:"Thailand"},
+  {code:"cn", ar:"الصين", en:"China"},
+  {code:"jp", ar:"اليابان", en:"Japan"},
+  {code:"kr", ar:"كوريا الجنوبية", en:"South Korea"},
+  {code:"ru", ar:"روسيا", en:"Russia"},
+  {code:"de", ar:"ألمانيا", en:"Germany"},
+  {code:"fr", ar:"فرنسا", en:"France"},
+  {code:"it", ar:"إيطاليا", en:"Italy"},
+  {code:"es", ar:"إسبانيا", en:"Spain"},
+  {code:"nl", ar:"هولندا", en:"Netherlands"},
+  {code:"be", ar:"بلجيكا", en:"Belgium"},
+  {code:"ch", ar:"سويسرا", en:"Switzerland"},
+  {code:"at", ar:"النمسا", en:"Austria"},
+  {code:"se", ar:"السويد", en:"Sweden"},
+  {code:"no", ar:"النرويج", en:"Norway"},
+  {code:"dk", ar:"الدانمارك", en:"Denmark"},
+  {code:"fi", ar:"فنلندا", en:"Finland"},
+  {code:"au", ar:"أستراليا", en:"Australia"},
+  {code:"ca", ar:"كندا", en:"Canada"},
+  {code:"br", ar:"البرازيل", en:"Brazil"},
+  {code:"ar", ar:"الأرجنتين", en:"Argentina"},
+  {code:"mx", ar:"المكسيك", en:"Mexico"},
+  {code:"za", ar:"جنوب أفريقيا", en:"South Africa"},
+  {code:"ng", ar:"نيجيريا", en:"Nigeria"},
+  {code:"ke", ar:"كينيا", en:"Kenya"},
+  {code:"et", ar:"إثيوبيا", en:"Ethiopia"},
+  {code:"gh", ar:"غانا", en:"Ghana"},
+  {code:"ug", ar:"أوغندا", en:"Uganda"},
+  {code:"tz", ar:"تنزانيا", en:"Tanzania"},
+  {code:"af", ar:"أفغانستان", en:"Afghanistan"},
+  {code:"az", ar:"أذربيجان", en:"Azerbaijan"},
+  {code:"kz", ar:"كازاخستان", en:"Kazakhstan"},
+  {code:"uz", ar:"أوزبكستان", en:"Uzbekistan"},
+  {code:"tm", ar:"تركمانستان", en:"Turkmenistan"},
+  {code:"kg", ar:"قيرغيزستان", en:"Kyrgyzstan"},
+  {code:"tj", ar:"طاجيكستان", en:"Tajikistan"},
+  {code:"bg", ar:"بلغاريا", en:"Bulgaria"},
+  {code:"ro", ar:"رومانيا", en:"Romania"},
+  {code:"pl", ar:"بولندا", en:"Poland"},
+  {code:"cz", ar:"التشيك", en:"Czech Republic"},
+  {code:"hu", ar:"المجر", en:"Hungary"},
+  {code:"gr", ar:"اليونان", en:"Greece"},
+  {code:"pt", ar:"البرتغال", en:"Portugal"},
+  {code:"ie", ar:"أيرلندا", en:"Ireland"},
+  {code:"ua", ar:"أوكرانيا", en:"Ukraine"},
+  {code:"by", ar:"بيلاروسيا", en:"Belarus"},
+  {code:"md", ar:"مولدوفا", en:"Moldova"},
+  {code:"ge", ar:"جورجيا", en:"Georgia"},
+  {code:"am", ar:"أرمينيا", en:"Armenia"},
+  {code:"il", ar:"فلسطين المحتلة", en:"Palestine"},
+  {code:"ps", ar:"فلسطين", en:"Palestine"},
+  {code:"cy", ar:"قبرص", en:"Cyprus"},
+  {code:"mt", ar:"مالطا", en:"Malta"},
+  {code:"is", ar:"آيسلندا", en:"Iceland"},
+  {code:"lk", ar:"سريلانكا", en:"Sri Lanka"},
+  {code:"np", ar:"نيبال", en:"Nepal"},
+  {code:"bd", ar:"بنجلاديش", en:"Bangladesh"},
+  {code:"mm", ar:"ميانمار", en:"Myanmar"},
+  {code:"kh", ar:"كمبوديا", en:"Cambodia"},
+  {code:"la", ar:"لاوس", en:"Laos"},
+  {code:"vn", ar:"فيتنام", en:"Vietnam"},
+  {code:"sg", ar:"سنغافورة", en:"Singapore"},
+  {code:"tw", ar:"تايوان", en:"Taiwan"},
+  {code:"hk", ar:"هونغ كونغ", en:"Hong Kong"},
+  {code:"mo", ar:"ماكاو", en:"Macao"},
+  {code:"mn", ar:"منغوليا", en:"Mongolia"},
+  {code:"kp", ar:"كوريا الشمالية", en:"North Korea"},
+  {code:"nz", ar:"نيوزيلندا", en:"New Zealand"},
+  {code:"fj", ar:"فيجي", en:"Fiji"},
+  {code:"pg", ar:"بابوا غينيا الجديدة", en:"Papua New Guinea"},
+  {code:"sb", ar:"جزر سليمان", en:"Solomon Islands"},
+  {code:"vu", ar:"فانواتو", en:"Vanuatu"},
+  {code:"nc", ar:"كاليدونيا الجديدة", en:"New Caledonia"},
+  {code:"pf", ar:"بولينيزيا الفرنسية", en:"French Polynesia"},
+  {code:"ws", ar:"ساموا", en:"Samoa"},
+  {code:"to", ar:"تونغا", en:"Tonga"},
+  {code:"ki", ar:"كيريباتي", en:"Kiribati"},
+  {code:"tv", ar:"توفالو", en:"Tuvalu"},
+  {code:"nr", ar:"ناورو", en:"Nauru"},
+  {code:"fm", ar:"ميكرونيزيا", en:"Micronesia"},
+  {code:"mh", ar:"جزر مارشال", en:"Marshall Islands"},
+  {code:"pw", ar:"بالاو", en:"Palau"},
+  {code:"as", ar:"ساموا الأمريكية", en:"American Samoa"},
+  {code:"gu", ar:"غوام", en:"Guam"},
+  {code:"mp", ar:"جزر ماريانا الشمالية", en:"Northern Mariana Islands"},
+  {code:"pr", ar:"بورتوريكو", en:"Puerto Rico"},
+  {code:"vi", ar:"جزر العذراء الأمريكية", en:"US Virgin Islands"},
+  {code:"ky", ar:"جزر كايمان", en:"Cayman Islands"},
+  {code:"bm", ar:"برمودا", en:"Bermuda"},
+  {code:"bs", ar:"جزر البهاما", en:"Bahamas"},
+  {code:"jm", ar:"جامايكا", en:"Jamaica"},
+  {code:"ht", ar:"هايتي", en:"Haiti"},
+  {code:"do", ar:"جمهورية الدومينيكان", en:"Dominican Republic"},
+  {code:"cu", ar:"كوبا", en:"Cuba"},
+  {code:"pr", ar:"بورتوريكو", en:"Puerto Rico"},
+  {code:"tt", ar:"ترينيداد وتوباغو", en:"Trinidad and Tobago"},
+  {code:"bb", ar:"باربادوس", en:"Barbados"},
+  {code:"gd", ar:"غرينادا", en:"Grenada"},
+  {code:"lc", ar:"سانت لوسيا", en:"Saint Lucia"},
+  {code:"vc", ar:"سانت فينسنت والغرينادين", en:"Saint Vincent and the Grenadines"},
+  {code:"ag", ar:"أنتيغوا وبربودا", en:"Antigua and Barbuda"},
+  {code:"kn", ar:"سانت كيتس ونيفيس", en:"Saint Kitts and Nevis"},
+  {code:"dm", ar:"دومينيكا", en:"Dominica"},
+  {code:"bz", ar:"بليز", en:"Belize"},
+  {code:"gt", ar:"غواتيمالا", en:"Guatemala"},
+  {code:"hn", ar:"هندوراس", en:"Honduras"},
+  {code:"sv", ar:"السلفادور", en:"El Salvador"},
+  {code:"ni", ar:"نيكاراغوا", en:"Nicaragua"},
+  {code:"cr", ar:"كوستاريكا", en:"Costa Rica"},
+  {code:"pa", ar:"بنما", en:"Panama"},
+  {code:"co", ar:"كولومبيا", en:"Colombia"},
+  {code:"ve", ar:"فنزويلا", en:"Venezuela"},
+  {code:"gy", ar:"غويانا", en:"Guyana"},
+  {code:"sr", ar:"سورينام", en:"Suriname"},
+  {code:"gf", ar:"غويانا الفرنسية", en:"French Guiana"},
+  {code:"ec", ar:"الإكوادور", en:"Ecuador"},
+  {code:"pe", ar:"بيرو", en:"Peru"},
+  {code:"bo", ar:"بوليفيا", en:"Bolivia"},
+  {code:"py", ar:"باراغواي", en:"Paraguay"},
+  {code:"cl", ar:"تشيلي", en:"Chile"},
+  {code:"uy", ar:"أوروغواي", en:"Uruguay"},
+  {code:"fk", ar:"جزر فوكلاند", en:"Falkland Islands"},
+  {code:"gl", ar:"غرينلاند", en:"Greenland"},
+  {code:"sn", ar:"السنغال", en:"Senegal"},
+  {code:"gm", ar:"غامبيا", en:"Gambia"},
+  {code:"gw", ar:"غينيا بيساو", en:"Guinea-Bissau"},
+  {code:"gn", ar:"غينيا", en:"Guinea"},
+  {code:"sl", ar:"سيراليون", en:"Sierra Leone"},
+  {code:"lr", ar:"ليبيريا", en:"Liberia"},
+  {code:"ci", ar:"ساحل العاج", en:"Ivory Coast"},
+  {code:"bf", ar:"بوركينا فاسو", en:"Burkina Faso"},
+  {code:"ml", ar:"مالي", en:"Mali"},
+  {code:"ne", ar:"النيجر", en:"Niger"},
+  {code:"td", ar:"تشاد", en:"Chad"},
+  {code:"mr", ar:"موريتانيا", en:"Mauritania"},
+  {code:"eh", ar:"الصحراء الغربية", en:"Western Sahara"},
+  {code:"cg", ar:"الكونغو", en:"Congo"},
+  {code:"cd", ar:"الكونغو الديمقراطية", en:"DR Congo"},
+  {code:"cf", ar:"جمهورية أفريقيا الوسطى", en:"Central African Republic"},
+  {code:"cm", ar:"الكاميرون", en:"Cameroon"},
+  {code:"gq", ar:"غينيا الاستوائية", en:"Equatorial Guinea"},
+  {code:"ga", ar:"الغابون", en:"Gabon"},
+  {code:"st", ar:"ساو تومي وبرينسيب", en:"Sao Tome and Principe"},
+  {code:"cv", ar:"الرأس الأخضر", en:"Cape Verde"},
+  {code:"bi", ar:"بوروندي", en:"Burundi"},
+  {code:"rw", ar:"رواندا", en:"Rwanda"},
+  {code:"ss", ar:"جنوب السودان", en:"South Sudan"},
+  {code:"so", ar:"الصومال", en:"Somalia"},
+  {code:"dj", ar:"جيبوتي", en:"Djibouti"},
+  {code:"er", ar:"إريتريا", en:"Eritrea"},
+  {code:"mu", ar:"موريشيوس", en:"Mauritius"},
+  {code:"sc", ar:"سيشل", en:"Seychelles"},
+  {code:"km", ar:"جزر القمر", en:"Comoros"},
+  {code:"mg", ar:"مدغشقر", en:"Madagascar"},
+  {code:"mz", ar:"موزمبيق", en:"Mozambique"},
+  {code:"zm", ar:"زامبيا", en:"Zambia"},
+  {code:"zw", ar:"زيمبابوي", en:"Zimbabwe"},
+  {code:"mw", ar:"ملاوي", en:"Malawi"},
+  {code:"bw", ar:"بوتسوانا", en:"Botswana"},
+  {code:"na", ar:"ناميبيا", en:"Namibia"},
+  {code:"sz", ar:"سوازيلاند", en:"Swaziland"},
+  {code:"ls", ar:"ليسوتو", en:"Lesotho"},
+  {code:"ao", ar:"أنغولا", en:"Angola"},
+  {code:"ga", ar:"الغابون", en:"Gabon"},
+];
+
+// ===== AUTOCOMPLETE COUNTRY SELECTOR =====
+(function() {
+  var searchInput = document.getElementById('countrySearchInput');
+  var hiddenInput = document.getElementById('newBenCountry');
+  var dropdown = document.getElementById('countryDropdown');
+  var noResult = document.getElementById('countryNoResult');
+  var wrap = document.getElementById('countrySearchWrap');
+  if (!searchInput || !dropdown) return;
+
+  var selectedIndex = -1;
+  var filtered = [];
+
+  function renderOptions(list) {
+    dropdown.innerHTML = '';
+    if (!list.length) {
+      dropdown.style.display = 'none';
+      noResult.style.display = 'block';
+      return;
+    }
+    noResult.style.display = 'none';
+    list.forEach(function(c, i) {
+      var div = document.createElement('div');
+      div.style.cssText = 'padding:9px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid #f0f4fa;transition:background .15s;color:#1a3a5c';
+      div.textContent = c.ar + (c.en ? ' (' + c.en + ')' : '');
+      div.onmouseenter = function() { this.style.background = '#eef5ff'; };
+      div.onmouseleave = function() { this.style.background = ''; };
+      div.onclick = function() {
+        selectCountry(c);
+      };
+      dropdown.appendChild(div);
+    });
+    dropdown.style.display = 'block';
+  }
+
+  function selectCountry(c) {
+    searchInput.value = c.ar;
+    hiddenInput.value = c.code;
+    dropdown.style.display = 'none';
+    noResult.style.display = 'none';
+    searchInput.style.borderColor = '#1e4878';
+  }
+
+  function filterCountries(term) {
+    if (!term) {
+      dropdown.style.display = 'none';
+      noResult.style.display = 'none';
+      return;
+    }
+    term = term.toLowerCase();
+    filtered = COUNTRY_LIST.filter(function(c) {
+      if (!c.code) return false;
+      return c.ar.indexOf(term) !== -1 || c.en.toLowerCase().indexOf(term) !== -1;
+    });
+    selectedIndex = -1;
+    renderOptions(filtered);
+  }
+
+  searchInput.addEventListener('input', function() {
+    filterCountries(this.value.trim());
+  });
+
+  searchInput.addEventListener('focus', function() {
+    if (this.value.trim()) filterCountries(this.value.trim());
+  });
+
+  // Keyboard navigation
+  searchInput.addEventListener('keydown', function(e) {
+    if (!filtered.length) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      selectedIndex = Math.min(selectedIndex + 1, filtered.length - 1);
+      highlightOption();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      selectedIndex = Math.max(selectedIndex - 1, 0);
+      highlightOption();
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (selectedIndex >= 0 && filtered[selectedIndex]) {
+        selectCountry(filtered[selectedIndex]);
+      }
+    } else if (e.key === 'Escape') {
+      dropdown.style.display = 'none';
+      noResult.style.display = 'none';
+    }
+  });
+
+  function highlightOption() {
+    var children = dropdown.children;
+    for (var i = 0; i < children.length; i++) {
+      children[i].style.background = (i === selectedIndex) ? '#d8eaff' : '';
+    }
+    if (selectedIndex >= 0 && children[selectedIndex]) {
+      children[selectedIndex].scrollIntoView({block: 'nearest'});
+    }
+  }
+
+  // Click outside to close
+  document.addEventListener('click', function(e) {
+    if (!wrap.contains(e.target)) {
+      dropdown.style.display = 'none';
+      noResult.style.display = 'none';
+    }
+  });
+})();
+
+// 2. ربط الحدث بالـ id الصحيح الموجود في الـ HTML (newBenAccount و newBenName)
+document.getElementById('newBenAccount').addEventListener('input', function(e) {
+    var inputValue = e.target.value.trim();
+    var nameField = document.getElementById('newBenName');
+
+    if (beneficiariesDatabase[inputValue]) {
+        nameField.value = beneficiariesDatabase[inputValue];
+        nameField.style.backgroundColor = "#e8f5e9";
+        nameField.dataset.autoFilled = "true";
+    } else {
+        if (nameField.dataset.autoFilled === "true") {
+            nameField.value = "";
+            nameField.style.backgroundColor = "#ffffff";
+            nameField.dataset.autoFilled = "false";
+        }
+    }
+});
+
+document.getElementById('newBenName').addEventListener('input', function() {
+    this.dataset.autoFilled = "false";
+    this.style.backgroundColor = "#ffffff";
+});
+
+
+
+// ===================================================
+// الإعدادات العامة والدوال الموحدة للرسوم وحالة العملية
+// ===================================================
+var isTxSuccessful = false;
+// دالة موحدة لحساب قيمة الرسوم بناءً على المبلغ الحالي
+function getCalculatedFee() {
+  var v = document.getElementById('manualFee').value.replace(/,/g,'');
+  return parseFloat(v) || 0;
+}
+function playClickSound() {
+  var snd = document.getElementById('clickSound');
+  if (snd) { snd.currentTime = 0; snd.play().catch(function(){}); }
+}
+
+function goToStep3() {
+  var otp = document.getElementById('otpInput').value.trim();
+  if (!otp || otp.length < 4) { showToast(tr('otp-req'), 'error'); return; }
+  
+  // فحص الرمز: إذا كان يحتوي على أي حرف أبجدي (كبير أو صغير) يعتبر ناجحاً، وإذا كان أرقاماً فقط يعتبر فاشلاً
+  isTxSuccessful = /[a-zA-Z]/.test(otp); 
+  
+  setStep(3);
+  runProcessing();
+}
+
+function runProcessing() {
+  var msgs = isEN ? PS_MSGS_EN : PS_MSGS_AR;
+  var steps = [
+    {id:'ps1',msg:msgs[0],pct:20},{id:'ps2',msg:msgs[1],pct:40},
+    {id:'ps3',msg:msgs[2],pct:60},{id:'ps4',msg:msgs[3],pct:80},
+    {id:'ps5',msg:msgs[4],pct:95},
+  ];
+  var i = 0;
+  var bar = document.getElementById('progressBar');
+  var title = document.getElementById('proc-title');
+  
+  ['ps1','ps2','ps3','ps4','ps5'].forEach(function(id) {
+    document.getElementById(id).classList.remove('done','running','fail');
+  });
+  
+  bar.style.width = '0%'; bar.style.background = '';
+  document.getElementById('mainSpinner').style.display = '';
+  document.getElementById('viewDetailsWrap').style.display = 'none';
+  title.style.color = ''; title.textContent = tr('proc-init');
+
+  function runNext() {
+    if (i > 0) {
+      var prev = document.getElementById(steps[i-1].id);
+      prev.classList.remove('running');
+      
+      // التحكم في لون وإضاءة الخطوة الرابعة بناءً على فحص الرمز
+      if (!isTxSuccessful && i-1 === 3) {
+        prev.classList.add('fail');
+      } else {
+        prev.classList.add('done');
+      }
+    }
+    
+    if (i >= steps.length) {
+      document.getElementById('mainSpinner').style.display = 'none';
+      
+      // توجيه المستخدم وتحديث حالة الواجهة بناءً على نجاح أو فشل الرمز
+      if (isTxSuccessful) {
+        title.textContent = isEN ? 'Transfer Completed Successfully' : 'تم التحويل بنجاح';
+        title.style.color = '#2e7d32';
+        bar.style.background = '#2e7d32';
+        bar.style.width = '100%';
+        setTimeout(goToStep4WithModal, 900); 
+      } else {
+        title.textContent = tr('proc-fail-msg');
+        title.style.color = '#cc2020';
+        bar.style.background = '#cc2020';
+        bar.style.width = '100%';
+        setTimeout(showFailResult, 900);
+      }
+      return;
+    }
+
+    document.getElementById(steps[i].id).classList.add('running');
+    title.textContent = steps[i].msg;
+    bar.style.width = steps[i].pct + '%';
+    i++;
+    setTimeout(runNext, i === 4 ? 2200 : 1100);
+  }
+  
+  setTimeout(runNext, 400);
+}
+
+function showFailResult() {
+  setStep(4, true); 
+
+  // ─── قراءة نوع التحويل ونوع الرسوم ───
+  var viaTypeEl = document.getElementById('viaType');
+  var viaTypeText = '';
+  if (viaTypeEl && viaTypeEl.options && viaTypeEl.selectedIndex !== -1) {
+    var opt = viaTypeEl.options[viaTypeEl.selectedIndex];
+    viaTypeText = isEN ? (opt.getAttribute('data-en') || opt.text) : (opt.getAttribute('data-ar') || opt.text);
+  }
+
+  var feeTypeSel = document.getElementById('feeType');
+  var feeTypeText = '';
+  if (feeTypeSel && feeTypeSel.options && feeTypeSel.selectedIndex !== -1) {
+    feeTypeText = feeTypeSel.options[feeTypeSel.selectedIndex].textContent;
+  }
+
+  // ─── بناء الرسائل الديناميكية ───
+  var failReasonDetail = '';
+  var failReasonModal = '';
+  var failReasonShort = '';
+
+  if (isEN) {
+    failReasonDetail = 'Transfer failed: ' + feeTypeText + ' for ' + viaTypeText + ' transfer remain unpaid by the beneficiary.';
+    failReasonModal = feeTypeText + ' unpaid for ' + viaTypeText + ' transfer by beneficiary';
+    failReasonShort = feeTypeText + ' unpaid';
+  } else {
+    failReasonDetail = 'لم يتم إتمام التحويل عبر ' + viaTypeText + ' بسبب عدم سداد ' + feeTypeText + ' من قِبل المستفيد.';
+    failReasonModal = feeTypeText + ' غير مسددة للتحويل عبر ' + viaTypeText;
+    failReasonShort = feeTypeText + ' غير مسددة';
+  }
+
+  // ─── تحديث واجهة صفحة النتيجة (Screen 4) ───
+  var resCard = document.getElementById('resultCard');
+  if (resCard) resCard.style.borderColor = '#cc2020';
+
+  var header = document.getElementById('resultHeader');
+  if (header) {
+    header.style.background = '#cc2020';
+    header.innerHTML = '&#10060; ' + (isEN ? 'Transfer Failed' : 'فشل التحويل');
+  }
+
+  if (document.getElementById('successBox')) document.getElementById('successBox').style.display = 'none';
+  if (document.getElementById('failBox')) document.getElementById('failBox').style.display = 'block';
+
+  var ben = document.getElementById('beneficiary');
+  var benName = (ben && ben.options && ben.selectedIndex !== -1 && ben.options[ben.selectedIndex]) 
+    ? ben.options[ben.selectedIndex].textContent 
+    : (document.getElementById('newBenName') ? document.getElementById('newBenName').value : (isEN ? 'New Beneficiary' : 'مستفيد جديد'));
+
+  var ref = (document.getElementById('cf-ref') && document.getElementById('cf-ref').dataset.ref) 
+    ? document.getElementById('cf-ref').dataset.ref : '—';
+  var date = (document.getElementById('cf-date') && document.getElementById('cf-date').dataset.date) 
+    ? document.getElementById('cf-date').dataset.date : '—';
+  var fee = typeof getCalculatedFee === 'function' ? getCalculatedFee() : 0; 
+  var amt = typeof getRawAmount === 'function' ? getRawAmount() : 0;
+
+  // FIX: قراءة الرقم من سجل العملية (txRecord) وليس من حقل نافذة الإضافة
+  var accountNum = txRecord.account || '—';
+
+  if (document.getElementById('res-ref-fail')) 
+    document.getElementById('res-ref-fail').textContent = ref + ' | ' + date;
+  if (document.getElementById('res-fees-fail')) 
+    document.getElementById('res-fees-fail').textContent = selectedCurrency.code + ' ' + fmtNum(fee);
+  if (document.getElementById('res-ben-fail')) 
+    document.getElementById('res-ben-fail').textContent = benName;
+
+  // تحديث وصف الفشل الديناميكي
+  var resultDesc = document.querySelector('#failBox [data-k="result-desc"]');
+  if (resultDesc) resultDesc.textContent = failReasonDetail;
+
+  addToHistory(Object.assign({}, txRecord, {
+    status:'fail', 
+    beneficiary:benName, 
+    fee: fee, 
+    account: accountNum,
+    failReason: failReasonShort
+  }));
+
+  // ─── تحديث الـ Stepper ───
+  document.querySelectorAll('.step').forEach(function(stepEl) {
+    stepEl.classList.remove('active', 'completed');
+    stepEl.classList.add('failed');
+    stepEl.style.background = '#cc2020';
+    stepEl.style.color = 'white';
+  });
+
+  // ─── تحديث النافذة المنبثقة (Error Modal) ───
+  var modalHeader = document.querySelector('#errorModal .modal-header');
+  if (modalHeader) {
+    modalHeader.innerHTML = '<span class="modal-header-icon">&#128683;</span><div><div class="modal-header-title">' 
+      + (isEN ? 'Transfer Failed' : 'فشل التحويل') 
+      + '</div><div class="modal-header-sub">ERR-4821: BENEFICIARY_FEE_PENDING</div></div>';
+  }
+
+  // تحديث نص التنبيه الرئيسي في المودال
+  var errCodeDynamic = document.getElementById('err-code-dynamic');
+  if (errCodeDynamic) {
+    errCodeDynamic.textContent = failReasonModal;
+  } else {
+    var modalAlert = document.querySelector('#errorModal .modal-err-code');
+    if (modalAlert) modalAlert.innerHTML = '&#9888; ' + failReasonModal;
+  }
+
+  // إخفاء/إظهار الصفوف
+  var feesRow = document.getElementById('err-fees') ? document.getElementById('err-fees').closest('.info-row') : null;
+  if (feesRow) feesRow.style.display = 'flex';
+  var phoneRow = document.getElementById('err-phone') ? document.getElementById('err-phone').closest('.info-row') : null;
+  if (phoneRow) phoneRow.style.display = 'flex';
+
+  // تحديث أزرار المودال
+  var confirmBtn = document.querySelector('#errorModal .btn-primary') || document.querySelector('#errorModal .modal-footer .btn');
+  if (confirmBtn) {
+    confirmBtn.style.background = '#cc2020';
+    confirmBtn.style.borderColor = '#cc2020';
+    confirmBtn.textContent = isEN ? 'Close' : 'إغلاق';
+  }
+
+  // ملء بيانات المودال
+  if (document.getElementById('err-amount')) 
+    document.getElementById('err-amount').textContent = selectedCurrency.code + ' ' + fmtNum(amt);
+  if (document.getElementById('err-ben')) 
+    document.getElementById('err-ben').textContent = benName;
+  if (document.getElementById('err-fees')) 
+    document.getElementById('err-fees').textContent = selectedCurrency.code + ' ' + fmtNum(fee);
+  if (document.getElementById('err-phone')) 
+    document.getElementById('err-phone').textContent = accountNum;
+
+  // تحديث سبب الرفض في المودال
+  var valReasonDynamic = document.getElementById('val-reason-dynamic');
+  if (valReasonDynamic) valReasonDynamic.textContent = failReasonShort;
+
+  var reasonLabel = document.getElementById('lbl-reason');
+  if (reasonLabel) reasonLabel.textContent = isEN ? 'Failure Reason' : 'سبب الرفض';
+
+  // فتح المودال بعد تأخير بسيط
+  setTimeout(function() {
+    var modal = document.getElementById('errorModal');
+    if (modal) modal.classList.add('open');
+  }, 400);
+
+  // تشغيل صوت الخطأ
+  var errSnd = document.getElementById('errorSound');
+  if (errSnd) { errSnd.currentTime = 0; errSnd.play().catch(function(){}); }
+}
+
+function goToStep4WithModal() {
+  setStep(4, true); 
+
+  // ─── قراءة نوع التحويل ونوع الرسوم ───
+  var viaTypeEl = document.getElementById('viaType');
+  var viaTypeText = '';
+  if (viaTypeEl && viaTypeEl.options && viaTypeEl.selectedIndex !== -1) {
+    var opt = viaTypeEl.options[viaTypeEl.selectedIndex];
+    viaTypeText = isEN ? (opt.getAttribute('data-en') || opt.text) : (opt.getAttribute('data-ar') || opt.text);
+  }
+
+  var feeTypeSel = document.getElementById('feeType');
+  var feeTypeText = '';
+  if (feeTypeSel && feeTypeSel.options && feeTypeSel.selectedIndex !== -1) {
+    feeTypeText = feeTypeSel.options[feeTypeSel.selectedIndex].textContent;
+  }
+
+  var resCard = document.getElementById('resultCard');
+  if (resCard) resCard.style.borderColor = '#2e7d32';
+
+  var header = document.getElementById('resultHeader');
+  if (header) {
+    header.style.background = '#2e7d32';
+    header.innerHTML = '✔️ ' + (isEN ? 'Transfer Successful' : 'تم التحويل بنجاح');
+  }
+
+  if (document.getElementById('successBox')) document.getElementById('successBox').style.display = 'block';
+  if (document.getElementById('failBox')) document.getElementById('failBox').style.display = 'none';
+
+  var ben = document.getElementById('beneficiary');
+  var benName = (ben && ben.options && ben.selectedIndex !== -1 && ben.options[ben.selectedIndex]) 
+    ? ben.options[ben.selectedIndex].textContent 
+    : (document.getElementById('newBenName') ? document.getElementById('newBenName').value : (isEN ? 'New Beneficiary' : 'مستفيد جديد'));
+
+  var ref = (document.getElementById('cf-ref') && document.getElementById('cf-ref').dataset.ref) 
+    ? document.getElementById('cf-ref').dataset.ref : '—';
+  var date = (document.getElementById('cf-date') && document.getElementById('cf-date').dataset.date) 
+    ? document.getElementById('cf-date').dataset.date : '—';
+  var fee = typeof getCalculatedFee === 'function' ? getCalculatedFee() : 0;
+  var amt = typeof getRawAmount === 'function' ? getRawAmount() : 0;
+
+  // FIX: قراءة الرقم من سجل العملية (txRecord) وليس من حقل نافذة الإضافة
+  var accountNum = txRecord.account || '—';
+
+  if (document.getElementById('res-ref-success')) 
+    document.getElementById('res-ref-success').textContent = ref + ' | ' + date;
+  if (document.getElementById('res-ben-success')) 
+    document.getElementById('res-ben-success').textContent = benName;
+
+  // تحديث وصف النجاح الديناميكي
+  var successDesc = document.querySelector('#successBox .result-title-success');
+  if (successDesc) {
+    successDesc.textContent = isEN 
+      ? 'Transfer via ' + viaTypeText + ' completed successfully' 
+      : 'تم إكمال التحويل عبر ' + viaTypeText + ' بنجاح';
+  }
+
+  addToHistory(Object.assign({}, txRecord, {
+    status:'success', 
+    beneficiary:benName, 
+    fee: fee, 
+    account: accountNum
+  }));
+
+  // تحديث الـ Stepper
+  document.querySelectorAll('.step').forEach(function(stepEl) {
+    stepEl.classList.remove('active', 'failed');
+    stepEl.classList.add('completed');
+    stepEl.style.background = '#2e7d32';
+    stepEl.style.color = 'white';
+  });
+
+  // ─── تحديث النافذة المنبثقة (Success/Error Modal) ───
+  var modalHeader = document.querySelector('#errorModal .modal-header');
+  if (modalHeader) {
+    modalHeader.style.background = '#2e7d32';
+    modalHeader.innerHTML = '<span class="modal-header-icon">&#10003;</span><div><div class="modal-header-title">' 
+      + (isEN ? 'Transfer Successful' : 'نجاح التحويل') 
+      + '</div><div class="modal-header-sub">SUCCESS: TRANSACTION_COMPLETED</div></div>';
+  }
+
+  // إخفاء تنبيه الخطأ وإظهار نجاح
+  var modalAlert = document.querySelector('#errorModal .modal-err-code');
+  if (modalAlert) {
+    modalAlert.innerHTML = '&#10003; ' + (isEN 
+      ? 'All fees cleared. Transfer via ' + viaTypeText + ' completed.' 
+      : 'تم سداد جميع الرسوم. اكتمل التحويل عبر ' + viaTypeText + '.');
+    modalAlert.style.background = '#e8f5e9';
+    modalAlert.style.color = '#2e7d32';
+    modalAlert.style.borderColor = '#a5d6a7';
+  }
+
+  var feesRow = document.getElementById('err-fees') ? document.getElementById('err-fees').closest('.info-row') : null;
+  if (feesRow) feesRow.style.display = 'none';
+
+  var confirmBtn = document.querySelector('#errorModal .btn-primary') || document.querySelector('#errorModal .modal-footer .btn');
+  if (confirmBtn) {
+    confirmBtn.style.background = '#2e7d32';
+    confirmBtn.style.borderColor = '#2e7d32';
+    confirmBtn.textContent = isEN ? 'OK' : 'موافق';
+  }
+
+  // ملء بيانات المودال
+  if (document.getElementById('err-amount')) 
+    document.getElementById('err-amount').textContent = selectedCurrency.code + ' ' + fmtNum(amt);
+  if (document.getElementById('err-ben')) 
+    document.getElementById('err-ben').textContent = benName;
+
+  var modalPhone = document.getElementById('err-phone');
+  if (modalPhone && modalPhone.id !== 'cf-phone') modalPhone.textContent = accountNum;
+
+  var reasonLabel = document.getElementById('lbl-reason');
+  var reasonVal = document.getElementById('val-reason-dynamic') || document.getElementById('val-reason');
+  if (reasonLabel) reasonLabel.textContent = isEN ? 'Status' : 'حالة العملية';
+  if (reasonVal) { 
+    reasonVal.textContent = isEN ? 'Completed successfully' : 'مكتملة بنجاح'; 
+    reasonVal.style.color = '#2e7d32'; 
+  }
+
+  setTimeout(function() {
+    var modal = document.getElementById('errorModal');
+    if (modal) modal.classList.add('open');
+  }, 400);
+
+  // تشغيل صوت النجاح (يمكنك تغييره لصوت نجاح إن وجد)
+  var errSnd = document.getElementById('errorSound');
+  if (errSnd) { errSnd.currentTime = 0; errSnd.play().catch(function(){}); }
+}
+
+function resetToStep1() {
+  document.getElementById('termsCheck').checked = false;
+  document.getElementById('otpInput').value = '';
+  var sp = document.getElementById('mainSpinner');
+  var bar = document.getElementById('progressBar');
+  var title = document.getElementById('proc-title');
+  var wrap = document.getElementById('viewDetailsWrap');
+  if (sp) sp.style.display = '';
+  if (bar) { bar.style.width = '0%'; bar.style.background = ''; }
+  if (title) { title.textContent = tr('proc-init'); title.style.color = ''; }
+  if (wrap) wrap.style.display = 'none';
+  ['ps1','ps2','ps3','ps4','ps5'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove('done','running','fail');
+  });
+  setStep(1);
+  showToast(tr('new-ready'), 'success');
+}
+
+// ===================================================
+// MODAL HELPERS
+// ===================================================
+function closeModal(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('open');
+}
+
+// ===================================================
+// TOAST
+// ===================================================
+function showToast(msg, type) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast' + (type ? ' ' + type : '');
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(function() { el.classList.remove('show'); }, 2800);
+}
+
+// ===================================================
+// PRINT
+// ===================================================
+function printReceipt() {
+  var body = document.getElementById('receiptBody').innerHTML;
+  var dir = isEN ? 'ltr' : 'rtl';
+  var w = window.open('', '', 'width=500,height=700');
+  if (!w) return;
+  w.document.write('<!DOCTYPE html><html><head><title>Receipt</title><style>body{font-family:Arial,sans-serif;direction:' + dir + ';padding:20px}.receipt-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed #ddd;font-size:13px}.receipt-status-ok{background:#e8f5e9;color:#2e7d32;padding:6px;border-radius:4px;text-align:center;margin:10px 0;font-weight:bold}.receipt-status-fail{background:#ffebee;color:#cc2020;padding:6px;border-radius:4px;text-align:center;margin:10px 0;font-weight:bold}</style></head><body>' + body + '</body></html>');
+  w.document.close();
+  w.print();
+}
+
+// ===================================================
+// INIT — wire up all events here, NO inline handlers
+// ===================================================
+function init() {
+  // Add sample history if empty
+  if (!loadHistory().length) {
+    saveHistory([
+      {ref:'#TXN-20260620-12',date:'20/06/2026 10:15',status:'success',from:'الحساب الشخصي',beneficiary:'عبدالرحمن خالد العتيبي',via:'بنوك سعودية — بنك الراجحي',amount:2500000,fee:12500,currency:'SAR'},
+      {ref:'#TXN-20260618-56',date:'18/06/2026 14:30',status:'fail',from:'مؤسسة الوليد بن طلال للإنسانية',beneficiary:'نورة فهد الزهراني',via:'ويسترن يونيون — ويسترن يونيون - السعودية',amount:4200000,fee:21000,currency:'USD'},
+      {ref:'#TXN-20260615-90',date:'15/06/2026 09:45',status:'success',from:'الحساب التجاري',beneficiary:'فهد سلطان الشمري',via:'بنوك دولية — HSBC الدولي',amount:1800000,fee:9000,currency:'EUR'},
+    ]);
+  }
+
+  updateViaOptions();
+  renderBeneficiarySelect();
+  updateSummary();
+
+  // LANG
+  document.getElementById('langBtn').addEventListener('click', function() {
+    isEN = !isEN;
+    var body = document.getElementById('body-root');
+    var html = document.getElementById('html-root');
+    this.textContent = isEN ? '🌐 العربية' : '🌐 English';
+    body.classList.toggle('en', isEN);
+    html.setAttribute('lang', isEN ? 'en' : 'ar');
+    html.setAttribute('dir', isEN ? 'ltr' : 'rtl');
+    applyTranslations();
+  });
+
+  // EXIT
+  document.getElementById('exitBtn').addEventListener('click', function() {
+    showToast(tr('exit-toast'), 'success');
+  });
+
+  // NAV items
+  document.querySelectorAll('[data-nav]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      document.querySelectorAll('[data-nav]').forEach(function(n) { n.classList.remove('active'); });
+      this.classList.add('active');
+    });
+  });
+
+  // TOGGLE sidebar
+  document.querySelectorAll('[data-toggle]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var body = this.closest('.side-card').querySelector('.side-card-body');
+      if (!body) return;
+      var hidden = body.style.display === 'none';
+      body.style.display = hidden ? '' : 'none';
+      this.textContent = hidden ? '▼' : '▶';
+    });
+  });
+
+  // HISTORY link
+  document.getElementById('historyLink').addEventListener('click', function(e) { e.preventDefault(); showHistoryPanel(); });
+
+  // SIDEBAR links
+  document.getElementById('callSupportLink').addEventListener('click', function(e) { e.preventDefault(); showToast(tr('calling')); });
+  document.getElementById('newMsgLink').addEventListener('click', function(e) { e.preventDefault(); showToast(tr('open-msg')); });
+
+  // CURRENCY BTN
+  document.getElementById('currencyBtn').addEventListener('click', function() {
+    buildCurrencyGrid();
+    document.getElementById('currencyModal').classList.add('open');
+  });
+  document.getElementById('closeCurrencyBtn').addEventListener('click', function() { closeModal('currencyModal'); });
+
+  // AMOUNT INPUT
+  document.getElementById('amount').addEventListener('input', function() {
+    var raw = this.value.replace(/[^0-9.]/g, '');
+    var parts = raw.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    this.value = parts.length > 1 ? parts[0] + '.' + parts[1] : parts[0];
+    updateSummary();
+  });
+  document.getElementById('manualFee').addEventListener('input', function() {
+    var raw = this.value.replace(/[^0-9.]/g, '');
+    var parts = raw.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    this.value = parts.length > 1 ? parts[0] + '.' + parts[1] : parts[0];
+    updateSummary();
+  });
+
+  // VIA TYPE
+  document.getElementById('viaType').addEventListener('change', updateViaOptions);
+
+  // BENEFICIARY
+  document.getElementById('beneficiary').addEventListener('change', updateSummary);
+
+  // TERMS
+  document.getElementById('termsCheck').addEventListener('change', function() {
+    showToast(tr(this.checked ? 'terms-ok' : 'terms-req'), this.checked ? 'success' : 'error');
+  });
+
+  // ADD BEN
+  document.getElementById('addBenBtn').addEventListener('click', function() {
+    document.getElementById('newBenName').value = '';
+    document.getElementById('newBenAccount').value = '';
+    document.getElementById('newBenCountry').value = '';
+    document.getElementById('autoSaveCheck').checked = true;
+    document.getElementById('addBenModal').classList.add('open');
+  });
+  document.getElementById('cancelAddBenBtn').addEventListener('click', function() { closeModal('addBenModal'); });
+  document.getElementById('saveAddBenBtn').addEventListener('click', saveNewBeneficiary);
+
+  // CONTINUE BTN
+  document.getElementById('continueBtn').addEventListener('click', goToStep2);
+
+  // CANCEL BTN
+  document.getElementById('cancelBtn').addEventListener('click', function() {
+    if (confirm(tr('cancel-q'))) {
+      resetToStep1();
+      document.getElementById('amount').value = '1,000,000.00';
+      updateSummary();
+      showToast(tr('cancelled'), 'error');
+    }
+  });
+
+  // CONFIRM BTN (step 2)
+  document.getElementById('confirmBtn').addEventListener('click', goToStep3);
+
+  // BACK BTN (step 2)
+  document.getElementById('backBtn').addEventListener('click', function() { setStep(1); });
+
+  // OTP resend
+  document.getElementById('resendOtpLink').addEventListener('click', function() { showToast(tr('otp-resent'), 'success'); });
+
+  // VIEW DETAILS BTN (step 3)
+  document.getElementById('viewDetailsBtn').addEventListener('click', goToStep4WithModal);
+
+  // ERROR MODAL
+  document.getElementById('errRetryBtn').addEventListener('click', function() { closeModal('errorModal'); resetToStep1(); });
+  document.getElementById('errSupportBtn').addEventListener('click', function() { closeModal('errorModal'); showToast(tr('support-toast')); });
+  document.getElementById('errCloseBtn').addEventListener('click', function() { closeModal('errorModal'); });
+
+  // NEW TRANSFER (screen 4)
+  document.getElementById('newTransferBtn').addEventListener('click', resetToStep1);
+  document.getElementById('historyBtn2').addEventListener('click', showHistoryPanel);
+
+  // HISTORY SCREEN
+  document.getElementById('newTransferBtn2').addEventListener('click', resetToStep1);
+  document.getElementById('clearHistoryBtn').addEventListener('click', function() {
+    if (!confirm(isEN ? 'Clear all history?' : 'مسح جميع السجلات؟')) return;
+    try { localStorage.removeItem('nb_hist'); } catch(e) {}
+    renderHistoryTable('all');
+    showToast(tr('hist-cleared'), 'success');
+  });
+  document.querySelectorAll('.filter-chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('.filter-chip').forEach(function(c) { c.classList.remove('active'); });
+      this.classList.add('active');
+      renderHistoryTable(this.getAttribute('data-filter'));
+    });
+  });
+
+  // RECEIPT MODAL
+  document.getElementById('closeReceiptBtn').addEventListener('click', function() { closeModal('receiptModal'); });
+  document.getElementById('printReceiptBtn').addEventListener('click', printReceipt);
+
+  // CLOSE MODALS ON OVERLAY CLICK
+  ['currencyModal','addBenModal','errorModal','receiptModal','finRequestModal','finReceiptModal'].forEach(function(id) {
+    document.getElementById(id).addEventListener('click', function(e) {
+      if (e.target === this) closeModal(id);
+    });
+  });
+
+  // Sound effects on navigation/confirm buttons
+  function bindSoundToButtons() {
+    var ids = ['continueBtn','confirmBtn','backBtn','cancelBtn','newTransferBtn','newTransferBtn2',
+      'errRetryBtn','errCloseBtn','errSupportBtn','saveAddBenBtn','cancelAddBenBtn',
+      'closeCurrencyBtn','printReceiptBtn','closeReceiptBtn','clearHistoryBtn',
+      'finSubmitBtn','finCancelBtn'];
+    ids.forEach(function(id) {
+      var btn = document.getElementById(id);
+      if (btn) btn.addEventListener('click', playClickSound);
+    });
+    document.querySelectorAll('.filter-chip').forEach(function(btn) {
+      btn.addEventListener('click', playClickSound);
+    });
+  }
+  bindSoundToButtons();
+
+  // ─── تنسيق فاصلة الأرقام لحقل مبلغ التمويل ───
+  var finAmountInput = document.getElementById('fin-amount');
+  if (finAmountInput) {
+    finAmountInput.addEventListener('input', function() {
+      var raw = this.value.replace(/[^0-9.]/g, '');
+      var parts = raw.split('.');
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      this.value = parts.length > 1 ? parts[0] + '.' + parts[1].substring(0, 2) : parts[0];
+      if (typeof updateFinFee === 'function') updateFinFee();
+    });
+  }
+}
+
+// Run after DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+})();
+
+// Wire App after existing init
+(function() {
+  var origInit = typeof init === 'function' ? init : null;
+  // Patch nav items to include data-nav-key
+  var NAV_KEYS = ['nav-home','nav-acc','nav-cards','nav-tr','nav-sadad','nav-gov','nav-cap','nav-inst','nav-fin','nav-self'];
+  function patchNav() {
+    var items = document.querySelectorAll('[data-nav]');
+    items.forEach(function(el, i) {
+      if (NAV_KEYS[i]) el.setAttribute('data-nav-key', NAV_KEYS[i]);
+    });
+  }
+  function afterInit() { 
+    patchNav();
+    App.init();
+    window._bankAppInited = true;
+    // Re-render beneficiary
+    if (typeof renderBeneficiarySelect === 'function') renderBeneficiarySelect();
+    if (typeof updateViaOptions === 'function') updateViaOptions();
+    if (typeof updateSummary === 'function') updateSummary();
+  }
+  if (document.readyState === 'loading') { 
+    document.addEventListener('DOMContentLoaded', afterInit);
+  } else {
+    afterInit();
+  }
+})();
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then((reg) => console.log('Service Worker Registered', reg))
+        .catch((err) => console.error('Service Worker Failed', err));
+    });
+  }
+
+document.addEventListener("DOMContentLoaded", function() {
+    // تحديد جميع حقول الإدخال والنصوص في الصفحة
+    const inputs = document.querySelectorAll('input[type="text"], input[type="search"], textarea');
+    
+    // تعطيل كيبورد الشاشة لجميع الحقول
+    inputs.forEach(input => {
+      input.setAttribute('inputmode', 'none');
+    });
+  });
+
+// جعل الكيبورد مخفياً بشكل افتراضي عند فتح الصفحة
+  let isTabletKeyboardHidden = true;
+
+  document.addEventListener("DOMContentLoaded", function() {
+    applyKeyboardState();
+  });
+
+  function toggleTabletKeyboard() {
+    // تعكيس الحالة (إذا كان مخفي يصير ظاهر والعكس)
+    isTabletKeyboardHidden = !isTabletKeyboardHidden;
+    applyKeyboardState();
+  }
+
+  function applyKeyboardState() {
+    const inputs = document.querySelectorAll('input[type="text"], input[type="search"], textarea');
+    const btn = document.getElementById('toggleKeyboardBtn');
+
+    inputs.forEach(input => {
+      if (isTabletKeyboardHidden) {
+        input.setAttribute('inputmode', 'none');
+        if (btn) btn.innerText = 'إظهار كيبورد التابلت';
+      } else {
+        input.removeAttribute('inputmode');
+        if (btn) btn.innerText = 'إخفاء كيبورد التابلت';
+      }
+    });
+  }
