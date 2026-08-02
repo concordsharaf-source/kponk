@@ -602,11 +602,10 @@ body.en .modal-box{border-radius:16px 16px 0 0}
   .modal-box{max-width:100%;box-shadow:none;margin:0;animation:none;border-radius:0 !important}
 }
 
-
-/* ===== USER REQUESTED: Hide fee fields from all screens except Screen 1 ===== */
+/* ===== USER REQUESTED: Hide fee fields from confirmation/result/error screens ===== */
 .hide-fee { display: none !important; }
 
-/* Also ensure receipt modal fee rows are hidden */
+/* Hide fee rows in receipt modal */
 #receiptModal .receipt-row:nth-child(9),
 #receiptModal .receipt-row:nth-child(10) {
   display: none !important;

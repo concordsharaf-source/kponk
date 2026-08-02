@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SADAD - المملكة القابضة</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="body-root">
+
+<div class="top-bar">
+  <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button><div class="top-bar-left">
+    <button class="exit-btn" id="exitBtn">&#9312; <span data-k="exit">خروج</span></button>
+    <button class="lang-btn" id="langBtn">&#127760; English</button>
+  </div>
+  <div class="logo-svg-wrap">
+    <div class="logo-icon">
+      <img src="xx.png" alt="logo">
+    </div>
+
+    <div class="logo-text-block">
+      <span class="logo-text-top">المملكة القابضة</span>
+      <span class="logo-text-bot">صندوق الإستثمار</span>
+    </div>
+    <div class="logo-divider"></div>
+    <div class="logo-sub" data-k="logo-sub">الخدمات المصرفية<br>الإلكترونية شاملة</div>
+  </div>
+
+<div class="main-nav">
+  <a href="index.html" class="nav-item" data-nav data-nav-key="nav-home"><span class="nav-icon">&#127968;</span><span data-k="nav-home">الرئيسية</span></a>
+  <a href="accounts.html" class="nav-item" data-nav data-nav-key="nav-acc"><span class="nav-icon">&#128179;</span><span data-k="nav-acc">الحسابات</span></a>
+  <a href="cards.html" class="nav-item" data-nav data-nav-key="nav-cards"><span class="nav-icon">&#127183;</span><span data-k="nav-cards">البطاقات</span></a>
+  <a href="transfer-services.html" class="nav-item" data-nav data-nav-key="nav-tr"><span class="nav-icon">&#128260;</span><span data-k="nav-tr">التحويل</span></a>
+  <a href="sadad.html" class="nav-item active" data-nav data-nav-key="nav-sadad"><span class="nav-icon">&#9881;</span><span data-k="nav-sadad">SADAD</span></a>
+  <a href="gov.html" class="nav-item" data-nav data-nav-key="nav-gov"><span class="nav-icon">&#127963;</span><span data-k="nav-gov">خدمات حكومية</span></a>
+  <a href="capital.html" class="nav-item" data-nav data-nav-key="nav-cap"><span class="nav-icon">&#127961;</span><span data-k="nav-cap">الجزيرة كابيتال</span></a>
+  <a href="instant.html" class="nav-item" data-nav data-nav-key="nav-inst"><span class="nav-icon">&#9889;</span><span data-k="nav-inst">فوري</span></a>
+  <a href="finance.html" class="nav-item" data-nav data-nav-key="nav-fin"><span class="nav-icon">&#128176;</span><span data-k="nav-fin">التمويل</span></a>
+  <a href="self.html" class="nav-item" data-nav data-nav-key="nav-self"><span class="nav-icon">&#128100;</span><span data-k="nav-self">الخدمات الذاتية</span></a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="page-container" id="page-sadad">
+  <div class="pg-header">
+    <span class="pg-header-icon">⚙️</span>
+    <div class="pg-header-title">SADAD Services</div>
+    <div class="pg-header-sub" data-k2="sadad-sub">دفع الفواتير وخدمات سداد</div>
+  </div>
+  <div class="pg-section">
+    <div class="pg-section-hdr">📋 <span data-k2="pending-bills">الفواتير المعلقة</span></div>
+    <div class="pg-section-body">
+      <div class="bill-row"><div class="bill-info"><span class="bill-icon">⚡</span><div><div class="bill-title" data-k2="bill-elec">الكهرباء - شركة SEC</div><div class="bill-sub" data-k2="bill-due">مستحقة: 30/06/2026</div></div></div><div style="display:flex;align-items:center;gap:10px"><span class="bill-amount">SAR 1,240</span><button class="bill-btn" data-k2="pay-btn">دفع</button></div></div>
+      <div class="bill-row"><div class="bill-info"><span class="bill-icon">💧</span><div><div class="bill-title" data-k2="bill-water">المياه - شركة المياه الوطنية</div><div class="bill-sub" data-k2="bill-due2">مستحقة: 02/07/2026</div></div></div><div style="display:flex;align-items:center;gap:10px"><span class="bill-amount">SAR 380</span><button class="bill-btn" data-k2="pay-btn">دفع</button></div></div>
+      <div class="bill-row"><div class="bill-info"><span class="bill-icon">📱</span><div><div class="bill-title" data-k2="bill-tel">الاتصالات - STC</div><div class="bill-sub">مستحقة: 05/07/2026</div></div></div><div style="display:flex;align-items:center;gap:10px"><span class="bill-amount">SAR 550</span><button class="bill-btn" data-k2="pay-btn">دفع</button></div></div>
+      <div class="bill-row"><div class="bill-info"><span class="bill-icon">🏠</span><div><div class="bill-title" data-k2="bill-rent">إيجار - مجمع البوابة</div><div class="bill-sub">مستحقة: 01/07/2026</div></div></div><div style="display:flex;align-items:center;gap:10px"><span class="bill-amount">SAR 18,000</span><button class="bill-btn" data-k2="pay-btn">دفع</button></div></div>
+    </div>
+  </div>
+  <div class="pg-section">
+    <div class="pg-section-hdr">🗂️ <span data-k2="sadad-cats">فئات الخدمات</span></div>
+    <div class="pg-section-body">
+      <div class="sadad-cat"><div class="sadad-cat-icon">⚡</div><div><div class="sadad-cat-title" data-k2="cat-util">المرافق (كهرباء، مياه، غاز)</div><div class="sadad-cat-sub">9 مزودين</div></div><span class="sadad-cat-arrow">◀</span></div>
+      <div class="sadad-cat"><div class="sadad-cat-icon">📱</div><div><div class="sadad-cat-title" data-k2="cat-tel">الاتصالات والإنترنت</div><div class="sadad-cat-sub">12 مزوداً</div></div><span class="sadad-cat-arrow">◀</span></div>
+      <div class="sadad-cat"><div class="sadad-cat-icon">🏫</div><div><div class="sadad-cat-title" data-k2="cat-edu">التعليم والجامعات</div><div class="sadad-cat-sub">45 مؤسسة</div></div><span class="sadad-cat-arrow">◀</span></div>
+      <div class="sadad-cat"><div class="sadad-cat-icon">🏥</div><div><div class="sadad-cat-title" data-k2="cat-health">الصحة والمستشفيات</div><div class="sadad-cat-sub">28 مستشفى</div></div><span class="sadad-cat-arrow">◀</span></div>
+      <div class="sadad-cat"><div class="sadad-cat-icon">🚗</div><div><div class="sadad-cat-title" data-k2="cat-traffic">المرور والمخالفات</div><div class="sadad-cat-sub">نجم، أبشر</div></div><span class="sadad-cat-arrow">◀</span></div>
+      <div class="sadad-cat"><div class="sadad-cat-icon">🏠</div><div><div class="sadad-cat-title" data-k2="cat-rent">الإيجار والعقارات</div><div class="sadad-cat-sub">إيجار، وثيقة</div></div><span class="sadad-cat-arrow">◀</span></div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<script src="app.js"></script>
+</body>
+</html>

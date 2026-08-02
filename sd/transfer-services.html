@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>خدمات التحويل - المملكة القابضة</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="body-root">
+
+<div class="top-bar">
+  <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button><div class="top-bar-left">
+    <button class="exit-btn" id="exitBtn">&#9312; <span data-k="exit">خروج</span></button>
+    <button class="lang-btn" id="langBtn">&#127760; English</button>
+  </div>
+  <div class="logo-svg-wrap">
+    <div class="logo-icon">
+      <img src="xx.png" alt="logo">
+    </div>
+
+    <div class="logo-text-block">
+      <span class="logo-text-top">المملكة القابضة</span>
+      <span class="logo-text-bot">صندوق الإستثمار</span>
+    </div>
+    <div class="logo-divider"></div>
+    <div class="logo-sub" data-k="logo-sub">الخدمات المصرفية<br>الإلكترونية شاملة</div>
+  </div>
+
+<div class="main-nav">
+  <a href="index.html" class="nav-item" data-nav data-nav-key="nav-home"><span class="nav-icon">&#127968;</span><span data-k="nav-home">الرئيسية</span></a>
+  <a href="accounts.html" class="nav-item" data-nav data-nav-key="nav-acc"><span class="nav-icon">&#128179;</span><span data-k="nav-acc">الحسابات</span></a>
+  <a href="cards.html" class="nav-item" data-nav data-nav-key="nav-cards"><span class="nav-icon">&#127183;</span><span data-k="nav-cards">البطاقات</span></a>
+  <a href="transfer-services.html" class="nav-item active" data-nav data-nav-key="nav-tr"><span class="nav-icon">&#128260;</span><span data-k="nav-tr">التحويل</span></a>
+  <a href="sadad.html" class="nav-item" data-nav data-nav-key="nav-sadad"><span class="nav-icon">&#9881;</span><span data-k="nav-sadad">SADAD</span></a>
+  <a href="gov.html" class="nav-item" data-nav data-nav-key="nav-gov"><span class="nav-icon">&#127963;</span><span data-k="nav-gov">خدمات حكومية</span></a>
+  <a href="capital.html" class="nav-item" data-nav data-nav-key="nav-cap"><span class="nav-icon">&#127961;</span><span data-k="nav-cap">الجزيرة كابيتال</span></a>
+  <a href="instant.html" class="nav-item" data-nav data-nav-key="nav-inst"><span class="nav-icon">&#9889;</span><span data-k="nav-inst">فوري</span></a>
+  <a href="finance.html" class="nav-item" data-nav data-nav-key="nav-fin"><span class="nav-icon">&#128176;</span><span data-k="nav-fin">التمويل</span></a>
+  <a href="self.html" class="nav-item" data-nav data-nav-key="nav-self"><span class="nav-icon">&#128100;</span><span data-k="nav-self">الخدمات الذاتية</span></a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="page-container" id="page-transfer">
+  <div class="pg-header">
+    <span class="pg-header-icon">🔄</span>
+    <div class="pg-header-title" data-k2="tr-title">خدمات التحويل</div>
+    <div class="pg-header-sub" data-k2="tr-sub">تحويل الأموال محلياً ودولياً</div>
+  </div>
+  <div class="services-grid">
+    <div class="service-card" onclick="window.location.href='instant.html'"><span class="service-card-icon">⚡</span><div class="service-card-title" data-k2="tr-instant">تحويل فوري</div><div class="service-card-sub">أقل من 60 ثانية</div></div>
+    <div class="service-card"><span class="service-card-icon">🌍</span><div class="service-card-title" data-k2="tr-intl">تحويل دولي</div><div class="service-card-sub">SWIFT/IBAN</div></div>
+    <div class="service-card"><span class="service-card-icon">🏦</span><div class="service-card-title" data-k2="tr-local">تحويل محلي</div><div class="service-card-sub">ACH / SARIE</div></div>
+    <div class="service-card"><span class="service-card-icon">📅</span><div class="service-card-title" data-k2="tr-sched">تحويل مجدول</div><div class="service-card-sub" data-k2="tr-sched-sub">حدد موعداً مسبقاً</div></div>
+    <div class="service-card"><span class="service-card-icon">🔁</span><div class="service-card-title" data-k2="tr-recurring">تحويل دوري</div><div class="service-card-sub" data-k2="tr-recur-sub">تلقائي كل شهر</div></div>
+    <div class="service-card"><span class="service-card-icon">📋</span><div class="service-card-title" data-k2="tr-history">سجل التحويلات</div></div>
+  </div>
+  <div class="pg-section">
+    <div class="pg-section-hdr">💱 <span data-k2="exchange-rates">أسعار الصرف اليوم</span></div>
+    <div class="pg-section-body">
+      <table class="rate-table">
+        <thead><tr><th data-k2="currency">العملة</th><th data-k2="buy">شراء</th><th data-k2="sell">بيع</th><th data-k2="change">التغير</th></tr></thead>
+        <tbody>
+          <tr><td>🇺🇸 USD</td><td>3.7497</td><td>3.7503</td><td class="rate-down">▼ -0.02%</td></tr>
+          <tr><td>🇪🇺 EUR</td><td>4.0821</td><td>4.0835</td><td class="rate-up">▲ +0.15%</td></tr>
+          <tr><td>🇬🇧 GBP</td><td>4.7234</td><td>4.7250</td><td class="rate-up">▲ +0.08%</td></tr>
+          <tr><td>🇦🇪 AED</td><td>1.0212</td><td>1.0218</td><td class="rate-down">▼ -0.01%</td></tr>
+          <tr><td>🇯🇵 JPY</td><td>0.02461</td><td>0.02465</td><td class="rate-up">▲ +0.22%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<script src="app.js"></script>
+</body>
+</html>

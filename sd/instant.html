@@ -1,3 +1,328 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>تحويل فوري - المملكة القابضة</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="body-root">
+
+<div class="top-bar">
+  <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button><div class="top-bar-left">
+    <button class="exit-btn" id="exitBtn">&#9312; <span data-k="exit">خروج</span></button>
+    <button class="lang-btn" id="langBtn">&#127760; English</button>
+  </div>
+  <div class="logo-svg-wrap">
+    <div class="logo-icon">
+      <img src="xx.png" alt="logo">
+    </div>
+
+    <div class="logo-text-block">
+      <span class="logo-text-top">المملكة القابضة</span>
+      <span class="logo-text-bot">صندوق الإستثمار</span>
+    </div>
+    <div class="logo-divider"></div>
+    <div class="logo-sub" data-k="logo-sub">الخدمات المصرفية<br>الإلكترونية شاملة</div>
+  </div>
+
+<div class="main-nav">
+  <a href="index.html" class="nav-item" data-nav data-nav-key="nav-home"><span class="nav-icon">&#127968;</span><span data-k="nav-home">الرئيسية</span></a>
+  <a href="accounts.html" class="nav-item" data-nav data-nav-key="nav-acc"><span class="nav-icon">&#128179;</span><span data-k="nav-acc">الحسابات</span></a>
+  <a href="cards.html" class="nav-item" data-nav data-nav-key="nav-cards"><span class="nav-icon">&#127183;</span><span data-k="nav-cards">البطاقات</span></a>
+  <a href="transfer-services.html" class="nav-item" data-nav data-nav-key="nav-tr"><span class="nav-icon">&#128260;</span><span data-k="nav-tr">التحويل</span></a>
+  <a href="sadad.html" class="nav-item" data-nav data-nav-key="nav-sadad"><span class="nav-icon">&#9881;</span><span data-k="nav-sadad">SADAD</span></a>
+  <a href="gov.html" class="nav-item" data-nav data-nav-key="nav-gov"><span class="nav-icon">&#127963;</span><span data-k="nav-gov">خدمات حكومية</span></a>
+  <a href="capital.html" class="nav-item" data-nav data-nav-key="nav-cap"><span class="nav-icon">&#127961;</span><span data-k="nav-cap">الجزيرة كابيتال</span></a>
+  <a href="instant.html" class="nav-item active" data-nav data-nav-key="nav-inst"><span class="nav-icon">&#9889;</span><span data-k="nav-inst">فوري</span></a>
+  <a href="finance.html" class="nav-item" data-nav data-nav-key="nav-fin"><span class="nav-icon">&#128176;</span><span data-k="nav-fin">التمويل</span></a>
+  <a href="self.html" class="nav-item" data-nav data-nav-key="nav-self"><span class="nav-icon">&#128100;</span><span data-k="nav-self">الخدمات الذاتية</span></a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="page-container" id="page-instant">
+<div class="page-body">
+  <div class="sidebar">
+    <div class="side-card">
+      <div class="side-card-header"><span data-k="nav-inst">فوري</span><button class="toggle-btn" data-toggle>&#9660;</button></div>
+      <div class="side-card-body" id="sideBody1">
+        <a class="side-link" href="#" data-nav-link="1">&#9664; <span data-k="side-transfers">حوالات فورية</span></a>
+        <a class="side-link active" href="#" data-nav-link="1">&#9654; <span data-k="side-transfer">تحويل فوري</span></a>
+        <a class="side-link" href="#" id="historyLink">&#9664; <span data-k="side-history">سجل العمليات</span></a>
+        <a class="side-link" href="#" data-nav-link="1">&#9664; <span data-k="side-manage">إدارة خدمات فوري</span></a>
+      </div>
+    </div>
+    <div class="side-card">
+      <div class="side-card-header"><span data-k="side-fav">العمليات المفضلة</span><button class="toggle-btn" data-toggle>&#9660;</button></div>
+      <div class="side-card-body"><a class="side-link" href="#">&#9664; UBL 3RD PARTY HBL</a></div>
+    </div>
+    <div class="side-card">
+      <div class="side-card-header"><span data-k="side-shortcuts">روابط مختصرة</span><button class="toggle-btn" data-toggle>&#9660;</button></div>
+      <div class="side-card-body"><div style="padding:12px;font-size:12px;color:#888;text-align:center" data-k="side-no-links">لا توجد روابط مختصرة</div></div>
+    </div>
+    <div class="side-card">
+      <div class="side-card-header" data-k="side-help">للمساعدة</div>
+      <div class="side-card-body">
+        <a class="side-link" href="#" id="callSupportLink">&#128100; <span data-k="side-call">خدمة العملاء</span></a>
+        <a class="side-link" href="#" id="newMsgLink">&#9993; <span data-k="side-msg">رسالة جديدة</span></a>
+      </div>
+    </div>
+       <div class="side-card">
+      <div class="banks-logo">
+        <div class="sb-icon">&#127970;</div>
+        <span style="font-weight:bold;color:#1a6040;font-size:13px" data-k="saudi-banks">البنـوك السعودية</span><br>
+        <span style="color:#888;font-size:11px">Saudi Banks</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="breadcrumb"><span data-k="nav-inst">فوري</span> &larr; <span data-k="breadcrumb">التحويل إلى مستفيد فوري</span></div>
+    <div class="page-title"><span data-k="page-title">تحويل فوري</span> <span class="star">&#9733;</span></div>
+
+    <div class="stepper">
+      <div class="step" id="s4" data-k="step4">4. النتيجة</div>
+      <div class="step" id="s3" data-k="step3">3. التعميد</div>
+      <div class="step" id="s2" data-k="step2">2. التأكيد</div>
+      <div class="step active" id="s1" data-k="step1">1. التنفيذ</div>
+    </div>
+
+    <!-- SCREEN 1 -->
+    <div class="form-card">
+        <div class="form-card-header" data-k="sec-to">1. إلى</div>
+        <div class="form-card-body">
+          <div class="form-row">
+            <label class="form-label" data-k="lbl-via">التحويل بواسطة <span class="required">*</span></label>
+            <div class="via-wrap">
+              <select class="via-type-select" id="viaType">
+                <option value="saudi" data-ar="بنوك سعودية" data-en="Saudi Banks">بنوك سعودية</option>
+                <option value="arab" data-ar="بنوك عربية" data-en="Arab Banks">بنوك عربية</option>
+                <option value="foreign" data-ar="بنوك أجنبية" data-en="Foreign Banks">بنوك أجنبية</option>
+                <option value="western" data-ar="ويسترن يونيون" data-en="Western Union">ويسترن يونيون</option>
+                <option value="moneygram" data-ar="موني جرام" data-en="MoneyGram">موني جرام</option>
+              </select>
+              <select class="form-control via-bank-select" id="viaBank"></select>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-label" data-k="lbl-ben">المستفيد <span class="required">*</span></label>
+            <select class="form-control" id="beneficiary"></select>
+          </div>
+          <button class="add-beneficiary" id="addBenBtn">
+            <span class="plus-icon">+</span> <span data-k="add-ben">إضافة مستفيد جديد</span>
+          </button>
+        </div>
+      </div>
+
+    
+    <div class="step-screen active" id="screen1">
+      <div class="form-card">
+        <div class="form-card-header" data-k="sec-from">2. من</div>
+        <div class="form-card-body">
+          <div class="form-row">
+            <label class="form-label" data-k="lbl-from">من حساب <span class="required">*</span></label>
+            <select class="form-control" id="fromAccount">
+              <option value="waleed" data-ar="مؤسسة الوليد بن طلال للإنسانية" data-en="Al-Waleed Humanitarian Foundation">مؤسسة الوليد بن طلال للإنسانية</option>
+              <option value="personal" data-ar="الحساب الشخصي" data-en="Personal Account">الحساب الشخصي</option>
+              <option value="business" data-ar="الحساب التجاري" data-en="Business Account">الحساب التجاري</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="form-label" data-k="lbl-amount">المبلغ <span class="required">*</span></label>
+            <div class="amount-wrap">
+              <button class="currency-btn" id="currencyBtn">
+                <span id="currencyFlag">&#127482;&#127480;</span> <span id="currencyCode">USD</span> &#9660;
+              </button>
+              <input type="text" class="amount-input" id="amount" value="1,000,000.00"/>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      
+      <div class="notice-card">
+        <div class="notice-title" data-k="sec-notice">3. تفاصيل التحويل</div>
+        <div class="notice-body">
+          <p class="notice-text" data-k="notice-1">يرجى إكمال الإجراءات والتنفيذ خلال 24 ساعة</p>
+          <p class="notice-text" data-k="notice-2">الموافقة على نظام مراقبة البنوك بالصيغة المرفقة </p>
+          <p class="notice-text" data-k="notice-3">نظام الإيداعات والتحويلات المالية</p>
+          <br>
+          <p class="notice-text" style="font-weight:bold" data-k="notice-acct">بيانات المستفيد</p>
+          <p class="notice-text"><span data-k="notice-ap-lbl">اسم الحالة التي تم الموافقة:</span> <input class="inline-input" id="approvedName" value="" placeholder="اسم المستفيد"/></p>
+          <br>
+          <p class="notice-text">
+            <span data-k="notice-grant">يتم صرف المنحة المقدرة بمبلغ وقدره</span>
+            <span class="highlight-amount" id="summaryAmount">USD 1,000,000.00</span>
+            <span data-k="notice-only"> لاغير</span>
+          </p>
+          <p class="notice-text"><span data-k="notice-dep">المالية إيداع المنحة بعد استكمال ما تم التوجيه به للمستفيد:</span> <input class="inline-input" id="finalBeneficiary" value="" placeholder="اسم المستفيد"/></p>
+          <div class="terms-row">
+            <input type="checkbox" id="termsCheck">
+            <label for="termsCheck" style="cursor:pointer"><span data-k="terms-text">لقد قرأت وافقت على</span> <span class="terms-link" data-k="terms-link">الشروط والأحكام الخاصة</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-primary" id="continueBtn" data-k="btn-continue">متابعة &larr;</button>
+        <button class="btn btn-cancel" id="cancelBtn" data-k="btn-cancel">إلغاء</button>
+      </div>
+    </div>
+ <div class="form-row" style="margin-top:4px">
+            <label class="form-label" data-k="lbl-fee-manual">رسوم التحويل <span class="required">*</span></label>
+            <div class="amount-wrap">
+              <button class="currency-btn" style="cursor:default"><span id="feeCurrencyFlag">&#127482;&#127480;</span> <span id="feeCurrencyCode">USD</span></button>
+              <input type="text" class="amount-input" id="manualFee" value="0.00"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-label" data-k="lbl-fee-type">نوع الرسوم</label>
+            <select class="form-control" id="feeType">
+              <option value="transfer" data-ar="رسوم تحويل" data-en="Transfer Fee">رسوم تحويل</option>
+ <option value="transfer" data-ar="رسوم التأمين البنكي" data-en="Transfer Fee">رسوم التأمين البنكي</option>
+ <option value="transfer" data-ar="رسوم الإيداع المالي" data-en="Transfer Fee">رسوم الإيداع المالي</option>
+ <option value="transfer" data-ar="رسوم الضريبه البنكية" data-en="Transfer Fee">رسوم الضريبه البنكية</option>
+ <option value="transfer" data-ar="رسوم خدمات المصادقة الأمنية" data-en="Transfer Fee">رسوم خدمات المصادقة الأمنية</option>
+ <option value="transfer" data-ar="رسوم المصادقة البنكية" data-en="Transfer Fee">رسوم المصادقة البنكية</option>
+ <option value="transfer" data-ar="رسوم الإظهار البنكي" data-en="Transfer Fee">رسوم الإظهار البنكي</option>
+ <option value="transfer" data-ar="رسوم خدمات الاعتماد الدولي" data-en="Transfer Fee">رسوم خدمات الاعتماد الدولي</option>
+ <option value="transfer" data-ar="رسوم خدمة تفعيل التحويل المباشر" data-en="Transfer Fee">رسوم خدمة تفعيل التحويل المباشر</option>
+ <option value="transfer" data-ar="رسوم خدمات التسوية والدمج" data-en="Transfer Fee">رسوم خدمات التسوية والدمج</option>
+ <option value="transfer" data-ar="رسوم المقاصة الإلكتروني الموحد" data-en="Transfer Fee">رسوم المقاصة الإلكتروني الموحد</option>
+ <option value="transfer" data-ar="رسوم خدمة تفعيل نقل الأموال" data-en="Transfer Fee">رسوم خدمة تفعيل نقل الأموال</option>
+              <option value="admin" data-ar="رسوم إدارية" data-en="Admin Fee">رسوم إدارية</option>
+<option value="service" data-ar="رسوم إيداع" data-en="Service Fee">رسوم إيداع</option>
+<option value="service" data-ar="رسوم تأمين" data-en="Service Fee">رسوم تأمين</option>
+              <option value="service" data-ar="رسوم خدمة" data-en="Service Fee">رسوم خدمة</option>
+              <option value="other" data-ar="أخرى" data-en="Other">أخرى</option>
+            </select>
+          </div>
+<button id="toggleKeyboardBtn" onclick="toggleTabletKeyboard()">إظهار كيبورد التابلت</button>
+
+    <!-- SCREEN 2 -->
+    <div class="step-screen" id="screen2">
+      <div class="form-card">
+        <div class="form-card-header" data-k="confirm-hdr">&#10003; مراجعة وتأكيد بيانات التحويل</div>
+        <div class="form-card-body" style="padding:0">
+          <table class="confirm-table">
+            <tr><td data-k="lbl-from">من حساب</td><td id="cf-account">—</td></tr>
+            <tr><td data-k="lbl-via">التحويل بواسطة</td><td id="cf-bank">—</td></tr>
+            <tr><td data-k="lbl-ben">المستفيد</td><td id="cf-ben">—</td></tr>
+            <tr><td data-k="lbl-acc">رقم الحساب / الهاتف</td><td id="cf-phone">—</td></tr>
+            <tr><td data-k="lbl-amount">المبلغ</td><td><span class="confirm-amount-big" id="cf-amount">—</span></td></tr>
+            <tr class="hide-fee"><td data-k="lbl-fees">رسوم التحويل </td><td class="fee-highlight" id="cf-fees">—</td></tr>
+
+            <tr><td data-k="lbl-currency">العملة</td><td id="cf-currency">—</td></tr>
+            <tr><td data-k="lbl-date">تاريخ التنفيذ</td><td id="cf-date">—</td></tr>
+            <tr><td data-k="lbl-ref">رقم العملية</td><td style="font-family:monospace" id="cf-ref">—</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="form-card" style="border-color:#f0a500">
+        <div class="form-card-header" style="background:#b07800" data-k="otp-hdr">&#128274; رمز التحقق (OTP)</div>
+        <div class="form-card-body">
+          <p style="font-size:13px;color:#555;margin-bottom:12px" data-k="otp-sent">تم إرسال رمز التحقق إلى هاتفك المسجل ***680</p>
+          <div class="form-row">
+            <label class="form-label" data-k="otp-lbl">رمز OTP <span class="required">*</span></label>
+            <input type="text" class="form-control" id="otpInput" maxlength="6" style="letter-spacing:4px;font-size:16px;text-align:center" data-par="6 أرقام" data-pen="6-digit code" placeholder="6 أرقام"/>
+          </div>
+          <p style="font-size:12px;color:#1e4878;cursor:pointer;text-decoration:underline" id="resendOtpLink" data-k="otp-resend">إعادة إرسال الرمز</p>
+        </div>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-primary" id="confirmBtn" data-k="btn-confirm">تأكيد التحويل &larr;</button>
+        <button class="btn btn-outline" id="backBtn" data-k="btn-back">رجوع</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 3 -->
+    <div class="step-screen" id="screen3">
+      <div class="form-card">
+        <div class="form-card-header" data-k="proc-hdr">&#9203; جاري معالجة طلب التحويل...</div>
+        <div class="form-card-body">
+          <div class="processing-box">
+            <div class="spinner" id="mainSpinner"></div>
+            <p style="font-size:15px;color:#1e4878;font-weight:bold" id="proc-title" data-k="proc-init">جاري التحقق من البيانات...</p>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
+            <div class="processing-steps">
+              <div class="proc-step" id="ps1"><span class="proc-icon">&#128274;</span><span data-k="ps1">التحقق من هوية المستخدم</span></div>
+              <div class="proc-step" id="ps2"><span class="proc-icon">&#128176;</span><span data-k="ps2">التحقق من رصيد الحساب</span></div>
+              <div class="proc-step" id="ps3"><span class="proc-icon">&#127970;</span><span data-k="ps3">الاتصال بنظام التحويل البنكي</span></div>
+              <div class="proc-step" id="ps4"><span class="proc-icon">&#128203;</span><span data-k="ps4">التحقق من رسوم معاملة التحويل</span></div>
+              <div class="proc-step" id="ps5"><span class="proc-icon">&#9993;</span><span data-k="ps5">إرسال الطلب للمستفيد</span></div>
+            </div>
+            <div id="viewDetailsWrap" style="display:none;margin-top:22px">
+              <button class="btn btn-cancel" id="viewDetailsBtn" data-k="btn-view-details">&#128203; عرض تفاصيل النتيجة</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 4 -->
+    <div class="step-screen" id="screen4">
+  <div class="form-card" id="resultCard" style="border-color:#cc2020">
+    <div class="form-card-header" id="resultHeader" style="background:#cc2020" data-k="result-hdr">&#10060; نتيجة عملية التحويل</div>
+    <div class="form-card-body">
+      
+      <div class="result-box" id="successBox" style="display:none; text-align:center;">
+        <span class="result-icon-success" style="color:#2e7d32; font-size:40px;">✔️</span>
+        <div class="result-title-success" style="color:#2e7d32; font-size:18px; font-weight:bold; margin:10px 0;">تم إكمال واجراءات التحويل بنجاح</div>
+        <div class="result-ref" id="res-ref-success" style="margin-bottom:15px; color:#666;">#TXN-— | —</div>
+        
+        <div style="background:#f4fbf7; border:1px solid #b7e4c7; border-radius:8px; padding:14px 16px; margin-bottom:16px; text-align:right">
+          <div class="info-row"><span class="info-label">حالة العملية</span><span class="info-value" style="color:#2e7d32; font-weight:bold;">مكتملة</span></div>
+          <div class="info-row"><span class="info-label" data-k="lbl-ben">المستفيد</span><span class="info-value" id="res-ben-success">—</span></div>
+        </div>
+      </div>
+
+      <div class="result-box" id="failBox" style="display:block;">
+        <span class="result-icon-fail">&#10060;</span>
+        <div class="result-title-fail" data-k="result-fail">فشلت عملية التحويل</div>
+        <div class="result-ref" id="res-ref-fail">#TXN-— | —</div>
+        <p style="font-size:13px; color:#555; max-width:400px; margin:0 auto 16px; line-height:1.8" data-k="result-desc">لم يتم إتمام التحويل بسبب عدم سداد المستفيد للرسوم المتبقية.</p>
+        
+        <div style="background:#fff0f0; border:1px solid #f0b0b0; border-radius:8px; padding:14px 16px; margin-bottom:16px; text-align:right">
+          <div class="info-row"><span class="info-label" data-k="lbl-reason">سبب الفشل</span><span class="info-value" style="color:#cc2020" id="val-reason-dynamic" data-k="val-reason">رسوم التحويل غير مسددة</span></div>
+          <div class="info-row hide-fee"><span class="info-label" data-k="lbl-fees">الرسوم المتبقية</span><span class="info-value" style="color:#cc2020; font-size:15px" id="res-fees-fail">—</span></div>
+          <div class="info-row"><span class="info-label" data-k="lbl-ben">المستفيد</span><span class="info-value" id="res-ben-fail">—</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="action-bar">
+    <button class="btn btn-secondary" id="newTransferBtn" data-k="btn-new">&#128260; تحويل جديد</button>
+    <button class="btn btn-outline" id="historyBtn2" data-k="btn-history">&#128203; سجل العمليات</button>
+  </div>
+</div>
+
+    <!-- HISTORY SCREEN -->
+    <div class="step-screen" id="screenHistory">
+      <div class="form-card">
+        <div class="form-card-header" data-k="history-hdr">&#128203; سجل التحويلات</div>
+        <div class="form-card-body">
+          <div class="history-filter-bar">
+            <button class="filter-chip active" data-filter="all" data-k="filter-all">الكل</button>
+            <button class="filter-chip" data-filter="success" data-k="filter-ok">&#10003; ناجح</button>
+            <button class="filter-chip" data-filter="fail" data-k="filter-fail">&#10060; فاشل</button>
+            <button class="filter-chip" data-filter="pending" data-k="filter-pending">&#8987; معلق</button>
+            <button class="btn btn-cancel btn-sm" id="clearHistoryBtn" style="margin-right:auto" data-k="btn-clear">&#128465; مسح السجل</button>
+          </div>
+          <!-- 💡 هنا يتم جلب وطباعة جدول العمليات السابقة برمجياً -->
+          <div id="historyTableWrap"></div>
+        </div>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-secondary" id="newTransferBtn2" data-k="btn-new">&#128260; تحويل جديد</button>
+      </div>
+    </div>
+
+
+
+<script>
 // Mobile sidebar toggle
 (function(){
   var menuBtn = document.getElementById('mobileMenuBtn');
@@ -16,7 +341,8 @@
     });
   }
 })();
-
+</script>
+<script>
 // ============================================================
 // APP SHELL - PAGE NAVIGATION
 // ============================================================
@@ -48,7 +374,7 @@ var App = (function() {
       el.classList.toggle('active', NAV_MAP[el.getAttribute('data-nav-id')] === pageId);
     });
     // Save to localStorage
-    
+    try { localStorage.setItem('nb_current_page', pageId); } catch(e) {}
     window.scrollTo({top:0,behavior:'smooth'});
     // If instant page, reinit the inner app
     if (pageId === 'page-instant' && window._bankAppInited) {
@@ -873,7 +1199,7 @@ function showReceipt(idx, filter) {
     [L?'Via':'بواسطة', tx.via],
     [L?'Currency':'العملة', tx.currency],
     [L?'Amount':'المبلغ', '<span style="font-weight:bold;color:#1e7a38">' + tx.currency + ' ' + fmtNum(tx.amount) + '</span>'],
-    // Fee hidden: [L?'Fee':'الرسوم', '<span style="color:#e65000">' + tx.currency + ' ' + fmtNum(tx.fee) + '</span>'],
+    [L?'Fee':'الرسوم', '<span style="color:#e65000">' + tx.currency + ' ' + fmtNum(tx.fee) + '</span>'],
   ];
   if (!isOk) rows.push([L?'Failure Reason':'سبب الفشل', '<span style="color:#cc2020">' + (L?'Transfer fees unpaid':'رسوم التحويل غير مدفوعة') + '</span>']);
   var rowsHtml = rows.map(function(r) {
@@ -1617,371 +1943,63 @@ function goToStep4WithModal() {
     modalHeader.style.background = '#2e7d32';
     modalHeader.innerHTML = '<span class="modal-header-icon">&#10003;</span><div><div class="modal-header-title">' 
       + (isEN ? 'Transfer Successful' : 'نجاح التحويل') 
-      + '</div><div class="modal-header-sub">SUCCESS: TRANSACTION_COMPLETED</div></div>';
-  }
+      + '</div><div class="modal-header-sub">SUCCESS: TRANSACTION_COMPLETED</div></div>
 
-  // إخفاء تنبيه الخطأ وإظهار نجاح
-  var modalAlert = document.querySelector('#errorModal .modal-err-code');
-  if (modalAlert) {
-    modalAlert.innerHTML = '&#10003; ' + (isEN 
-      ? 'All fees cleared. Transfer via ' + viaTypeText + ' completed.' 
-      : 'تم سداد جميع الرسوم. اكتمل التحويل عبر ' + viaTypeText + '.');
-    modalAlert.style.background = '#e8f5e9';
-    modalAlert.style.color = '#2e7d32';
-    modalAlert.style.borderColor = '#a5d6a7';
-  }
+<audio id="clickSound" src="1.wav" preload="auto"></audio>
+<audio id="errorSound" src="2.mp3" preload="auto"></audio>
 
-  var feesRow = document.getElementById('err-fees') ? document.getElementById('err-fees').closest('.info-row') : null;
-  if (feesRow) feesRow.style.display = 'none';
 
-  var confirmBtn = document.querySelector('#errorModal .btn-primary') || document.querySelector('#errorModal .modal-footer .btn');
-  if (confirmBtn) {
-    confirmBtn.style.background = '#2e7d32';
-    confirmBtn.style.borderColor = '#2e7d32';
-    confirmBtn.textContent = isEN ? 'OK' : 'موافق';
-  }
 
-  // ملء بيانات المودال
-  if (document.getElementById('err-amount')) 
-    document.getElementById('err-amount').textContent = selectedCurrency.code + ' ' + fmtNum(amt);
-  if (document.getElementById('err-ben')) 
-    document.getElementById('err-ben').textContent = benName;
+<div class="modal-overlay" id="currencyModal">
+  <div class="modal-box wide">
+    <div class="modal-header blue">
+      <span class="modal-header-icon">&#128434;</span>
+      <div>
+        <div class="modal-header-title" data-k="cur-title">اختر العملة</div>
+        <div class="modal-header-sub" data-k="cur-sub">يتم تحديث المبلغ وفق العملة المختارة</div>
+      </div>
 
-  var modalPhone = document.getElementById('err-phone');
-  if (modalPhone && modalPhone.id !== 'cf-phone') modalPhone.textContent = accountNum;
+<div class="modal-overlay" id="addBenModal">
+  <div class="modal-box wide">
+    <div class="modal-header blue">
+      <span class="modal-header-icon">&#128100;</span>
+      <div>
+        <div class="modal-header-title" data-k="addben-title">إضافة مستفيد جديد</div>
+        <div class="modal-header-sub" data-k="addben-sub">يتم الحفظ تلقائياً للاستخدام مستقبلاً</div>
+      </div>
 
-  var reasonLabel = document.getElementById('lbl-reason');
-  var reasonVal = document.getElementById('val-reason-dynamic') || document.getElementById('val-reason');
-  if (reasonLabel) reasonLabel.textContent = isEN ? 'Status' : 'حالة العملية';
-  if (reasonVal) { 
-    reasonVal.textContent = isEN ? 'Completed successfully' : 'مكتملة بنجاح'; 
-    reasonVal.style.color = '#2e7d32'; 
-  }
+<div class="modal-overlay" id="errorModal">
+  <div class="modal-box">
+    <div class="modal-header red">
+      <span class="modal-header-icon">&#128683;</span>
+      <div>
+        <div class="modal-header-title" data-k="err-title">فشل التحويل</div>
+        <div class="modal-header-sub">ERR-4821: BENEFICIARY_FEE_PENDING</div>
+      </div>
 
-  setTimeout(function() {
-    var modal = document.getElementById('errorModal');
-    if (modal) modal.classList.add('open');
-  }, 400);
+<div class="modal-overlay" id="receiptModal">
+  <div class="modal-box wide">
+    <div class="modal-header blue" id="receiptHeader">
+      <span class="modal-header-icon" id="receiptIcon">&#128196;</span>
+      <div>
+        <div class="modal-header-title" data-k="receipt-title">تفاصيل العملية</div>
+        <div class="modal-header-sub" id="receiptRef">#TXN-—</div>
+      </div>
 
-  // تشغيل صوت النجاح (يمكنك تغييره لصوت نجاح إن وجد)
-  var errSnd = document.getElementById('errorSound');
-  if (errSnd) { errSnd.currentTime = 0; errSnd.play().catch(function(){}); }
-}
+<div class="modal-overlay" id="finRequestModal">
+  <div class="modal-box extra-wide">
+    <div class="modal-header gold" style="justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="modal-header-icon">💼</span>
+        <div>
+          <div class="modal-header-title" id="finModalTitle">طلب تمويل مشروع</div>
+          <div class="modal-header-sub">رسوم إدارية وتنفيذية 10% من المبلغ المطلوب</div>
+        </div>
 
-function resetToStep1() {
-  document.getElementById('termsCheck').checked = false;
-  document.getElementById('otpInput').value = '';
-  var sp = document.getElementById('mainSpinner');
-  var bar = document.getElementById('progressBar');
-  var title = document.getElementById('proc-title');
-  var wrap = document.getElementById('viewDetailsWrap');
-  if (sp) sp.style.display = '';
-  if (bar) { bar.style.width = '0%'; bar.style.background = ''; }
-  if (title) { title.textContent = tr('proc-init'); title.style.color = ''; }
-  if (wrap) wrap.style.display = 'none';
-  ['ps1','ps2','ps3','ps4','ps5'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.classList.remove('done','running','fail');
-  });
-  setStep(1);
-  showToast(tr('new-ready'), 'success');
-}
+<div class="modal-overlay" id="finReceiptModal">
+  <div class="modal-box wide">
+    <div class="modal-header green"><span class="modal-header-icon">✅</span><div><div class="modal-header-title">تم استلام طلب التمويل</div><div class="modal-header-sub" id="finReceiptRef">—</div></div>
 
-// ===================================================
-// MODAL HELPERS
-// ===================================================
-function closeModal(id) {
-  var el = document.getElementById(id);
-  if (el) el.classList.remove('open');
-}
-
-// ===================================================
-// TOAST
-// ===================================================
-function showToast(msg, type) {
-  var el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'toast' + (type ? ' ' + type : '');
-  el.classList.add('show');
-  clearTimeout(el._t);
-  el._t = setTimeout(function() { el.classList.remove('show'); }, 2800);
-}
-
-// ===================================================
-// PRINT
-// ===================================================
-function printReceipt() {
-  var body = document.getElementById('receiptBody').innerHTML;
-  var dir = isEN ? 'ltr' : 'rtl';
-  var w = window.open('', '', 'width=500,height=700');
-  if (!w) return;
-  w.document.write('<!DOCTYPE html><html><head><title>Receipt</title><style>body{font-family:Arial,sans-serif;direction:' + dir + ';padding:20px}.receipt-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed #ddd;font-size:13px}.receipt-status-ok{background:#e8f5e9;color:#2e7d32;padding:6px;border-radius:4px;text-align:center;margin:10px 0;font-weight:bold}.receipt-status-fail{background:#ffebee;color:#cc2020;padding:6px;border-radius:4px;text-align:center;margin:10px 0;font-weight:bold}</style></head><body>' + body + '</body></html>');
-  w.document.close();
-  w.print();
-}
-
-// ===================================================
-// INIT — wire up all events here, NO inline handlers
-// ===================================================
-function init() {
-  // Add sample history if empty
-  if (!loadHistory().length) {
-    saveHistory([
-      {ref:'#TXN-20260620-12',date:'20/06/2026 10:15',status:'success',from:'الحساب الشخصي',beneficiary:'عبدالرحمن خالد العتيبي',via:'بنوك سعودية — بنك الراجحي',amount:2500000,fee:12500,currency:'SAR'},
-      {ref:'#TXN-20260618-56',date:'18/06/2026 14:30',status:'fail',from:'مؤسسة الوليد بن طلال للإنسانية',beneficiary:'نورة فهد الزهراني',via:'ويسترن يونيون — ويسترن يونيون - السعودية',amount:4200000,fee:21000,currency:'USD'},
-      {ref:'#TXN-20260615-90',date:'15/06/2026 09:45',status:'success',from:'الحساب التجاري',beneficiary:'فهد سلطان الشمري',via:'بنوك دولية — HSBC الدولي',amount:1800000,fee:9000,currency:'EUR'},
-    ]);
-  }
-
-  updateViaOptions();
-  renderBeneficiarySelect();
-  updateSummary();
-
-  // LANG
-  document.getElementById('langBtn').addEventListener('click', function() {
-    isEN = !isEN;
-    var body = document.getElementById('body-root');
-    var html = document.getElementById('html-root');
-    this.textContent = isEN ? '🌐 العربية' : '🌐 English';
-    body.classList.toggle('en', isEN);
-    html.setAttribute('lang', isEN ? 'en' : 'ar');
-    html.setAttribute('dir', isEN ? 'ltr' : 'rtl');
-    applyTranslations();
-  });
-
-  // EXIT
-  document.getElementById('exitBtn').addEventListener('click', function() {
-    showToast(tr('exit-toast'), 'success');
-  });
-
-  // NAV items
-  document.querySelectorAll('[data-nav]').forEach(function(el) {
-    el.addEventListener('click', function() {
-      document.querySelectorAll('[data-nav]').forEach(function(n) { n.classList.remove('active'); });
-      this.classList.add('active');
-    });
-  });
-
-  // TOGGLE sidebar
-  document.querySelectorAll('[data-toggle]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var body = this.closest('.side-card').querySelector('.side-card-body');
-      if (!body) return;
-      var hidden = body.style.display === 'none';
-      body.style.display = hidden ? '' : 'none';
-      this.textContent = hidden ? '▼' : '▶';
-    });
-  });
-
-  // HISTORY link
-  document.getElementById('historyLink').addEventListener('click', function(e) { e.preventDefault(); showHistoryPanel(); });
-
-  // SIDEBAR links
-  document.getElementById('callSupportLink').addEventListener('click', function(e) { e.preventDefault(); showToast(tr('calling')); });
-  document.getElementById('newMsgLink').addEventListener('click', function(e) { e.preventDefault(); showToast(tr('open-msg')); });
-
-  // CURRENCY BTN
-  document.getElementById('currencyBtn').addEventListener('click', function() {
-    buildCurrencyGrid();
-    document.getElementById('currencyModal').classList.add('open');
-  });
-  document.getElementById('closeCurrencyBtn').addEventListener('click', function() { closeModal('currencyModal'); });
-
-  // AMOUNT INPUT
-  document.getElementById('amount').addEventListener('input', function() {
-    var raw = this.value.replace(/[^0-9.]/g, '');
-    var parts = raw.split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    this.value = parts.length > 1 ? parts[0] + '.' + parts[1] : parts[0];
-    updateSummary();
-  });
-  document.getElementById('manualFee').addEventListener('input', function() {
-    var raw = this.value.replace(/[^0-9.]/g, '');
-    var parts = raw.split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    this.value = parts.length > 1 ? parts[0] + '.' + parts[1] : parts[0];
-    updateSummary();
-  });
-
-  // VIA TYPE
-  document.getElementById('viaType').addEventListener('change', updateViaOptions);
-
-  // BENEFICIARY
-  document.getElementById('beneficiary').addEventListener('change', updateSummary);
-
-  // TERMS
-  document.getElementById('termsCheck').addEventListener('change', function() {
-    showToast(tr(this.checked ? 'terms-ok' : 'terms-req'), this.checked ? 'success' : 'error');
-  });
-
-  // ADD BEN
-  document.getElementById('addBenBtn').addEventListener('click', function() {
-    document.getElementById('newBenName').value = '';
-    document.getElementById('newBenAccount').value = '';
-    document.getElementById('newBenCountry').value = '';
-    document.getElementById('autoSaveCheck').checked = true;
-    document.getElementById('addBenModal').classList.add('open');
-  });
-  document.getElementById('cancelAddBenBtn').addEventListener('click', function() { closeModal('addBenModal'); });
-  document.getElementById('saveAddBenBtn').addEventListener('click', saveNewBeneficiary);
-
-  // CONTINUE BTN
-  document.getElementById('continueBtn').addEventListener('click', goToStep2);
-
-  // CANCEL BTN
-  document.getElementById('cancelBtn').addEventListener('click', function() {
-    if (confirm(tr('cancel-q'))) {
-      resetToStep1();
-      document.getElementById('amount').value = '1,000,000.00';
-      updateSummary();
-      showToast(tr('cancelled'), 'error');
-    }
-  });
-
-  // CONFIRM BTN (step 2)
-  document.getElementById('confirmBtn').addEventListener('click', goToStep3);
-
-  // BACK BTN (step 2)
-  document.getElementById('backBtn').addEventListener('click', function() { setStep(1); });
-
-  // OTP resend
-  document.getElementById('resendOtpLink').addEventListener('click', function() { showToast(tr('otp-resent'), 'success'); });
-
-  // VIEW DETAILS BTN (step 3)
-  document.getElementById('viewDetailsBtn').addEventListener('click', goToStep4WithModal);
-
-  // ERROR MODAL
-  document.getElementById('errRetryBtn').addEventListener('click', function() { closeModal('errorModal'); resetToStep1(); });
-  document.getElementById('errSupportBtn').addEventListener('click', function() { closeModal('errorModal'); showToast(tr('support-toast')); });
-  document.getElementById('errCloseBtn').addEventListener('click', function() { closeModal('errorModal'); });
-
-  // NEW TRANSFER (screen 4)
-  document.getElementById('newTransferBtn').addEventListener('click', resetToStep1);
-  document.getElementById('historyBtn2').addEventListener('click', showHistoryPanel);
-
-  // HISTORY SCREEN
-  document.getElementById('newTransferBtn2').addEventListener('click', resetToStep1);
-  document.getElementById('clearHistoryBtn').addEventListener('click', function() {
-    if (!confirm(isEN ? 'Clear all history?' : 'مسح جميع السجلات؟')) return;
-    try { localStorage.removeItem('nb_hist'); } catch(e) {}
-    renderHistoryTable('all');
-    showToast(tr('hist-cleared'), 'success');
-  });
-  document.querySelectorAll('.filter-chip').forEach(function(chip) {
-    chip.addEventListener('click', function() {
-      document.querySelectorAll('.filter-chip').forEach(function(c) { c.classList.remove('active'); });
-      this.classList.add('active');
-      renderHistoryTable(this.getAttribute('data-filter'));
-    });
-  });
-
-  // RECEIPT MODAL
-  document.getElementById('closeReceiptBtn').addEventListener('click', function() { closeModal('receiptModal'); });
-  document.getElementById('printReceiptBtn').addEventListener('click', printReceipt);
-
-  // CLOSE MODALS ON OVERLAY CLICK
-  ['currencyModal','addBenModal','errorModal','receiptModal','finRequestModal','finReceiptModal'].forEach(function(id) {
-    document.getElementById(id).addEventListener('click', function(e) {
-      if (e.target === this) closeModal(id);
-    });
-  });
-
-  // Sound effects on navigation/confirm buttons
-  function bindSoundToButtons() {
-    var ids = ['continueBtn','confirmBtn','backBtn','cancelBtn','newTransferBtn','newTransferBtn2',
-      'errRetryBtn','errCloseBtn','errSupportBtn','saveAddBenBtn','cancelAddBenBtn',
-      'closeCurrencyBtn','printReceiptBtn','closeReceiptBtn','clearHistoryBtn',
-      'finSubmitBtn','finCancelBtn'];
-    ids.forEach(function(id) {
-      var btn = document.getElementById(id);
-      if (btn) btn.addEventListener('click', playClickSound);
-    });
-    document.querySelectorAll('.filter-chip').forEach(function(btn) {
-      btn.addEventListener('click', playClickSound);
-    });
-  }
-  bindSoundToButtons();
-
-  // ─── تنسيق فاصلة الأرقام لحقل مبلغ التمويل ───
-  var finAmountInput = document.getElementById('fin-amount');
-  if (finAmountInput) {
-    finAmountInput.addEventListener('input', function() {
-      var raw = this.value.replace(/[^0-9.]/g, '');
-      var parts = raw.split('.');
-      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-      this.value = parts.length > 1 ? parts[0] + '.' + parts[1].substring(0, 2) : parts[0];
-      if (typeof updateFinFee === 'function') updateFinFee();
-    });
-  }
-}
-
-// Run after DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
-
-})();
-
-// Wire App after existing init
-(function() {
-  function afterInit() { 
-    App.init();
-    window._bankAppInited = true;
-    if (typeof renderBeneficiarySelect === 'function') renderBeneficiarySelect();
-    if (typeof updateViaOptions === 'function') updateViaOptions();
-    if (typeof updateSummary === 'function') updateSummary();
-  }
-  if (document.readyState === 'loading') { 
-    document.addEventListener('DOMContentLoaded', afterInit);
-  } else {
-    afterInit();
-  }
-})();
-
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then((reg) => console.log('Service Worker Registered', reg))
-        .catch((err) => console.error('Service Worker Failed', err));
-    });
-  }
-
-document.addEventListener("DOMContentLoaded", function() {
-    // تحديد جميع حقول الإدخال والنصوص في الصفحة
-    const inputs = document.querySelectorAll('input[type="text"], input[type="search"], textarea');
-    
-    // تعطيل كيبورد الشاشة لجميع الحقول
-    inputs.forEach(input => {
-      input.setAttribute('inputmode', 'none');
-    });
-  });
-
-// جعل الكيبورد مخفياً بشكل افتراضي عند فتح الصفحة
-  let isTabletKeyboardHidden = true;
-
-  document.addEventListener("DOMContentLoaded", function() {
-    applyKeyboardState();
-  });
-
-  function toggleTabletKeyboard() {
-    // تعكيس الحالة (إذا كان مخفي يصير ظاهر والعكس)
-    isTabletKeyboardHidden = !isTabletKeyboardHidden;
-    applyKeyboardState();
-  }
-
-  function applyKeyboardState() {
-    const inputs = document.querySelectorAll('input[type="text"], input[type="search"], textarea');
-    const btn = document.getElementById('toggleKeyboardBtn');
-
-    inputs.forEach(input => {
-      if (isTabletKeyboardHidden) {
-        input.setAttribute('inputmode', 'none');
-        if (btn) btn.innerText = 'إظهار كيبورد التابلت';
-      } else {
-        input.removeAttribute('inputmode');
-        if (btn) btn.innerText = 'إخفاء كيبورد التابلت';
-      }
-    });
-  }
+<script src="app.js"></script>
+</body>
+</html>

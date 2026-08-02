@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>الخدمات الذاتية - المملكة القابضة</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="body-root">
+
+<div class="top-bar">
+  <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button><div class="top-bar-left">
+    <button class="exit-btn" id="exitBtn">&#9312; <span data-k="exit">خروج</span></button>
+    <button class="lang-btn" id="langBtn">&#127760; English</button>
+  </div>
+  <div class="logo-svg-wrap">
+    <div class="logo-icon">
+      <img src="xx.png" alt="logo">
+    </div>
+
+    <div class="logo-text-block">
+      <span class="logo-text-top">المملكة القابضة</span>
+      <span class="logo-text-bot">صندوق الإستثمار</span>
+    </div>
+    <div class="logo-divider"></div>
+    <div class="logo-sub" data-k="logo-sub">الخدمات المصرفية<br>الإلكترونية شاملة</div>
+  </div>
+
+<div class="main-nav">
+  <a href="index.html" class="nav-item" data-nav data-nav-key="nav-home"><span class="nav-icon">&#127968;</span><span data-k="nav-home">الرئيسية</span></a>
+  <a href="accounts.html" class="nav-item" data-nav data-nav-key="nav-acc"><span class="nav-icon">&#128179;</span><span data-k="nav-acc">الحسابات</span></a>
+  <a href="cards.html" class="nav-item" data-nav data-nav-key="nav-cards"><span class="nav-icon">&#127183;</span><span data-k="nav-cards">البطاقات</span></a>
+  <a href="transfer-services.html" class="nav-item" data-nav data-nav-key="nav-tr"><span class="nav-icon">&#128260;</span><span data-k="nav-tr">التحويل</span></a>
+  <a href="sadad.html" class="nav-item" data-nav data-nav-key="nav-sadad"><span class="nav-icon">&#9881;</span><span data-k="nav-sadad">SADAD</span></a>
+  <a href="gov.html" class="nav-item" data-nav data-nav-key="nav-gov"><span class="nav-icon">&#127963;</span><span data-k="nav-gov">خدمات حكومية</span></a>
+  <a href="capital.html" class="nav-item" data-nav data-nav-key="nav-cap"><span class="nav-icon">&#127961;</span><span data-k="nav-cap">الجزيرة كابيتال</span></a>
+  <a href="instant.html" class="nav-item" data-nav data-nav-key="nav-inst"><span class="nav-icon">&#9889;</span><span data-k="nav-inst">فوري</span></a>
+  <a href="finance.html" class="nav-item" data-nav data-nav-key="nav-fin"><span class="nav-icon">&#128176;</span><span data-k="nav-fin">التمويل</span></a>
+  <a href="self.html" class="nav-item active" data-nav data-nav-key="nav-self"><span class="nav-icon">&#128100;</span><span data-k="nav-self">الخدمات الذاتية</span></a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="page-container" id="page-self">
+  <div class="pg-header">
+    <span class="pg-header-icon">👤</span>
+    <div class="pg-header-title" data-k2="self-title">الخدمات الذاتية</div>
+    <div class="pg-header-sub" data-k2="self-sub">إدارة ملفك الشخصي وإعدادات حسابك</div>
+  </div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <div style="flex:0 0 250px">
+      <div class="pg-section">
+        <div class="pg-section-body" style="text-align:center">
+          <div class="profile-avatar">👤</div>
+          <div style="font-size:16px;font-weight:bold;color:#1a3a5c;margin-bottom:4px">الوليد بن طلال</div>
+          <div style="font-size:12px;color:#888" data-k2="premium-client">عميل بريميوم منذ 2015</div>
+          <div style="margin-top:12px"><span class="badge badge-success">✓ موثّق</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="flex:1;min-width:200px">
+      <div class="pg-section">
+        <div class="pg-section-hdr">📋 <span data-k2="personal-info">المعلومات الشخصية</span></div>
+        <div class="pg-section-body">
+          <div class="profile-field"><span class="profile-label" data-k2="id-num">رقم الهوية</span><span class="profile-value">1XXXXXXXXX</span></div>
+          <div class="profile-field"><span class="profile-label" data-k2="phone">الجوال</span><span class="profile-value">+966 5X XXX XXXX</span></div>
+          <div class="profile-field"><span class="profile-label" data-k2="email">البريد الإلكتروني</span><span class="profile-value">al***@***.com</span></div>
+          <div class="profile-field"><span class="profile-label" data-k2="address">العنوان</span><span class="profile-value">الرياض، حي النخيل</span></div>
+          <div class="profile-field"><span class="profile-label" data-k2="nationality">الجنسية</span><span class="profile-value" data-k2="saudi">سعودي</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pg-section">
+    <div class="pg-section-hdr">⚙️ <span data-k2="self-services-list">خدمات إضافية</span></div>
+    <div class="pg-section-body">
+      <div class="services-grid">
+        <div class="service-card"><span class="service-card-icon">🔑</span><div class="service-card-title" data-k2="change-pass">تغيير كلمة المرور</div></div>
+        <div class="service-card"><span class="service-card-icon">📱</span><div class="service-card-title" data-k2="link-device">ربط جهاز جديد</div></div>
+        <div class="service-card"><span class="service-card-icon">🔔</span><div class="service-card-title" data-k2="notif-settings">إعدادات الإشعارات</div></div>
+        <div class="service-card"><span class="service-card-icon">🛡️</span><div class="service-card-title" data-k2="security">الأمان والخصوصية</div></div>
+        <div class="service-card"><span class="service-card-icon">📄</span><div class="service-card-title" data-k2="statements">كشف الحساب</div></div>
+        <div class="service-card"><span class="service-card-icon">💬</span><div class="service-card-title" data-k2="support">الدعم الفني</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>الجزيرة كابيتال - المملكة القابضة</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="body-root">
+
+<div class="top-bar">
+  <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button><div class="top-bar-left">
+    <button class="exit-btn" id="exitBtn">&#9312; <span data-k="exit">خروج</span></button>
+    <button class="lang-btn" id="langBtn">&#127760; English</button>
+  </div>
+  <div class="logo-svg-wrap">
+    <div class="logo-icon">
+      <img src="xx.png" alt="logo">
+    </div>
+
+    <div class="logo-text-block">
+      <span class="logo-text-top">المملكة القابضة</span>
+      <span class="logo-text-bot">صندوق الإستثمار</span>
+    </div>
+    <div class="logo-divider"></div>
+    <div class="logo-sub" data-k="logo-sub">الخدمات المصرفية<br>الإلكترونية شاملة</div>
+  </div>
+
+<div class="main-nav">
+  <a href="index.html" class="nav-item" data-nav data-nav-key="nav-home"><span class="nav-icon">&#127968;</span><span data-k="nav-home">الرئيسية</span></a>
+  <a href="accounts.html" class="nav-item" data-nav data-nav-key="nav-acc"><span class="nav-icon">&#128179;</span><span data-k="nav-acc">الحسابات</span></a>
+  <a href="cards.html" class="nav-item" data-nav data-nav-key="nav-cards"><span class="nav-icon">&#127183;</span><span data-k="nav-cards">البطاقات</span></a>
+  <a href="transfer-services.html" class="nav-item" data-nav data-nav-key="nav-tr"><span class="nav-icon">&#128260;</span><span data-k="nav-tr">التحويل</span></a>
+  <a href="sadad.html" class="nav-item" data-nav data-nav-key="nav-sadad"><span class="nav-icon">&#9881;</span><span data-k="nav-sadad">SADAD</span></a>
+  <a href="gov.html" class="nav-item" data-nav data-nav-key="nav-gov"><span class="nav-icon">&#127963;</span><span data-k="nav-gov">خدمات حكومية</span></a>
+  <a href="capital.html" class="nav-item active" data-nav data-nav-key="nav-cap"><span class="nav-icon">&#127961;</span><span data-k="nav-cap">الجزيرة كابيتال</span></a>
+  <a href="instant.html" class="nav-item" data-nav data-nav-key="nav-inst"><span class="nav-icon">&#9889;</span><span data-k="nav-inst">فوري</span></a>
+  <a href="finance.html" class="nav-item" data-nav data-nav-key="nav-fin"><span class="nav-icon">&#128176;</span><span data-k="nav-fin">التمويل</span></a>
+  <a href="self.html" class="nav-item" data-nav data-nav-key="nav-self"><span class="nav-icon">&#128100;</span><span data-k="nav-self">الخدمات الذاتية</span></a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="page-container" id="page-capital">
+  <div class="pg-header">
+    <span class="pg-header-icon">📊</span>
+    <div class="pg-header-title" data-k2="cap-title">الجزيرة كابيتال</div>
+    <div class="pg-header-sub" data-k2="cap-sub">الاستثمار وإدارة الثروات</div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-icon blue">📈</div><div><div class="stat-label" data-k2="portfolio">محفظتي الاستثمارية</div><div class="stat-value">SAR 850K</div><div class="stat-change">+5.1% YTD</div></div></div>
+    <div class="stat-card"><div class="stat-icon green">💰</div><div><div class="stat-label" data-k2="dividends">الأرباح الموزعة</div><div class="stat-value">SAR 42,500</div><div class="stat-change">هذا العام</div></div></div>
+    <div class="stat-card"><div class="stat-icon orange">📊</div><div><div class="stat-label" data-k2="funds-count">الصناديق</div><div class="stat-value">4 صناديق</div></div></div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="App.switchTab(this,'cap')">📈 <span data-k2="tab-funds">الصناديق</span></button>
+    <button class="tab-btn" onclick="App.switchTab(this,'cap')">🏢 <span data-k2="tab-stocks">الأسهم</span></button>
+    <button class="tab-btn" onclick="App.switchTab(this,'cap')">📜 <span data-k2="tab-sukuk">الصكوك</span></button>
+  </div>
+  <div class="tab-pane active">
+    <div class="fund-card"><div class="fund-name" data-k2="fund1">صندوق النمو السعودي المتوازن</div><div class="fund-meta"><span data-k2="fund-type">متوازن</span><span data-k2="fund-risk">مخاطر متوسطة</span><span data-k2="fund-min">حد أدنى: SAR 10,000</span></div><div class="fund-return">+8.4% <span style="font-size:12px;color:#777" data-k2="annual">سنوياً</span></div></div>
+    <div class="fund-card"><div class="fund-name" data-k2="fund2">صندوق الأسهم السعودية للنمو</div><div class="fund-meta"><span data-k2="fund-equity">أسهم</span><span data-k2="fund-high-risk">مخاطر عالية</span><span data-k2="fund-min2">حد أدنى: SAR 25,000</span></div><div class="fund-return">+12.7% <span style="font-size:12px;color:#777" data-k2="annual">سنوياً</span></div></div>
+    <div class="fund-card"><div class="fund-name" data-k2="fund3">صندوق الدخل الثابت (صكوك)</div><div class="fund-meta"><span data-k2="fund-sukuk">دخل ثابت</span><span data-k2="fund-low-risk">مخاطر منخفضة</span><span data-k2="fund-min3">حد أدنى: SAR 5,000</span></div><div class="fund-return">+5.2% <span style="font-size:12px;color:#777" data-k2="annual">سنوياً</span></div></div>
+    <div class="fund-card"><div class="fund-name" data-k2="fund4">صندوق العقارات السعودية</div><div class="fund-meta"><span data-k2="fund-real">عقارات</span><span data-k2="fund-med-risk">مخاطر متوسطة</span><span data-k2="fund-min4">حد أدنى: SAR 50,000</span></div><div class="fund-return">+6.8% <span style="font-size:12px;color:#777" data-k2="annual">سنوياً</span></div></div>
+  </div>
+  <div class="tab-pane">
+    <div class="pg-section"><div class="pg-section-hdr">🏢 <span data-k2="my-stocks">أسهمي</span></div><div class="pg-section-body">
+      <table class="rate-table">
+        <thead><tr><th data-k2="stock">السهم</th><th data-k2="shares">الأسهم</th><th data-k2="price">السعر</th><th data-k2="change">التغير</th><th data-k2="value">القيمة</th></tr></thead>
+        <tbody>
+          <tr><td>أرامكو (2222)</td><td>1,000</td><td>SAR 28.50</td><td class="rate-up">+1.2%</td><td>SAR 28,500</td></tr>
+          <tr><td>STC (7010)</td><td>500</td><td>SAR 52.00</td><td class="rate-down">-0.8%</td><td>SAR 26,000</td></tr>
+          <tr><td>الراجحي (1120)</td><td>300</td><td>SAR 84.20</td><td class="rate-up">+0.5%</td><td>SAR 25,260</td></tr>
+          <tr><td>مصافي الجبيل (2030)</td><td>800</td><td>SAR 41.80</td><td class="rate-up">+2.1%</td><td>SAR 33,440</td></tr>
+        </tbody>
+      </table>
+    </div></div>
+  </div>
+  <div class="tab-pane"><div class="pg-section"><div class="pg-section-hdr">📜 <span data-k2="my-sukuk">صكوكي</span></div><div class="pg-section-body"><div style="text-align:center;padding:30px;color:#999" data-k2="no-sukuk">لا توجد صكوك مسجلة حالياً</div></div></div></div>
+</div>
+
+
+
+
+
+<script src="app.js"></script>
+</body>
+</html>

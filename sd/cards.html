@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>بطاقاتي - المملكة القابضة</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="body-root">
+
+<div class="top-bar">
+  <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button><div class="top-bar-left">
+    <button class="exit-btn" id="exitBtn">&#9312; <span data-k="exit">خروج</span></button>
+    <button class="lang-btn" id="langBtn">&#127760; English</button>
+  </div>
+  <div class="logo-svg-wrap">
+    <div class="logo-icon">
+      <img src="xx.png" alt="logo">
+    </div>
+
+    <div class="logo-text-block">
+      <span class="logo-text-top">المملكة القابضة</span>
+      <span class="logo-text-bot">صندوق الإستثمار</span>
+    </div>
+    <div class="logo-divider"></div>
+    <div class="logo-sub" data-k="logo-sub">الخدمات المصرفية<br>الإلكترونية شاملة</div>
+  </div>
+
+<div class="main-nav">
+  <a href="index.html" class="nav-item" data-nav data-nav-key="nav-home"><span class="nav-icon">&#127968;</span><span data-k="nav-home">الرئيسية</span></a>
+  <a href="accounts.html" class="nav-item" data-nav data-nav-key="nav-acc"><span class="nav-icon">&#128179;</span><span data-k="nav-acc">الحسابات</span></a>
+  <a href="cards.html" class="nav-item active" data-nav data-nav-key="nav-cards"><span class="nav-icon">&#127183;</span><span data-k="nav-cards">البطاقات</span></a>
+  <a href="transfer-services.html" class="nav-item" data-nav data-nav-key="nav-tr"><span class="nav-icon">&#128260;</span><span data-k="nav-tr">التحويل</span></a>
+  <a href="sadad.html" class="nav-item" data-nav data-nav-key="nav-sadad"><span class="nav-icon">&#9881;</span><span data-k="nav-sadad">SADAD</span></a>
+  <a href="gov.html" class="nav-item" data-nav data-nav-key="nav-gov"><span class="nav-icon">&#127963;</span><span data-k="nav-gov">خدمات حكومية</span></a>
+  <a href="capital.html" class="nav-item" data-nav data-nav-key="nav-cap"><span class="nav-icon">&#127961;</span><span data-k="nav-cap">الجزيرة كابيتال</span></a>
+  <a href="instant.html" class="nav-item" data-nav data-nav-key="nav-inst"><span class="nav-icon">&#9889;</span><span data-k="nav-inst">فوري</span></a>
+  <a href="finance.html" class="nav-item" data-nav data-nav-key="nav-fin"><span class="nav-icon">&#128176;</span><span data-k="nav-fin">التمويل</span></a>
+  <a href="self.html" class="nav-item" data-nav data-nav-key="nav-self"><span class="nav-icon">&#128100;</span><span data-k="nav-self">الخدمات الذاتية</span></a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="page-container" id="page-cards">
+  <div class="pg-header">
+    <span class="pg-header-icon">🃏</span>
+    <div class="pg-header-title" data-k2="cards-title">بطاقاتي</div>
+    <div class="pg-header-sub" data-k2="cards-sub">إدارة بطاقات الائتمان والخصم</div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="App.switchTab(this,'cards')">💳 <span data-k2="credit-cards">بطاقات الائتمان</span></button>
+    <button class="tab-btn" onclick="App.switchTab(this,'cards')">🏧 <span data-k2="debit-cards">بطاقات الخصم</span></button>
+    <button class="tab-btn" onclick="App.switchTab(this,'cards')">🔒 <span data-k2="card-services">خدمات البطاقة</span></button>
+  </div>
+  <div class="tab-pane active">
+    <div style="display:flex;gap:20px;flex-wrap:wrap">
+      <div>
+        <div class="card-visual gold">
+          <div class="card-chip">📟</div>
+          <div class="card-num">•••• •••• •••• 4821</div>
+          <div class="card-bottom"><span>الوليد بن طلال</span><span>12/29</span><span>VISA</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="card-visual black">
+          <div class="card-chip">📟</div>
+          <div class="card-num">•••• •••• •••• 7743</div>
+          <div class="card-bottom"><span>الوليد بن طلال</span><span>08/28</span><span>Mastercard</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="pg-section">
+      <div class="pg-section-hdr">📊 <span data-k2="card-usage">استخدام البطاقة الذهبية</span></div>
+      <div class="pg-section-body">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px">
+          <span data-k2="used">المستخدم: <strong>SAR 45,000,200</strong></span>
+          <span data-k2="limit">الحد: <strong>SAR 990,000,000</strong></span>
+        </div>
+        <div class="loan-bar"><div class="loan-bar-fill" style="width:30%"></div></div>
+        <div style="font-size:12px;color:#888;text-align:center" data-k2="card-pct">30% من الحد الائتماني مستخدم</div>
+      </div>
+    </div>
+    <div class="pg-section">
+      <div class="pg-section-hdr">💸 <span data-k2="card-tx">آخر معاملات البطاقة</span></div>
+      <div class="pg-section-body">
+        <div class="tx-row"><div class="tx-icon out">🛒</div><div class="tx-info"><div class="tx-title">Amazon.sa</div><div class="tx-date">26/06/2026</div></div><div class="tx-amount out">-SAR 3,450</div></div>
+        <div class="tx-row"><div class="tx-icon out">✈️</div><div class="tx-info"><div class="tx-title" data-k2="card-tx-fly">طيران السعودية</div><div class="tx-date">25/06/2026</div></div><div class="tx-amount out">-SAR 8,200</div></div>
+        <div class="tx-row"><div class="tx-icon out">🏪</div><div class="tx-info"><div class="tx-title" data-k2="card-tx-shop">بندة للتجزئة</div><div class="tx-date">24/06/2026</div></div><div class="tx-amount out">-SAR 680</div></div>
+        <div class="tx-row"><div class="tx-icon in">💵</div><div class="tx-info"><div class="tx-title" data-k2="card-tx-pay">سداد بطاقة</div><div class="tx-date">20/06/2026</div></div><div class="tx-amount in">+SAR 20,000</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane"></div>
+  <div class="tab-pane">
+    <div class="pg-section">
+      <div class="pg-section-hdr">🔧 <span data-k2="card-mgmt">إدارة البطاقة</span></div>
+      <div class="pg-section-body">
+        <div class="services-grid">
+          <div class="service-card"><span class="service-card-icon">🔒</span><div class="service-card-title" data-k2="freeze-card">تجميد البطاقة</div></div>
+          <div class="service-card"><span class="service-card-icon">🔑</span><div class="service-card-title" data-k2="change-pin">تغيير الرقم السري</div></div>
+          <div class="service-card"><span class="service-card-icon">📊</span><div class="service-card-title" data-k2="increase-limit">رفع الحد الائتماني</div></div>
+          <div class="service-card"><span class="service-card-icon">🔔</span><div class="service-card-title" data-k2="card-alerts">تنبيهات البطاقة</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<script src="app.js"></script>
+</body>
+</html>

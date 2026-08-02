@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>التمويل - المملكة القابضة</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="body-root">
+
+<div class="top-bar">
+  <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button><div class="top-bar-left">
+    <button class="exit-btn" id="exitBtn">&#9312; <span data-k="exit">خروج</span></button>
+    <button class="lang-btn" id="langBtn">&#127760; English</button>
+  </div>
+  <div class="logo-svg-wrap">
+    <div class="logo-icon">
+      <img src="xx.png" alt="logo">
+    </div>
+
+    <div class="logo-text-block">
+      <span class="logo-text-top">المملكة القابضة</span>
+      <span class="logo-text-bot">صندوق الإستثمار</span>
+    </div>
+    <div class="logo-divider"></div>
+    <div class="logo-sub" data-k="logo-sub">الخدمات المصرفية<br>الإلكترونية شاملة</div>
+  </div>
+
+<div class="main-nav">
+  <a href="index.html" class="nav-item" data-nav data-nav-key="nav-home"><span class="nav-icon">&#127968;</span><span data-k="nav-home">الرئيسية</span></a>
+  <a href="accounts.html" class="nav-item" data-nav data-nav-key="nav-acc"><span class="nav-icon">&#128179;</span><span data-k="nav-acc">الحسابات</span></a>
+  <a href="cards.html" class="nav-item" data-nav data-nav-key="nav-cards"><span class="nav-icon">&#127183;</span><span data-k="nav-cards">البطاقات</span></a>
+  <a href="transfer-services.html" class="nav-item" data-nav data-nav-key="nav-tr"><span class="nav-icon">&#128260;</span><span data-k="nav-tr">التحويل</span></a>
+  <a href="sadad.html" class="nav-item" data-nav data-nav-key="nav-sadad"><span class="nav-icon">&#9881;</span><span data-k="nav-sadad">SADAD</span></a>
+  <a href="gov.html" class="nav-item" data-nav data-nav-key="nav-gov"><span class="nav-icon">&#127963;</span><span data-k="nav-gov">خدمات حكومية</span></a>
+  <a href="capital.html" class="nav-item" data-nav data-nav-key="nav-cap"><span class="nav-icon">&#127961;</span><span data-k="nav-cap">الجزيرة كابيتال</span></a>
+  <a href="instant.html" class="nav-item" data-nav data-nav-key="nav-inst"><span class="nav-icon">&#9889;</span><span data-k="nav-inst">فوري</span></a>
+  <a href="finance.html" class="nav-item active" data-nav data-nav-key="nav-fin"><span class="nav-icon">&#128176;</span><span data-k="nav-fin">التمويل</span></a>
+  <a href="self.html" class="nav-item" data-nav data-nav-key="nav-self"><span class="nav-icon">&#128100;</span><span data-k="nav-self">الخدمات الذاتية</span></a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="page-container active" id="page-finance">
+  <div class="pg-header">
+    <span class="pg-header-icon">💰</span>
+    <div class="pg-header-title">خدمات التمويل</div>
+    <div class="pg-header-sub">حلول تمويلية متنوعة تناسب احتياجاتك — تمويل المشاريع برسوم 10% فقط</div>
+  </div>
+
+  <!-- Service Cards Grid -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:20px" id="finServicesGrid">
+    <div class="fin-service-card" data-fin="home" onclick="openFinRequest('home')">
+      <span class="fin-service-card-icon">🏠</span>
+      <div class="fin-service-card-title">تمويل عقاري</div>
+      <div class="fin-service-card-sub">حتى 90% من قيمة العقار</div>
+    </div>
+    <div class="fin-service-card" data-fin="car" onclick="openFinRequest('car')">
+      <span class="fin-service-card-icon">🚗</span>
+      <div class="fin-service-card-title">تمويل سيارات</div>
+      <div class="fin-service-card-sub">بدون رسوم تسجيل</div>
+    </div>
+    <div class="fin-service-card" data-fin="personal" onclick="openFinRequest('personal')">
+      <span class="fin-service-card-icon">💼</span>
+      <div class="fin-service-card-title">تمويل شخصي</div>
+      <div class="fin-service-card-sub">حتى SAR 500,000</div>
+    </div>
+    <div class="fin-service-card" data-fin="business" onclick="openFinRequest('business')">
+      <span class="fin-service-card-icon">🏢</span>
+      <div class="fin-service-card-title">تمويل تجاري</div>
+      <div class="fin-service-card-sub">للشركات والمؤسسات</div>
+    </div>
+    <div class="fin-service-card" data-fin="refin" onclick="openFinRequest('refin')">
+      <span class="fin-service-card-icon">🔄</span>
+      <div class="fin-service-card-title">إعادة التمويل</div>
+      <div class="fin-service-card-sub">تحويل القروض</div>
+    </div>
+    <div class="fin-service-card" data-fin="digital" onclick="openFinRequest('digital')">
+      <span class="fin-service-card-icon">📱</span>
+      <div class="fin-service-card-title">تمويل رقمي</div>
+      <div class="fin-service-card-sub">خلال 5 دقائق</div>
+    </div>
+    <!-- HIGHLIGHTED NEW: Project Finance -->
+    <div class="fin-service-card highlight" data-fin="project" onclick="openFinRequest('project')" style="position:relative">
+      <span class="fin-badge-new">جديد ✨</span>
+      <span class="fin-service-card-icon">🌟</span>
+      <div class="fin-service-card-title">تمويل المشاريع</div>
+      <div class="fin-service-card-sub">رسوم إدارية 10% فقط</div>
+    </div>
+  </div>
+<!-- Info banner about project finance -->
+<div style="background:linear-gradient(135deg,#fff8e1,#fffde7); border:2px solid #f0a500; border-radius:10px; padding:16px 20px; margin-bottom:20px; display:flex; align-items:center; gap:16px;">
+  <div style="font-size:40px; flex-shrink:0;">💡</div>
+  <div>
+    <div style="font-size:14px; font-weight:bold; color:#b07800; margin-bottom:4px;">تمويل المشاريع وتمكين المستفيدين</div>
+    <div style="font-size:12.5px; color:#555; line-height:1.7;">يمكنك تقديم طلب تمويل لأي مستفيد بمبالغ نقدية لدعم مشاريعه. تُحتسب رسوم إدارية وتنفيذية بنسبة <strong style="color:#cc2020">10%</strong> من إجمالي المبلغ المطلوب، مع إمكانية رفع صورة شخصية للمستفيد وحفظ العملية في السجل.</div>
+  </div>
+  <button class="btn btn-primary btn-sm" onclick="openFinRequest('project')" style="flex-shrink:0; white-space:nowrap;">طلب تمويل مشروع ←</button>
+</div>
+
+
+  <!-- Active Loans -->
+  <div class="pg-section">
+    <div class="pg-section-hdr">📊 تمويلاتي الحالية</div>
+    <div class="pg-section-body">
+      <div style="margin-bottom:18px">
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>🏠 التمويل العقاري - فيلا الرياض</span><span style="color:#1e4878;font-weight:bold">SAR 1,200,000 / SAR 2,000,000</span></div>
+        <div class="loan-bar"><div class="loan-bar-fill" style="width:60%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#888"><span>مدفوع: 40%</span><span>متبقٍ: SAR 800,000</span></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>🚗 تمويل السيارة - لكزس LX</span><span style="color:#1e4878;font-weight:bold">SAR 85,000 / SAR 180,000</span></div>
+        <div class="loan-bar"><div class="loan-bar-fill" style="width:47%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#888"><span>مدفوع: 53%</span><span>متبقٍ: SAR 95,000</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Finance Requests History -->
+  <div class="pg-section">
+    <div class="pg-section-hdr" style="justify-content:space-between">
+      <span>📋 سجل طلبات التمويل</span>
+      <button class="btn btn-cancel btn-sm" id="clearFinHistBtn" style="font-size:11px">🗑️ مسح السجل</button>
+    </div>
+    <div class="pg-section-body" id="finHistoryWrap">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<script src="app.js"></script>
+</body>
+</html>
