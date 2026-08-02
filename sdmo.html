@@ -1431,6 +1431,7 @@ body.en .modal-box{border-radius:16px 16px 0 0}
               <option value="other" data-ar="أخرى" data-en="Other">أخرى</option>
             </select>
           </div>
+<button id="toggleKeyboardBtn" onclick="toggleTabletKeyboard()">إظهار كيبورد التابلت</button>
 
     <!-- SCREEN 2 -->
     <div class="step-screen" id="screen2">
@@ -3529,6 +3530,39 @@ if (document.readyState === 'loading') {
     });
   });
 </script>
+<!-- كود السكريبت للتحكم بالزر والحقول -->
+<script>
+  // جعل الكيبورد مخفياً بشكل افتراضي عند فتح الصفحة
+  let isTabletKeyboardHidden = true;
+
+  document.addEventListener("DOMContentLoaded", function() {
+    applyKeyboardState();
+  });
+
+  function toggleTabletKeyboard() {
+    // تعكيس الحالة (إذا كان مخفي يصير ظاهر والعكس)
+    isTabletKeyboardHidden = !isTabletKeyboardHidden;
+    applyKeyboardState();
+  }
+
+  function applyKeyboardState() {
+    const inputs = document.querySelectorAll('input[type="text"], input[type="search"], textarea');
+    const btn = document.getElementById('toggleKeyboardBtn');
+
+    inputs.forEach(input => {
+      if (isTabletKeyboardHidden) {
+        input.setAttribute('inputmode', 'none');
+        if (btn) btn.innerText = 'إظهار كيبورد التابلت';
+      } else {
+        input.removeAttribute('inputmode');
+        if (btn) btn.innerText = 'إخفاء كيبورد التابلت';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
 
 </body>
 </ht1ml> 
