@@ -3518,6 +3518,17 @@ if (document.readyState === 'loading') {
     });
   }
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // تحديد جميع حقول الإدخال والنصوص في الصفحة
+    const inputs = document.querySelectorAll('input[type="text"], input[type="search"], textarea');
+    
+    // تعطيل كيبورد الشاشة لجميع الحقول
+    inputs.forEach(input => {
+      input.setAttribute('inputmode', 'none');
+    });
+  });
+</script>
 
 </body>
 </ht1ml> 
