@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>الرئيسية - المملكة القابضة</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="body-root">
+
+<div class="top-bar">
+  <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button><div class="top-bar-left">
+    <button class="exit-btn" id="exitBtn">&#9312; <span data-k="exit">خروج</span></button>
+    <button class="lang-btn" id="langBtn">&#127760; English</button>
+  </div>
+  <div class="logo-svg-wrap">
+    <div class="logo-icon">
+      <img src="xx.png" alt="logo">
+    </div>
+
+    <div class="logo-text-block">
+      <span class="logo-text-top">المملكة القابضة</span>
+      <span class="logo-text-bot">صندوق الإستثمار</span>
+    </div>
+    <div class="logo-divider"></div>
+    <div class="logo-sub" data-k="logo-sub">الخدمات المصرفية<br>الإلكترونية شاملة</div>
+  </div>
+
+<div class="main-nav">
+  <a href="index.html" class="nav-item active" data-nav data-nav-key="nav-home"><span class="nav-icon">&#127968;</span><span data-k="nav-home">الرئيسية</span></a>
+  <a href="accounts.html" class="nav-item" data-nav data-nav-key="nav-acc"><span class="nav-icon">&#128179;</span><span data-k="nav-acc">الحسابات</span></a>
+  <a href="cards.html" class="nav-item" data-nav data-nav-key="nav-cards"><span class="nav-icon">&#127183;</span><span data-k="nav-cards">البطاقات</span></a>
+  <a href="transfer-services.html" class="nav-item" data-nav data-nav-key="nav-tr"><span class="nav-icon">&#128260;</span><span data-k="nav-tr">التحويل</span></a>
+  <a href="sadad.html" class="nav-item" data-nav data-nav-key="nav-sadad"><span class="nav-icon">&#9881;</span><span data-k="nav-sadad">SADAD</span></a>
+  <a href="gov.html" class="nav-item" data-nav data-nav-key="nav-gov"><span class="nav-icon">&#127963;</span><span data-k="nav-gov">خدمات حكومية</span></a>
+  <a href="capital.html" class="nav-item" data-nav data-nav-key="nav-cap"><span class="nav-icon">&#127961;</span><span data-k="nav-cap">الجزيرة كابيتال</span></a>
+  <a href="instant.html" class="nav-item" data-nav data-nav-key="nav-inst"><span class="nav-icon">&#9889;</span><span data-k="nav-inst">فوري</span></a>
+  <a href="finance.html" class="nav-item" data-nav data-nav-key="nav-fin"><span class="nav-icon">&#128176;</span><span data-k="nav-fin">التمويل</span></a>
+  <a href="self.html" class="nav-item" data-nav data-nav-key="nav-self"><span class="nav-icon">&#128100;</span><span data-k="nav-self">الخدمات الذاتية</span></a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="page-container active" id="page-home">
+  <div class="pg-header">
+    <span class="pg-header-icon">🏠</span>
+    <div class="pg-header-title" data-k2="home-title">مرحباً، مؤسسة الوليد</div>
+    <div class="pg-header-sub" data-k2="home-sub">آخر تسجيل دخول: منذ 13 دقيقة</div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-icon blue">💰</div><div><div class="stat-label" data-k2="stat-total">إجمالي الأرصدة</div><div class="stat-value">SAR 2.4M</div><div class="stat-change">+2.3% هذا الشهر</div></div></div>
+    <div class="stat-card"><div class="stat-icon green">📈</div><div><div class="stat-label" data-k2="stat-inv">الاستثمارات</div><div class="stat-value">SAR 850K</div><div class="stat-change">+5.1%</div></div></div>
+    <div class="stat-card"><div class="stat-icon orange">💳</div><div><div class="stat-label" data-k2="stat-cards">البطاقات</div><div class="stat-value">3 بطاقات</div><div class="stat-change" data-k2="stat-cards-active">جميعها نشطة</div></div></div>
+    <div class="stat-card"><div class="stat-icon red">📋</div><div><div class="stat-label" data-k2="stat-bills">فواتير معلقة</div><div class="stat-value">4 فواتير</div><div class="stat-change" style="color:#cc2020" data-k2="stat-bills-due">مستحقة الدفع</div></div></div>
+  </div>
+  <div class="pg-section">
+    <div class="pg-section-hdr">⚡ <span data-k2="quick-services">الخدمات السريعة</span></div>
+    <div class="pg-section-body">
+      <div class="services-grid">
+        <div class="service-card" onclick="window.location.href='instant.html'"><span class="service-card-icon">⚡</span><div class="service-card-title" data-k2="svc-instant">تحويل فوري</div></div>
+        <div class="service-card" onclick="window.location.href='accounts.html'"><span class="service-card-icon">💳</span><div class="service-card-title" data-k2="svc-accounts">حساباتي</div></div>
+        <div class="service-card" onclick="window.location.href='sadad.html'"><span class="service-card-icon">⚙️</span><div class="service-card-title">SADAD</div></div>
+        <div class="service-card" onclick="window.location.href='gov.html'"><span class="service-card-icon">🏛️</span><div class="service-card-title" data-k2="svc-gov">خدمات حكومية</div></div>
+        <div class="service-card" onclick="window.location.href='finance.html'"><span class="service-card-icon">💰</span><div class="service-card-title" data-k2="svc-finance">التمويل</div></div>
+        <div class="service-card" onclick="window.location.href='capital.html'"><span class="service-card-icon">📊</span><div class="service-card-title" data-k2="svc-capital">الجزيرة كابيتال</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="pg-section">
+    <div class="pg-section-hdr">📰 <span data-k2="market-news">أخبار السوق</span></div>
+    <div class="pg-section-body">
+      <div class="news-item"><div class="news-img">📈</div><div><div class="news-title" data-k2="news1-title">ارتفاع مؤشر تداول بنسبة 1.8% في تداولات اليوم</div><div class="news-meta">تداول | منذ ساعتين</div></div></div>
+      <div class="news-item"><div class="news-img">🏦</div><div><div class="news-title" data-k2="news2-title">مؤسسة النقد تُعلن عن حزمة تحفيزية جديدة للقطاع المصرفي</div><div class="news-meta">أموال الغد | منذ 4 ساعات</div></div></div>
+      <div class="news-item"><div class="news-img">💵</div><div><div class="news-title" data-k2="news3-title">أسعار الصرف: الدولار يتراجع أمام الريال في التعاملات الصباحية</div><div class="news-meta">الاقتصادية | منذ 6 ساعات</div></div></div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<script src="app.js"></script>
+</body>
+</html>
