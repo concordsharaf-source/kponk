@@ -160,6 +160,8 @@ body.en .history-table th{text-align:left}
 .modal-body {
     padding: 20px 24px; /* مسافة مريحة ومنظمة من اليمين واليسار */
     width: 100%;
+    flex: 1;
+    overflow-y: auto;
 }
 
 /* 3. ضبط حقول الإدخال لكي لا تخرج عن السيطرة */
@@ -660,7 +662,7 @@ body.en .modal-box{border-radius:16px 16px 0 0}
         <div class="modal-header-sub" data-k="cur-sub">يتم تحديث المبلغ وفق العملة المختارة</div>
       </div>
     </div>
-    <div class="modal-body"><div class="currency-grid" id="currencyGrid"></div></div>
+    <div class="modal-body" style="max-height: 60vh; overflow-y: auto;"><div class="currency-grid" id="currencyGrid"></div></div>
     <div class="modal-footer">
       <button class="btn btn-outline btn-sm" id="closeCurrencyBtn" data-k="btn-close">إغلاق</button>
     </div>
@@ -709,7 +711,7 @@ body.en .modal-box{border-radius:16px 16px 0 0}
         <div class="modal-header-sub">ERR-4821: BENEFICIARY_FEE_PENDING</div>
       </div>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="max-height: 65vh; overflow-y: auto;">
       <div class="modal-err-code" data-k="err-code">&#9888; <span id="err-code-dynamic">رسوم معاملة التحويل غير مسددة من قِبل المستفيد</span></div>
       <div class="info-row"><span class="info-label" data-k="lbl-amount">المبلغ</span><span class="info-value" id="err-amount">—</span></div>
       <div class="info-row"><span class="info-label" data-k="lbl-ben">المستفيد</span><span class="info-value" id="err-ben">—</span></div>
@@ -1322,6 +1324,8 @@ body.en .modal-box{border-radius:16px 16px 0 0}
     </div>
 
     <!-- SCREEN 1 -->
+    
+    <div class="step-screen active" id="screen1">
     <div class="form-card">
         <div class="form-card-header" data-k="sec-to">1. إلى</div>
         <div class="form-card-body">
@@ -1347,10 +1351,7 @@ body.en .modal-box{border-radius:16px 16px 0 0}
           </button>
         </div>
       </div>
-
-    
-    <div class="step-screen active" id="screen1">
-      <div class="form-card">
+    <div class="form-card">
         <div class="form-card-header" data-k="sec-from">2. من</div>
         <div class="form-card-body">
           <div class="form-row">
@@ -1401,7 +1402,7 @@ body.en .modal-box{border-radius:16px 16px 0 0}
         <button class="btn btn-primary" id="continueBtn" data-k="btn-continue">متابعة &larr;</button>
         <button class="btn btn-cancel" id="cancelBtn" data-k="btn-cancel">إلغاء</button>
       </div>
-    </div>
+    
  <div class="form-row" style="margin-top:4px">
             <label class="form-label" data-k="lbl-fee-manual">رسوم التحويل <span class="required">*</span></label>
             <div class="amount-wrap">
@@ -1432,6 +1433,7 @@ body.en .modal-box{border-radius:16px 16px 0 0}
             </select>
           </div>
 <button id="toggleKeyboardBtn" onclick="toggleTabletKeyboard()">إظهار كيبورد التابلت</button>
+    </div>
 
     <!-- SCREEN 2 -->
     <div class="step-screen" id="screen2">
@@ -3521,19 +3523,16 @@ if (document.readyState === 'loading') {
 </script>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    // تحديد جميع حقول الإدخال والنصوص في الصفحة
-    const inputs = document.querySelectorAll('input[type="text"], input[type="search"], textarea');
-    
-    // تعطيل كيبورد الشاشة لجميع الحقول
-    inputs.forEach(input => {
-      input.setAttribute('inputmode', 'none');
-    });
+    // الكيبورد الافتراضي مفعل — يتم التحكم به عبر زر التبديل
+    // const inputs = document.querySelectorAll('input[type="text"], input[type="search"], textarea');
+    // inputs.forEach(input => { input.setAttribute('inputmode', 'none'); });
+  });
   });
 </script>
 <!-- كود السكريبت للتحكم بالزر والحقول -->
 <script>
   // جعل الكيبورد مخفياً بشكل افتراضي عند فتح الصفحة
-  let isTabletKeyboardHidden = true;
+  let isTabletKeyboardHidden = false;
 
   document.addEventListener("DOMContentLoaded", function() {
     applyKeyboardState();
@@ -3552,7 +3551,7 @@ if (document.readyState === 'loading') {
     inputs.forEach(input => {
       if (isTabletKeyboardHidden) {
         input.setAttribute('inputmode', 'none');
-        if (btn) btn.innerText = 'إظهار كيبورد التابلت';
+        if (btn) btn.innerText = 'إخفاء كيبورد التابلت';
       } else {
         input.removeAttribute('inputmode');
         if (btn) btn.innerText = 'إخفاء كيبورد التابلت';
