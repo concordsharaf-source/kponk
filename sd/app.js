@@ -21,42 +21,6 @@
 // APP SHELL - PAGE NAVIGATION
 // ============================================================
 var App = (function() {
-  var NAV_MAP = {
-    'nav-home':'page-home','nav-acc':'page-accounts','nav-cards':'page-cards',
-    'nav-tr':'page-transfer','nav-sadad':'page-sadad','nav-gov':'page-gov',
-    'nav-cap':'page-capital','nav-inst':'page-instant','nav-fin':'page-finance','nav-self':'page-self'
-  };
-  var currentPage = 'page-home';
-  var tabCounters = {};
-
-  function showPage(pageId) {
-    // hide all pages
-    document.querySelectorAll('.page-container').forEach(function(p) { p.classList.remove('active'); });
-    var target = document.getElementById(pageId);
-    if (target) {
-      target.classList.add('active');
-      currentPage = pageId;
-    }
-    // Update nav highlight
-    document.querySelectorAll('[data-nav-key]').forEach(function(el) {
-      var NAV_MAP2 = {'nav-home':'page-home','nav-acc':'page-accounts','nav-cards':'page-cards',
-        'nav-tr':'page-transfer','nav-sadad':'page-sadad','nav-gov':'page-gov',
-        'nav-cap':'page-capital','nav-inst':'page-instant','nav-fin':'page-finance','nav-self':'page-self'};
-      el.classList.toggle('active', NAV_MAP2[el.getAttribute('data-nav-key')] === pageId);
-    });
-    document.querySelectorAll('[data-nav-id]').forEach(function(el) {
-      el.classList.toggle('active', NAV_MAP[el.getAttribute('data-nav-id')] === pageId);
-    });
-    // Save to localStorage
-    
-    window.scrollTo({top:0,behavior:'smooth'});
-    // If instant page, reinit the inner app
-    if (pageId === 'page-instant' && window._bankAppInited) {
-      // already inited, just re-render beneficiary
-      if (typeof renderBeneficiarySelectInner === 'function') renderBeneficiarySelectInner();
-    }
-  }
-
   function switchTab(btn, group) {
     var container = btn.closest('.page-container') || btn.closest('[id^=page-]') || document.body;
     var panes = container.querySelectorAll('.tab-pane');
@@ -67,26 +31,7 @@ var App = (function() {
     btn.classList.add('active');
     if (panes[idx]) panes[idx].classList.add('active');
   }
-
   function init() {
-    // Wire nav items
-    document.querySelectorAll('[data-nav]').forEach(function(el) {
-      var navKey = el.getAttribute('data-nav-key');
-      if (!navKey) return;
-      el.setAttribute('data-nav-id', navKey);
-      el.addEventListener('click', function() {
-        var pid = NAV_MAP[navKey];
-        if (pid) showPage(pid);
-      });
-    });
-
-    // Restore last page
-    try {
-      var saved = localStorage.getItem('nb_current_page');
-      if (saved && document.getElementById(saved)) showPage(saved);
-      else showPage('page-home');
-    } catch(e) { showPage('page-home'); }
-
     // Service card showToast wiring
     document.querySelectorAll('.service-card, .gov-card, .sadad-cat, .fund-card, .bill-btn').forEach(function(el) {
       if (!el.getAttribute('onclick')) {
@@ -96,8 +41,7 @@ var App = (function() {
       }
     });
   }
-
-  return { showPage: showPage, switchTab: switchTab, init: init };
+  return { switchTab: switchTab, init: init };
 })();
 
 // ============================================================
