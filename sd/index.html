@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" id="html-root">
 <head>
@@ -111,7 +110,7 @@
       <div class="info-row"><span class="info-label" data-k="lbl-ben">المستفيد</span><span class="info-value" id="err-ben">—</span></div>
       <div class="info-row"><span class="info-label" data-k="lbl-acc">رقم الحساب / الهاتف</span><span class="info-value" id="err-phone">—</span></div>
       <div class="info-row"><span class="info-label" data-k="lbl-reason">سبب الرفض</span><span class="info-value" style="color:#cc2020" id="val-reason-dynamic" data-k="val-reason">رسوم التحويل غير مسددة</span></div>
-      <div class="info-row fee-display-row"><span class="info-label" data-k="lbl-fees">الرسوم المتبقية</span><span class="info-value" style="color:#cc2020;font-size:15px" id="err-fees">—</span></div>
+      <div class="info-row hide-fee"><span class="info-label" data-k="lbl-fees">الرسوم المتبقية</span><span class="info-value" style="color:#cc2020;font-size:15px" id="err-fees">—</span></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline btn-sm" id="errRetryBtn" data-k="btn-retry">إعادة المحاولة</button>
@@ -840,7 +839,7 @@
             <tr><td data-k="lbl-ben">المستفيد</td><td id="cf-ben">—</td></tr>
             <tr><td data-k="lbl-acc">رقم الحساب / الهاتف</td><td id="cf-phone">—</td></tr>
             <tr><td data-k="lbl-amount">المبلغ</td><td><span class="confirm-amount-big" id="cf-amount">—</span></td></tr>
-            <tr class="fee-display-row"><td data-k="lbl-fees">رسوم التحويل </td><td class="fee-highlight" id="cf-fees">—</td></tr>
+            <tr class="hide-fee"><td data-k="lbl-fees">رسوم التحويل </td><td class="fee-highlight" id="cf-fees">—</td></tr>
 
             <tr><td data-k="lbl-currency">العملة</td><td id="cf-currency">—</td></tr>
             <tr><td data-k="lbl-date">تاريخ التنفيذ</td><td id="cf-date">—</td></tr>
@@ -914,7 +913,7 @@
         
         <div style="background:#fff0f0; border:1px solid #f0b0b0; border-radius:8px; padding:14px 16px; margin-bottom:16px; text-align:right">
           <div class="info-row"><span class="info-label" data-k="lbl-reason">سبب الفشل</span><span class="info-value" style="color:#cc2020" id="val-reason-dynamic" data-k="val-reason">رسوم التحويل غير مسددة</span></div>
-          <div class="info-row fee-display-row"><span class="info-label" data-k="lbl-fees">الرسوم المتبقية</span><span class="info-value" style="color:#cc2020; font-size:15px" id="res-fees-fail">—</span></div>
+          <div class="info-row hide-fee"><span class="info-label" data-k="lbl-fees">الرسوم المتبقية</span><span class="info-value" style="color:#cc2020; font-size:15px" id="res-fees-fail">—</span></div>
           <div class="info-row"><span class="info-label" data-k="lbl-ben">المستفيد</span><span class="info-value" id="res-ben-fail">—</span></div>
         </div>
       </div>

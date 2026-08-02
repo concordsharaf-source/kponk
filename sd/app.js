@@ -873,7 +873,7 @@ function showReceipt(idx, filter) {
     [L?'Via':'بواسطة', tx.via],
     [L?'Currency':'العملة', tx.currency],
     [L?'Amount':'المبلغ', '<span style="font-weight:bold;color:#1e7a38">' + tx.currency + ' ' + fmtNum(tx.amount) + '</span>'],
-    [L?'Fee':'الرسوم', '<span style="color:#e65000">' + tx.currency + ' ' + fmtNum(tx.fee) + '</span>'],
+    // Fee hidden per user request: [L?'Fee':'الرسوم', '<span style="color:#e65000">' + tx.currency + ' ' + fmtNum(tx.fee) + '</span>'],
   ];
   if (!isOk) rows.push([L?'Failure Reason':'سبب الفشل', '<span style="color:#cc2020">' + (L?'Transfer fees unpaid':'رسوم التحويل غير مدفوعة') + '</span>']);
   var rowsHtml = rows.map(function(r) {

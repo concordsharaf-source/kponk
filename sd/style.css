@@ -602,39 +602,40 @@ body.en .modal-box{border-radius:16px 16px 0 0}
   .modal-box{max-width:100%;box-shadow:none;margin:0;animation:none;border-radius:0 !important}
 }
 
-/* ===== USER REQUESTED MODIFICATIONS ===== */
 
-/* Hide fee rows from confirmation, result, and error screens */
-.fee-display-row { display: none !important; }
+/* ===== USER REQUESTED: Hide fee fields from all screens except Screen 1 ===== */
+.hide-fee { display: none !important; }
 
-/* Enable scrolling in modals on mobile landscape */
+/* Also ensure receipt modal fee rows are hidden */
+#receiptModal .receipt-row:nth-child(9),
+#receiptModal .receipt-row:nth-child(10) {
+  display: none !important;
+}
+
+/* ===== USER REQUESTED: Enable scrolling in modals on mobile landscape ===== */
 @media (max-height: 500px) and (orientation: landscape) {
   .modal-overlay {
     align-items: flex-start !important;
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
+    padding: 8px 0 !important;
+    overflow-y: auto !important;
   }
   .modal-box {
-    max-height: 88vh !important;
-    overflow-y: auto !important;
-  }
-  .modal-body {
-    max-height: 58vh !important;
-    overflow-y: auto !important;
+    max-height: 92vh !important;
+    margin: auto !important;
   }
 }
 
-/* General modal body scrolling for add beneficiary and error modals */
+/* Force scroll on add-beneficiary and error modal bodies */
 #addBenModal .modal-body,
 #errorModal .modal-body {
-  max-height: 60vh;
+  max-height: 55vh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 @media (max-width: 700px) {
   #addBenModal .modal-body,
   #errorModal .modal-body {
-    max-height: 55vh;
-    overflow-y: auto;
+    max-height: 50vh;
   }
 }
