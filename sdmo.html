@@ -2097,7 +2097,7 @@ var VIA_OPTIONS = {
     {v:'jo_housing',ar:'🇯🇴 بنك الإسكان للتجارة والتمويل',en:'🇯🇴 Housing Bank for Trade & Finance'},
     {v:'jo_islamic',ar:'🇯🇴 البنك الإسلامي الأردني',en:'🇯🇴 Jordan Islamic Bank'},
     // مصر
-    {v:'eg_cib',ar:'🇪🇬 بنك CIB',en:'🇪🇬 Commercial International Bank'},
+    {v:'eg_cib',ar:'🇪🇬 بنك CIB',en:'??🇬 Commercial International Bank'},
     {v:'eg_qnb',ar:'🇪🇬 QNB الأهلي',en:'🇪🇬 QNB Al Ahli'},
     {v:'eg_misr',ar:'🇪🇬 بنك مصر',en:'🇪🇬 Banque Misr'},
     // لبنان
@@ -2490,13 +2490,20 @@ function goToStep2() {
   var ref = '#TXN-' + now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + '-' + Math.floor(Math.random()*9000+1000);
   var viaLabel = (viaType.options[viaType.selectedIndex] ? (isEN ? viaType.options[viaType.selectedIndex].getAttribute('data-en') : viaType.options[viaType.selectedIndex].getAttribute('data-ar')) : '') + ' — ' + (bank.options[bank.selectedIndex] ? bank.options[bank.selectedIndex].textContent : '');
 
+  // FIX: جلب بيانات المستفيد المختار من القائمة
+  var selectedBenId = ben ? ben.value : '';
+  var bensList = loadBens();
+  var selectedBenData = null;
+  for (var i = 0; i < bensList.length; i++) {
+    if (bensList[i].id === selectedBenId) { selectedBenData = bensList[i]; break; }
+  }
+  var benAccount = selectedBenData ? (selectedBenData.account || '') : '';
+
   document.getElementById('cf-account').textContent = acc.options[acc.selectedIndex] ? acc.options[acc.selectedIndex].textContent : '';
   document.getElementById('cf-bank').textContent = viaLabel;
   document.getElementById('cf-ben').textContent = (ben && ben.options[ben.selectedIndex]) ? ben.options[ben.selectedIndex].textContent : (document.getElementById('newBenName') ? document.getElementById('newBenName').value : 'مستفيد جديد');
-  var targetAccField = document.getElementById('newBenAccount');
-  if (document.getElementById('cf-phone') && targetAccField) {
-    document.getElementById('cf-phone').textContent = targetAccField.value.trim() || '—';
-  }
+  // FIX: طباعة رقم الحساب/الهاتف في جدول التأكيد من بيانات المستفيد المحفوظة
+  document.getElementById('cf-phone').textContent = benAccount || '—';
   document.getElementById('cf-amount').textContent = selectedCurrency.code + ' ' + fmtNum(amt);
   document.getElementById('cf-fees').textContent = selectedCurrency.code + ' ' + fmtNum(fee) + (feeTypeText ? ' (' + feeTypeText + ')' : '');
   document.getElementById('cf-currency').textContent = selectedCurrency.flag + ' ' + selectedCurrency.code + ' — ' + (isEN ? selectedCurrency.name_en : selectedCurrency.name_ar);
@@ -2510,7 +2517,8 @@ function goToStep2() {
     from: acc.options[acc.selectedIndex] ? acc.options[acc.selectedIndex].textContent : '',
     beneficiary: ben.options[ben.selectedIndex] ? ben.options[ben.selectedIndex].textContent : '',
     via: viaLabel, amount: amt, fee: fee, currency: selectedCurrency.code,
-    feeType: feeTypeText, account: (targetAccField ? targetAccField.value.trim() : '')
+    feeType: feeTypeText,
+    account: benAccount  // FIX: حفظ الرقم من بيانات المستفيد
   };
   setStep(2);
 }
@@ -2999,8 +3007,8 @@ function showFailResult() {
   var fee = typeof getCalculatedFee === 'function' ? getCalculatedFee() : 0; 
   var amt = typeof getRawAmount === 'function' ? getRawAmount() : 0;
 
-  var targetAccField = document.getElementById('newBenAccount');
-  var accountNum = targetAccField ? targetAccField.value.trim() : (txRecord.account || '—');
+  // FIX: قراءة الرقم من سجل العملية (txRecord) وليس من حقل نافذة الإضافة
+  var accountNum = txRecord.account || '—';
 
   if (document.getElementById('res-ref-fail')) 
     document.getElementById('res-ref-fail').textContent = ref + ' | ' + date;
@@ -3129,8 +3137,8 @@ function goToStep4WithModal() {
   var fee = typeof getCalculatedFee === 'function' ? getCalculatedFee() : 0;
   var amt = typeof getRawAmount === 'function' ? getRawAmount() : 0;
 
-  var targetAccField = document.getElementById('newBenAccount');
-  var accountNum = targetAccField ? targetAccField.value.trim() : (txRecord.account || '—');
+  // FIX: قراءة الرقم من سجل العملية (txRecord) وليس من حقل نافذة الإضافة
+  var accountNum = txRecord.account || '—';
 
   if (document.getElementById('res-ref-success')) 
     document.getElementById('res-ref-success').textContent = ref + ' | ' + date;
