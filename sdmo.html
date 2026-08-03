@@ -2440,7 +2440,7 @@ function renderHistoryTable(filter) {
     var si = tx.status==='success' ? '✅' : tx.status==='fail' ? '❌' : '⏳';
     var detailLabel = isEN ? 'Details' : 'تفاصيل';
     html += '<tr>';
-    html += '<td>' + tx.beneficiary + '</td>';
+    html += '<td style="font-size:15px;font-weight:bold;color:#1a3a5c">' + tx.beneficiary + '</td>';
     html += '<td style="white-space:nowrap;font-weight:bold">' + tx.currency + ' ' + fmtNum(tx.amount) + '</td>';
     html += '<td><span class="badge ' + bc + '">' + si + ' ' + sl + '</span></td>';
     html += '<td><button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px" data-receipt-idx="' + idx + '" data-receipt-filter="' + filter + '">' + detailLabel + '</button></td>';
