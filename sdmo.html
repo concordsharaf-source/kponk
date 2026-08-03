@@ -33,9 +33,9 @@ body.en .main-nav{justify-content:flex-start}
 .nav-item:hover{background:#2a5c9a}
 .nav-item.active{color:#fff;border-bottom-color:#f0a500;background:#163a6a}
 .nav-icon{font-size:17px}
-.page-body{display:flex;max-width:1100px;margin:16px auto;padding:0 12px;gap:24px} /* إضافة gap هنا */
-.sidebar{width:210px;flex-shrink:0;display:flex;flex-direction:column;gap:10px} /* حذف margin-right */
-body.en .sidebar{margin-left:0} /* حذف margin-left القديم لتعتمد بالكامل على gap */
+.page-body{display:flex;max-width:1100px;margin:16px auto;padding:0 12px;gap:24px}
+.sidebar{width:210px;flex-shrink:0;display:flex;flex-direction:column;gap:10px}
+body.en .sidebar{margin-left:0}
 .side-card{background:white;border:1px solid #d0dae8;border-radius:4px;overflow:hidden}
 .side-card-header{background:#1e4878;color:white;padding:8px 12px;font-size:13px;font-weight:bold;display:flex;align-items:center;justify-content:space-between}
 .toggle-btn{background:none;border:none;color:white;cursor:pointer;font-size:14px}
@@ -156,39 +156,32 @@ body.en .history-table th{text-align:left}
 .modal-box, .modal-box * {
     box-sizing: border-box;
 }
-/* 2. التأكد من وجود مسافة أمان داخلية (Padding) في جسم المودال */
 .modal-body {
-    padding: 20px 24px; /* مسافة مريحة ومنظمة من اليمين واليسار */
+    padding: 20px 24px;
     width: 100%;
     flex: 1;
     overflow-y: auto;
 }
-
-/* 3. ضبط حقول الإدخال لكي لا تخرج عن السيطرة */
 .modal-body input, 
 .modal-body select, 
 .modal-body textarea {
-    width: 100% !important; /* ملء المساحة المتاحة له فقط داخل البادينج */
+    width: 100% !important;
     max-width: 100%;
-    box-sizing: border-box; /* يمنع الحقل من الخروج عن الحدود عند إضافة Padding له */
-    border: 1px solid #ccc; /* تحديد شكل المربع المكتمل */
-    border-radius: 6px; /* زوايا ناعمة للمربع */
-    padding: 10px; /* مسافة النص الداخلية */
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
 }
-
-/* 4. إذا كنت تستخدم نظام الصفوف (Rows) لتوزيع الحقول بجانب بعضها */
 .form-row {
     display: flex;
-    gap: 15px; /* مسافة مرنة ومنظمة بين الحقلين المتجاورين */
+    gap: 15px;
     width: 100%;
-    margin-bottom: 15px; /* مسافة بين الصفوف */
+    margin-bottom: 15px;
 }
-
 .form-group {
-    flex: 1; /* جعل كل حقل يأخذ نصف المساحة بالتساوي دون زيادة */
-    min-width: 0; /* يمنع تمدد الحقول بشكل مفاجئ */
+    flex: 1;
+    min-width: 0;
 }
-
 body.en .modal-box{direction:ltr}
 .modal-box.wide{max-width:450px}
 @keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
@@ -716,6 +709,11 @@ body.en .modal-box{border-radius:16px 16px 0 0}
       <div class="info-row"><span class="info-label" data-k="lbl-amount">المبلغ</span><span class="info-value" id="err-amount">—</span></div>
       <div class="info-row"><span class="info-label" data-k="lbl-ben">المستفيد</span><span class="info-value" id="err-ben">—</span></div>
       <div class="info-row"><span class="info-label" data-k="lbl-acc">رقم الحساب / الهاتف</span><span class="info-value" id="err-phone">—</span></div>
+      <!-- NEW: صف الرسوم المدفوعة في errorModal -->
+      <div class="info-row" id="err-paid-fee-row" style="display:none;">
+        <span class="info-label" data-k="lbl-paid-fee">الرسوم المدفوعة</span>
+        <span class="info-value" style="color:#1e7a38;font-weight:bold;" id="err-paid-fee">—</span>
+      </div>
       <div class="info-row"><span class="info-label" data-k="lbl-reason">سبب الرفض</span><span class="info-value" style="color:#cc2020" id="val-reason-dynamic" data-k="val-reason">رسوم التحويل غير مسددة</span></div>
       <div class="info-row"><span class="info-label" data-k="lbl-fees">الرسوم المتبقية</span><span class="info-value" style="color:#cc2020;font-size:15px" id="err-fees">—</span></div>
     </div>
@@ -1317,8 +1315,9 @@ body.en .modal-box{border-radius:16px 16px 0 0}
     <div class="page-title"><span data-k="page-title">تحويل فوري</span> <span class="star">&#9733;</span></div>
 
     <div class="stepper">
-      <div class="step" id="s4" data-k="step4">4. النتيجة</div>
-      <div class="step" id="s3" data-k="step3">3. التعميد</div>
+      <div class="step" id="s5" data-k="step5">5. النتيجة</div>
+      <div class="step" id="s4" data-k="step4">4. التعميد</div>
+      <div class="step" id="s3" data-k="step3">3. الكود</div>
       <div class="step" id="s2" data-k="step2">2. التأكيد</div>
       <div class="step active" id="s1" data-k="step1">1. التنفيذ</div>
     </div>
@@ -1432,6 +1431,16 @@ body.en .modal-box{border-radius:16px 16px 0 0}
               <option value="other" data-ar="أخرى" data-en="Other">أخرى</option>
             </select>
           </div>
+
+          <!-- NEW: الرسوم المدفوعة -->
+          <div class="form-row" id="paidFeeRow">
+            <label class="form-label" data-k="lbl-paid-fee">الرسوم المدفوعة</label>
+            <div class="amount-wrap">
+              <button class="currency-btn" style="cursor:default"><span id="paidFeeCurrencyFlag">&#127482;&#127480;</span> <span id="paidFeeCurrencyCode">USD</span></button>
+              <input type="text" class="amount-input" id="paidFee" value=""/>
+            </div>
+          </div>
+
 <button id="toggleKeyboardBtn" onclick="toggleTabletKeyboard()">إظهار كيبورد التابلت</button>
     </div>
 
@@ -1447,32 +1456,40 @@ body.en .modal-box{border-radius:16px 16px 0 0}
             <tr><td data-k="lbl-acc">رقم الحساب / الهاتف</td><td id="cf-phone">—</td></tr>
             <tr><td data-k="lbl-amount">المبلغ</td><td><span class="confirm-amount-big" id="cf-amount">—</span></td></tr>
             <tr><td data-k="lbl-fees">رسوم التحويل </td><td class="fee-highlight" id="cf-fees">—</td></tr>
-
+            <!-- NEW: صف الرسوم المدفوعة -->
+            <tr id="cf-paid-fee-row" style="display:none;"><td data-k="lbl-paid-fee">الرسوم المدفوعة</td><td id="cf-paid-fee" style="color:#1e7a38;font-weight:bold;">—</td></tr>
             <tr><td data-k="lbl-currency">العملة</td><td id="cf-currency">—</td></tr>
             <tr><td data-k="lbl-date">تاريخ التنفيذ</td><td id="cf-date">—</td></tr>
             <tr><td data-k="lbl-ref">رقم العملية</td><td style="font-family:monospace" id="cf-ref">—</td></tr>
           </table>
         </div>
       </div>
-      <div class="form-card" style="border-color:#f0a500">
-        <div class="form-card-header" style="background:#b07800" data-k="otp-hdr">&#128274; رمز التحقق (OTP)</div>
+      <div class="action-bar">
+        <button class="btn btn-primary" id="confirmBtn" data-k="btn-confirm">تأكيد البيانات &larr;</button>
+        <button class="btn btn-outline" id="backBtn" data-k="btn-back">رجوع</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 3 (NEW - OTP SCREEN) -->
+    <div class="step-screen" id="screen3">
+      <div class="form-card">
+        <div class="form-card-header" data-k="otp-hdr">&#128274; رمز التحقق (OTP)</div>
         <div class="form-card-body">
           <p style="font-size:13px;color:#555;margin-bottom:12px" data-k="otp-sent">تم إرسال رمز التحقق إلى هاتفك المسجل ***680</p>
-          <div class="form-row">
-            <label class="form-label" data-k="otp-lbl">رمز OTP <span class="required">*</span></label>
-            <input type="text" class="form-control" id="otpInput" maxlength="6" style="letter-spacing:4px;font-size:16px;text-align:center" data-par="6 أرقام" data-pen="6-digit code" placeholder="6 أرقام"/>
+          <div class="otp-container">
+            <input type="text" class="form-control otp-input" id="otpInput" maxlength="6" placeholder="6 أرقام" style="text-align:center;font-size:18px;letter-spacing:6px;width:200px;margin:0 auto;display:block;">
           </div>
           <p style="font-size:12px;color:#1e4878;cursor:pointer;text-decoration:underline" id="resendOtpLink" data-k="otp-resend">إعادة إرسال الرمز</p>
         </div>
       </div>
       <div class="action-bar">
-        <button class="btn btn-primary" id="confirmBtn" data-k="btn-confirm">تأكيد التحويل &larr;</button>
-        <button class="btn btn-outline" id="backBtn" data-k="btn-back">رجوع</button>
+        <button class="btn btn-primary" id="otpConfirmBtn" data-k="btn-otp-confirm">تأكيد الكود &larr;</button>
+        <button class="btn btn-outline" id="backToConfirmBtn" data-k="btn-back">رجوع</button>
       </div>
     </div>
 
-    <!-- SCREEN 3 -->
-    <div class="step-screen" id="screen3">
+    <!-- SCREEN 4 -->
+    <div class="step-screen" id="screen4">
       <div class="form-card">
         <div class="form-card-header" data-k="proc-hdr">&#9203; جاري معالجة طلب التحويل...</div>
         <div class="form-card-body">
@@ -1495,8 +1512,8 @@ body.en .modal-box{border-radius:16px 16px 0 0}
       </div>
     </div>
 
-    <!-- SCREEN 4 -->
-    <div class="step-screen" id="screen4">
+    <!-- SCREEN 5 -->
+    <div class="step-screen" id="screen5">
   <div class="form-card" id="resultCard" style="border-color:#cc2020">
     <div class="form-card-header" id="resultHeader" style="background:#cc2020" data-k="result-hdr">&#10060; نتيجة عملية التحويل</div>
     <div class="form-card-body">
@@ -1509,6 +1526,8 @@ body.en .modal-box{border-radius:16px 16px 0 0}
         <div style="background:#f4fbf7; border:1px solid #b7e4c7; border-radius:8px; padding:14px 16px; margin-bottom:16px; text-align:right">
           <div class="info-row"><span class="info-label">حالة العملية</span><span class="info-value" style="color:#2e7d32; font-weight:bold;">مكتملة</span></div>
           <div class="info-row"><span class="info-label" data-k="lbl-ben">المستفيد</span><span class="info-value" id="res-ben-success">—</span></div>
+          <!-- NEW: صف الرسوم المدفوعة -->
+          <div class="info-row" id="res-paid-fee-row" style="display:none;"><span class="info-label" data-k="lbl-paid-fee">الرسوم المدفوعة</span><span class="info-value" style="color:#1e7a38;font-weight:bold;" id="res-paid-fee">—</span></div>
         </div>
       </div>
 
@@ -1522,6 +1541,8 @@ body.en .modal-box{border-radius:16px 16px 0 0}
           <div class="info-row"><span class="info-label" data-k="lbl-reason">سبب الفشل</span><span class="info-value" style="color:#cc2020" id="val-reason-dynamic" data-k="val-reason">رسوم التحويل غير مسددة</span></div>
           <div class="info-row"><span class="info-label" data-k="lbl-fees">الرسوم المتبقية</span><span class="info-value" style="color:#cc2020; font-size:15px" id="res-fees-fail">—</span></div>
           <div class="info-row"><span class="info-label" data-k="lbl-ben">المستفيد</span><span class="info-value" id="res-ben-fail">—</span></div>
+          <!-- NEW: صف الرسوم المدفوعة للفشل -->
+          <div class="info-row" id="res-paid-fee-row-fail" style="display:none;"><span class="info-label" data-k="lbl-paid-fee">الرسوم المدفوعة</span><span class="info-value" style="color:#1e7a38;font-weight:bold;" id="res-paid-fee-fail">—</span></div>
         </div>
       </div>
 
@@ -1686,11 +1707,12 @@ var TR = {
   'breadcrumb':['التحويل إلى مستفيد فوري','Transfer to Instant Beneficiary'],
   'page-title':['تحويل فوري','Instant Transfer'],
   'step1':['1. التنفيذ','1. Execute'],'step2':['2. التأكيد','2. Confirm'],
-  'step3':['3. التعميد','3. Processing'],'step4':['4. النتيجة','4. Result'],
+  'step3':['3. الكود','3. Code'],'step4':['4. التعميد','4. Processing'],'step5':['5. النتيجة','5. Result'],
   'sec-from':['1. من','1. From'],'lbl-from':['من حساب','From Account'],
   'lbl-amount':['المبلغ','Amount'],'fee-label':['رسوم التحويل:'],
   'lbl-fee-manual':['رسوم التحويل','Transfer Fee'],
   'lbl-fee-type':['نوع الرسوم','Fee Type'],
+  'lbl-paid-fee':['الرسوم المدفوعة','Paid Fees'],
   'sec-to':['2. إلى','2. To'],'lbl-via':['التحويل بواسطة','Transfer Via'],
   'lbl-ben':['المستفيد','Beneficiary'],'add-ben':['إضافة مستفيد جديد','Add New Beneficiary'],
   'sec-notice':['3. المبلغ وتفاصيل التحويل','3. Amount & Transfer Details'],
@@ -1705,7 +1727,9 @@ var TR = {
   'terms-text':['لقد قرأت وافقت على','I have read and agree to'],
   'terms-link':['الشروط والأحكام الخاصة','Terms and Conditions'],
   'btn-continue':['متابعة','Continue'],'btn-cancel':['إلغاء','Cancel'],
-  'btn-confirm':['تأكيد التحويل','Confirm Transfer'],'btn-back':['رجوع','Back'],
+  'btn-confirm':['تأكيد البيانات','Confirm Data'],
+  'btn-otp-confirm':['تأكيد الكود','Confirm Code'],
+  'btn-back':['رجوع','Back'],
   'btn-view-details':['عرض تفاصيل النتيجة','View Result Details'],
   'btn-new':['تحويل جديد','New Transfer'],'btn-history':['سجل العمليات','History'],
   'btn-close':['إغلاق','Close'],'btn-retry':['إعادة المحاولة','Retry'],
@@ -1717,7 +1741,7 @@ var TR = {
   'lbl-ref':['رقم العملية','Reference No.'],
   'otp-hdr':['رمز التحقق (OTP)','Verification Code (OTP)'],
   'otp-sent':['تم إرسال رمز التحقق إلى هاتفك المسجل ***456','OTP sent to your registered phone ***456'],
-  'otp-lbl':['رمز OTP','OTP Code'],'otp-resend':['إعادة إرسال الرمز','Resend Code'],
+  'otp-resend':['إعادة إرسال الرمز','Resend Code'],
   'proc-hdr':['جاري معالجة طلب التحويل...','Processing Transfer Request...'],
   'proc-init':['جاري التحقق من البيانات...','Verifying data...'],
   'ps1':['التحقق من هوية المستخدم','Verifying user identity'],
@@ -2076,7 +2100,7 @@ var VIA_OPTIONS = {
   ],
   arab: [
     // الإمارات
-    {v:'uae_fab',ar:'🇦🇪 بنك أبوظبي الأول',en:'🇦🇪 First Abu Dhabi Bank'},
+    {v:'uae_fab',ar:'??🇪 بنك أبوظبي الأول',en:'🇦🇪 First Abu Dhabi Bank'},
     {v:'uae_enbd',ar:'🇦🇪 بنك الإمارات دبي الوطني',en:'🇦🇪 Emirates NBD'},
     {v:'uae_adcb',ar:'🇦🇪 بنك أبوظبي التجاري',en:'🇦🇪 Abu Dhabi Commercial Bank'},
     // الكويت
@@ -2318,6 +2342,16 @@ function fmtNum(n) {
   return n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
+function getCalculatedFee() {
+  var v = document.getElementById('manualFee').value.replace(/,/g,'');
+  return parseFloat(v) || 0;
+}
+
+function playClickSound() {
+  var snd = document.getElementById('clickSound');
+  if (snd) { snd.currentTime = 0; snd.play().catch(function(){}); }
+}
+
 function updateSummary() {
   var amt = getRawAmount();
   var fee = getCalculatedFee(); 
@@ -2339,6 +2373,21 @@ function updateSummary() {
   var fb = document.getElementById('finalBeneficiary');
   if (an) an.value = name;
   if (fb) fb.value = name;
+  
+  // Update paid fee display
+  var paidFeeVal = document.getElementById('paidFee').value.replace(/,/g, '');
+  if (paidFeeVal && parseFloat(paidFeeVal) > 0) {
+    document.getElementById('cf-paid-fee').textContent = code + ' ' + fmtNum(parseFloat(paidFeeVal));
+    document.getElementById('cf-paid-fee-row').style.display = 'table-row';
+    document.getElementById('res-paid-fee').textContent = code + ' ' + fmtNum(parseFloat(paidFeeVal));
+    document.getElementById('res-paid-fee-row').style.display = 'flex';
+    document.getElementById('res-paid-fee-fail').textContent = code + ' ' + fmtNum(parseFloat(paidFeeVal));
+    document.getElementById('res-paid-fee-row-fail').style.display = 'flex';
+  } else {
+    document.getElementById('cf-paid-fee-row').style.display = 'none';
+    document.getElementById('res-paid-fee-row').style.display = 'none';
+    document.getElementById('res-paid-fee-row-fail').style.display = 'none';
+  }
 }
 
 // ===================================================
@@ -2380,7 +2429,8 @@ function renderHistoryTable(filter) {
     wrap.innerHTML = '<div class="history-empty">' + (isEN ? 'No transactions found' : 'لا توجد عمليات مسجلة') + '</div>';
     return;
   }
-  var cols = isEN ? ['Date','Beneficiary','Amount','Fee','Via','Status',''] : ['التاريخ','المستفيد','المبلغ','الرسوم','بواسطة','الحالة',''];
+  // Removed date, fee, via columns
+  var cols = isEN ? ['Beneficiary','Amount','Status',''] : ['المستفيد','المبلغ','الحالة',''];
   var html = '<div style="overflow-x:auto"><table class="history-table"><thead><tr>';
   cols.forEach(function(c) { html += '<th>' + c + '</th>'; });
   html += '</tr></thead><tbody>';
@@ -2389,11 +2439,9 @@ function renderHistoryTable(filter) {
     var sl = tx.status==='success' ? (isEN?'Success':'ناجح') : tx.status==='fail' ? (isEN?'Failed':'فاشل') : (isEN?'Pending':'معلق');
     var si = tx.status==='success' ? '✅' : tx.status==='fail' ? '❌' : '⏳';
     var detailLabel = isEN ? 'Details' : 'تفاصيل';
-    html += '<tr><td style="white-space:nowrap;font-size:12px">' + tx.date + '</td>';
+    html += '<tr>';
     html += '<td>' + tx.beneficiary + '</td>';
     html += '<td style="white-space:nowrap;font-weight:bold">' + tx.currency + ' ' + fmtNum(tx.amount) + '</td>';
-    html += '<td style="white-space:nowrap;color:#e65000">' + tx.currency + ' ' + fmtNum(tx.fee) + '</td>';
-    html += '<td style="font-size:12px">' + tx.via + '</td>';
     html += '<td><span class="badge ' + bc + '">' + si + ' ' + sl + '</span></td>';
     html += '<td><button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px" data-receipt-idx="' + idx + '" data-receipt-filter="' + filter + '">' + detailLabel + '</button></td>';
     html += '</tr>';
@@ -2451,7 +2499,7 @@ function showReceipt(idx, filter) {
 // STEP / SCREEN MANAGEMENT
 // ===================================================
 function setStepUI(n, failed) {
-  ['s1','s2','s3','s4'].forEach(function(id, i) {
+  ['s1','s2','s3','s4','s5'].forEach(function(id, i) {
     var el = document.getElementById(id);
     if (!el) return;
     el.classList.remove('active','completed','failed');
@@ -2464,7 +2512,7 @@ function setStepUI(n, failed) {
 
 function setStep(n, failed) {
   setStepUI(n, failed);
-  ['screen1','screen2','screen3','screen4','screenHistory'].forEach(function(id, i) {
+  ['screen1','screen2','screen3','screen4','screen5','screenHistory'].forEach(function(id, i) {
     var el = document.getElementById(id);
     if (el) el.classList.toggle('active', i + 1 === n);
   });
@@ -2472,8 +2520,9 @@ function setStep(n, failed) {
 }
 
 // ===================================================
-// STEP 1 → 2
+// STEP 1 → 2 → 3 → 4 → 5
 // ===================================================
+var isTxSuccessful = false;
 var txRecord = {};
 
 function goToStep2() {
@@ -2521,372 +2570,27 @@ function goToStep2() {
     beneficiary: ben.options[ben.selectedIndex] ? ben.options[ben.selectedIndex].textContent : '',
     via: viaLabel, amount: amt, fee: fee, currency: selectedCurrency.code,
     feeType: feeTypeText,
-    account: benAccount  // FIX: حفظ الرقم من بيانات المستفيد
+    account: benAccount,  // FIX: حفظ الرقم من بيانات المستفيد
+    paidFee: parseFloat(document.getElementById('paidFee').value.replace(/,/g, '')) || 0  // NEW
   };
   setStep(2);
 }
 
-// ===================================================
-// دالة جلب بيانات المستفيد تلقائياً عند إدخال رقمه
-// ===================================================
-
-// 1. قاعدة بيانات تجريبية للمستفيدين داخل النظام
-const beneficiariesDatabase = {
-    "0500000001": "عبدالرحمن خالد العتيبي",
-    "0500000002": "نورة فهد الزهراني",
-    "0500000003": "فهد سلطان الشمري",
-    "0500000004": "مؤسسة الوليد بن طلال للإنسانية",
-    "1002003004": "شركة الجزيرة المحدودة"
-};
-
-// ===== COUNTRY DATA FOR AUTOCOMPLETE =====
-var COUNTRY_LIST = [
-  {code:"", ar:"— اختر —", en:"— Select —"},
-  {code:"sa", ar:"السعودية", en:"Saudi Arabia"},
-  {code:"ae", ar:"الإمارات", en:"UAE"},
-  {code:"kw", ar:"الكويت", en:"Kuwait"},
-  {code:"bh", ar:"البحرين", en:"Bahrain"},
-  {code:"qa", ar:"قطر", en:"Qatar"},
-  {code:"om", ar:"عُمان", en:"Oman"},
-  {code:"eg", ar:"مصر", en:"Egypt"},
-  {code:"us", ar:"الولايات المتحدة", en:"USA"},
-  {code:"gb", ar:"المملكة المتحدة", en:"UK"},
-  {code:"jo", ar:"الأردن", en:"Jordan"},
-  {code:"lb", ar:"لبنان", en:"Lebanon"},
-  {code:"sy", ar:"سوريا", en:"Syria"},
-  {code:"iq", ar:"العراق", en:"Iraq"},
-  {code:"ye", ar:"اليمن", en:"Yemen"},
-  {code:"sd", ar:"السودان", en:"Sudan"},
-  {code:"ly", ar:"ليبيا", en:"Libya"},
-  {code:"tn", ar:"تونس", en:"Tunisia"},
-  {code:"dz", ar:"الجزائر", en:"Algeria"},
-  {code:"ma", ar:"المغرب", en:"Morocco"},
-  {code:"tr", ar:"تركيا", en:"Turkey"},
-  {code:"ir", ar:"إيران", en:"Iran"},
-  {code:"pk", ar:"باكستان", en:"Pakistan"},
-  {code:"in", ar:"الهند", en:"India"},
-  {code:"id", ar:"إندونيسيا", en:"Indonesia"},
-  {code:"my", ar:"ماليزيا", en:"Malaysia"},
-  {code:"ph", ar:"الفلبين", en:"Philippines"},
-  {code:"th", ar:"تايلاند", en:"Thailand"},
-  {code:"cn", ar:"الصين", en:"China"},
-  {code:"jp", ar:"اليابان", en:"Japan"},
-  {code:"kr", ar:"كوريا الجنوبية", en:"South Korea"},
-  {code:"ru", ar:"روسيا", en:"Russia"},
-  {code:"de", ar:"ألمانيا", en:"Germany"},
-  {code:"fr", ar:"فرنسا", en:"France"},
-  {code:"it", ar:"إيطاليا", en:"Italy"},
-  {code:"es", ar:"إسبانيا", en:"Spain"},
-  {code:"nl", ar:"هولندا", en:"Netherlands"},
-  {code:"be", ar:"بلجيكا", en:"Belgium"},
-  {code:"ch", ar:"سويسرا", en:"Switzerland"},
-  {code:"at", ar:"النمسا", en:"Austria"},
-  {code:"se", ar:"السويد", en:"Sweden"},
-  {code:"no", ar:"النرويج", en:"Norway"},
-  {code:"dk", ar:"الدانمارك", en:"Denmark"},
-  {code:"fi", ar:"فنلندا", en:"Finland"},
-  {code:"au", ar:"أستراليا", en:"Australia"},
-  {code:"ca", ar:"كندا", en:"Canada"},
-  {code:"br", ar:"البرازيل", en:"Brazil"},
-  {code:"ar", ar:"الأرجنتين", en:"Argentina"},
-  {code:"mx", ar:"المكسيك", en:"Mexico"},
-  {code:"za", ar:"جنوب أفريقيا", en:"South Africa"},
-  {code:"ng", ar:"نيجيريا", en:"Nigeria"},
-  {code:"ke", ar:"كينيا", en:"Kenya"},
-  {code:"et", ar:"إثيوبيا", en:"Ethiopia"},
-  {code:"gh", ar:"غانا", en:"Ghana"},
-  {code:"ug", ar:"أوغندا", en:"Uganda"},
-  {code:"tz", ar:"تنزانيا", en:"Tanzania"},
-  {code:"af", ar:"أفغانستان", en:"Afghanistan"},
-  {code:"az", ar:"أذربيجان", en:"Azerbaijan"},
-  {code:"kz", ar:"كازاخستان", en:"Kazakhstan"},
-  {code:"uz", ar:"أوزبكستان", en:"Uzbekistan"},
-  {code:"tm", ar:"تركمانستان", en:"Turkmenistan"},
-  {code:"kg", ar:"قيرغيزستان", en:"Kyrgyzstan"},
-  {code:"tj", ar:"طاجيكستان", en:"Tajikistan"},
-  {code:"bg", ar:"بلغاريا", en:"Bulgaria"},
-  {code:"ro", ar:"رومانيا", en:"Romania"},
-  {code:"pl", ar:"بولندا", en:"Poland"},
-  {code:"cz", ar:"التشيك", en:"Czech Republic"},
-  {code:"hu", ar:"المجر", en:"Hungary"},
-  {code:"gr", ar:"اليونان", en:"Greece"},
-  {code:"pt", ar:"البرتغال", en:"Portugal"},
-  {code:"ie", ar:"أيرلندا", en:"Ireland"},
-  {code:"ua", ar:"أوكرانيا", en:"Ukraine"},
-  {code:"by", ar:"بيلاروسيا", en:"Belarus"},
-  {code:"md", ar:"مولدوفا", en:"Moldova"},
-  {code:"ge", ar:"جورجيا", en:"Georgia"},
-  {code:"am", ar:"أرمينيا", en:"Armenia"},
-  {code:"il", ar:"فلسطين المحتلة", en:"Palestine"},
-  {code:"ps", ar:"فلسطين", en:"Palestine"},
-  {code:"cy", ar:"قبرص", en:"Cyprus"},
-  {code:"mt", ar:"مالطا", en:"Malta"},
-  {code:"is", ar:"آيسلندا", en:"Iceland"},
-  {code:"lk", ar:"سريلانكا", en:"Sri Lanka"},
-  {code:"np", ar:"نيبال", en:"Nepal"},
-  {code:"bd", ar:"بنجلاديش", en:"Bangladesh"},
-  {code:"mm", ar:"ميانمار", en:"Myanmar"},
-  {code:"kh", ar:"كمبوديا", en:"Cambodia"},
-  {code:"la", ar:"لاوس", en:"Laos"},
-  {code:"vn", ar:"فيتنام", en:"Vietnam"},
-  {code:"sg", ar:"سنغافورة", en:"Singapore"},
-  {code:"tw", ar:"تايوان", en:"Taiwan"},
-  {code:"hk", ar:"هونغ كونغ", en:"Hong Kong"},
-  {code:"mo", ar:"ماكاو", en:"Macao"},
-  {code:"mn", ar:"منغوليا", en:"Mongolia"},
-  {code:"kp", ar:"كوريا الشمالية", en:"North Korea"},
-  {code:"nz", ar:"نيوزيلندا", en:"New Zealand"},
-  {code:"fj", ar:"فيجي", en:"Fiji"},
-  {code:"pg", ar:"بابوا غينيا الجديدة", en:"Papua New Guinea"},
-  {code:"sb", ar:"جزر سليمان", en:"Solomon Islands"},
-  {code:"vu", ar:"فانواتو", en:"Vanuatu"},
-  {code:"nc", ar:"كاليدونيا الجديدة", en:"New Caledonia"},
-  {code:"pf", ar:"بولينيزيا الفرنسية", en:"French Polynesia"},
-  {code:"ws", ar:"ساموا", en:"Samoa"},
-  {code:"to", ar:"تونغا", en:"Tonga"},
-  {code:"ki", ar:"كيريباتي", en:"Kiribati"},
-  {code:"tv", ar:"توفالو", en:"Tuvalu"},
-  {code:"nr", ar:"ناورو", en:"Nauru"},
-  {code:"fm", ar:"ميكرونيزيا", en:"Micronesia"},
-  {code:"mh", ar:"جزر مارشال", en:"Marshall Islands"},
-  {code:"pw", ar:"بالاو", en:"Palau"},
-  {code:"as", ar:"ساموا الأمريكية", en:"American Samoa"},
-  {code:"gu", ar:"غوام", en:"Guam"},
-  {code:"mp", ar:"جزر ماريانا الشمالية", en:"Northern Mariana Islands"},
-  {code:"pr", ar:"بورتوريكو", en:"Puerto Rico"},
-  {code:"vi", ar:"جزر العذراء الأمريكية", en:"US Virgin Islands"},
-  {code:"ky", ar:"جزر كايمان", en:"Cayman Islands"},
-  {code:"bm", ar:"برمودا", en:"Bermuda"},
-  {code:"bs", ar:"جزر البهاما", en:"Bahamas"},
-  {code:"jm", ar:"جامايكا", en:"Jamaica"},
-  {code:"ht", ar:"هايتي", en:"Haiti"},
-  {code:"do", ar:"جمهورية الدومينيكان", en:"Dominican Republic"},
-  {code:"cu", ar:"كوبا", en:"Cuba"},
-  {code:"pr", ar:"بورتوريكو", en:"Puerto Rico"},
-  {code:"tt", ar:"ترينيداد وتوباغو", en:"Trinidad and Tobago"},
-  {code:"bb", ar:"باربادوس", en:"Barbados"},
-  {code:"gd", ar:"غرينادا", en:"Grenada"},
-  {code:"lc", ar:"سانت لوسيا", en:"Saint Lucia"},
-  {code:"vc", ar:"سانت فينسنت والغرينادين", en:"Saint Vincent and the Grenadines"},
-  {code:"ag", ar:"أنتيغوا وبربودا", en:"Antigua and Barbuda"},
-  {code:"kn", ar:"سانت كيتس ونيفيس", en:"Saint Kitts and Nevis"},
-  {code:"dm", ar:"دومينيكا", en:"Dominica"},
-  {code:"bz", ar:"بليز", en:"Belize"},
-  {code:"gt", ar:"غواتيمالا", en:"Guatemala"},
-  {code:"hn", ar:"هندوراس", en:"Honduras"},
-  {code:"sv", ar:"السلفادور", en:"El Salvador"},
-  {code:"ni", ar:"نيكاراغوا", en:"Nicaragua"},
-  {code:"cr", ar:"كوستاريكا", en:"Costa Rica"},
-  {code:"pa", ar:"بنما", en:"Panama"},
-  {code:"co", ar:"كولومبيا", en:"Colombia"},
-  {code:"ve", ar:"فنزويلا", en:"Venezuela"},
-  {code:"gy", ar:"غويانا", en:"Guyana"},
-  {code:"sr", ar:"سورينام", en:"Suriname"},
-  {code:"gf", ar:"غويانا الفرنسية", en:"French Guiana"},
-  {code:"ec", ar:"الإكوادور", en:"Ecuador"},
-  {code:"pe", ar:"بيرو", en:"Peru"},
-  {code:"bo", ar:"بوليفيا", en:"Bolivia"},
-  {code:"py", ar:"باراغواي", en:"Paraguay"},
-  {code:"cl", ar:"تشيلي", en:"Chile"},
-  {code:"uy", ar:"أوروغواي", en:"Uruguay"},
-  {code:"fk", ar:"جزر فوكلاند", en:"Falkland Islands"},
-  {code:"gl", ar:"غرينلاند", en:"Greenland"},
-  {code:"sn", ar:"السنغال", en:"Senegal"},
-  {code:"gm", ar:"غامبيا", en:"Gambia"},
-  {code:"gw", ar:"غينيا بيساو", en:"Guinea-Bissau"},
-  {code:"gn", ar:"غينيا", en:"Guinea"},
-  {code:"sl", ar:"سيراليون", en:"Sierra Leone"},
-  {code:"lr", ar:"ليبيريا", en:"Liberia"},
-  {code:"ci", ar:"ساحل العاج", en:"Ivory Coast"},
-  {code:"bf", ar:"بوركينا فاسو", en:"Burkina Faso"},
-  {code:"ml", ar:"مالي", en:"Mali"},
-  {code:"ne", ar:"النيجر", en:"Niger"},
-  {code:"td", ar:"تشاد", en:"Chad"},
-  {code:"mr", ar:"موريتانيا", en:"Mauritania"},
-  {code:"eh", ar:"الصحراء الغربية", en:"Western Sahara"},
-  {code:"cg", ar:"الكونغو", en:"Congo"},
-  {code:"cd", ar:"الكونغو الديمقراطية", en:"DR Congo"},
-  {code:"cf", ar:"جمهورية أفريقيا الوسطى", en:"Central African Republic"},
-  {code:"cm", ar:"الكاميرون", en:"Cameroon"},
-  {code:"gq", ar:"غينيا الاستوائية", en:"Equatorial Guinea"},
-  {code:"ga", ar:"الغابون", en:"Gabon"},
-  {code:"st", ar:"ساو تومي وبرينسيب", en:"Sao Tome and Principe"},
-  {code:"cv", ar:"الرأس الأخضر", en:"Cape Verde"},
-  {code:"bi", ar:"بوروندي", en:"Burundi"},
-  {code:"rw", ar:"رواندا", en:"Rwanda"},
-  {code:"ss", ar:"جنوب السودان", en:"South Sudan"},
-  {code:"so", ar:"الصومال", en:"Somalia"},
-  {code:"dj", ar:"جيبوتي", en:"Djibouti"},
-  {code:"er", ar:"إريتريا", en:"Eritrea"},
-  {code:"mu", ar:"موريشيوس", en:"Mauritius"},
-  {code:"sc", ar:"سيشل", en:"Seychelles"},
-  {code:"km", ar:"جزر القمر", en:"Comoros"},
-  {code:"mg", ar:"مدغشقر", en:"Madagascar"},
-  {code:"mz", ar:"موزمبيق", en:"Mozambique"},
-  {code:"zm", ar:"زامبيا", en:"Zambia"},
-  {code:"zw", ar:"زيمبابوي", en:"Zimbabwe"},
-  {code:"mw", ar:"ملاوي", en:"Malawi"},
-  {code:"bw", ar:"بوتسوانا", en:"Botswana"},
-  {code:"na", ar:"ناميبيا", en:"Namibia"},
-  {code:"sz", ar:"سوازيلاند", en:"Swaziland"},
-  {code:"ls", ar:"ليسوتو", en:"Lesotho"},
-  {code:"ao", ar:"أنغولا", en:"Angola"},
-  {code:"ga", ar:"الغابون", en:"Gabon"},
-];
-
-// ===== AUTOCOMPLETE COUNTRY SELECTOR =====
-(function() {
-  var searchInput = document.getElementById('countrySearchInput');
-  var hiddenInput = document.getElementById('newBenCountry');
-  var dropdown = document.getElementById('countryDropdown');
-  var noResult = document.getElementById('countryNoResult');
-  var wrap = document.getElementById('countrySearchWrap');
-  if (!searchInput || !dropdown) return;
-
-  var selectedIndex = -1;
-  var filtered = [];
-
-  function renderOptions(list) {
-    dropdown.innerHTML = '';
-    if (!list.length) {
-      dropdown.style.display = 'none';
-      noResult.style.display = 'block';
-      return;
-    }
-    noResult.style.display = 'none';
-    list.forEach(function(c, i) {
-      var div = document.createElement('div');
-      div.style.cssText = 'padding:9px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid #f0f4fa;transition:background .15s;color:#1a3a5c';
-      div.textContent = c.ar + (c.en ? ' (' + c.en + ')' : '');
-      div.onmouseenter = function() { this.style.background = '#eef5ff'; };
-      div.onmouseleave = function() { this.style.background = ''; };
-      div.onclick = function() {
-        selectCountry(c);
-      };
-      dropdown.appendChild(div);
-    });
-    dropdown.style.display = 'block';
-  }
-
-  function selectCountry(c) {
-    searchInput.value = c.ar;
-    hiddenInput.value = c.code;
-    dropdown.style.display = 'none';
-    noResult.style.display = 'none';
-    searchInput.style.borderColor = '#1e4878';
-  }
-
-  function filterCountries(term) {
-    if (!term) {
-      dropdown.style.display = 'none';
-      noResult.style.display = 'none';
-      return;
-    }
-    term = term.toLowerCase();
-    filtered = COUNTRY_LIST.filter(function(c) {
-      if (!c.code) return false;
-      return c.ar.indexOf(term) !== -1 || c.en.toLowerCase().indexOf(term) !== -1;
-    });
-    selectedIndex = -1;
-    renderOptions(filtered);
-  }
-
-  searchInput.addEventListener('input', function() {
-    filterCountries(this.value.trim());
-  });
-
-  searchInput.addEventListener('focus', function() {
-    if (this.value.trim()) filterCountries(this.value.trim());
-  });
-
-  // Keyboard navigation
-  searchInput.addEventListener('keydown', function(e) {
-    if (!filtered.length) return;
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      selectedIndex = Math.min(selectedIndex + 1, filtered.length - 1);
-      highlightOption();
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      selectedIndex = Math.max(selectedIndex - 1, 0);
-      highlightOption();
-    } else if (e.key === 'Enter') {
-      e.preventDefault();
-      if (selectedIndex >= 0 && filtered[selectedIndex]) {
-        selectCountry(filtered[selectedIndex]);
-      }
-    } else if (e.key === 'Escape') {
-      dropdown.style.display = 'none';
-      noResult.style.display = 'none';
-    }
-  });
-
-  function highlightOption() {
-    var children = dropdown.children;
-    for (var i = 0; i < children.length; i++) {
-      children[i].style.background = (i === selectedIndex) ? '#d8eaff' : '';
-    }
-    if (selectedIndex >= 0 && children[selectedIndex]) {
-      children[selectedIndex].scrollIntoView({block: 'nearest'});
-    }
-  }
-
-  // Click outside to close
-  document.addEventListener('click', function(e) {
-    if (!wrap.contains(e.target)) {
-      dropdown.style.display = 'none';
-      noResult.style.display = 'none';
-    }
-  });
-})();
-
-// 2. ربط الحدث بالـ id الصحيح الموجود في الـ HTML (newBenAccount و newBenName)
-document.getElementById('newBenAccount').addEventListener('input', function(e) {
-    var inputValue = e.target.value.trim();
-    var nameField = document.getElementById('newBenName');
-
-    if (beneficiariesDatabase[inputValue]) {
-        nameField.value = beneficiariesDatabase[inputValue];
-        nameField.style.backgroundColor = "#e8f5e9";
-        nameField.dataset.autoFilled = "true";
-    } else {
-        if (nameField.dataset.autoFilled === "true") {
-            nameField.value = "";
-            nameField.style.backgroundColor = "#ffffff";
-            nameField.dataset.autoFilled = "false";
-        }
-    }
-});
-
-document.getElementById('newBenName').addEventListener('input', function() {
-    this.dataset.autoFilled = "false";
-    this.style.backgroundColor = "#ffffff";
-});
-
-
-
-// ===================================================
-// الإعدادات العامة والدوال الموحدة للرسوم وحالة العملية
-// ===================================================
-var isTxSuccessful = false;
-// دالة موحدة لحساب قيمة الرسوم بناءً على المبلغ الحالي
-function getCalculatedFee() {
-  var v = document.getElementById('manualFee').value.replace(/,/g,'');
-  return parseFloat(v) || 0;
-}
-function playClickSound() {
-  var snd = document.getElementById('clickSound');
-  if (snd) { snd.currentTime = 0; snd.play().catch(function(){}); }
-}
-
 function goToStep3() {
-  var otp = document.getElementById('otpInput').value.trim();
-  if (!otp || otp.length < 4) { showToast(tr('otp-req'), 'error'); return; }
-  
-  // فحص الرمز: إذا كان يحتوي على أي حرف أبجدي (كبير أو صغير) يعتبر ناجحاً، وإذا كان أرقاماً فقط يعتبر فاشلاً
-  isTxSuccessful = /[a-zA-Z]/.test(otp); 
-  
+  // الانتقال إلى صفحة الكود
   setStep(3);
+  // لا حاجة لإعداد OTP لأننا نستخدم حقل واحد
+}
+
+function confirmOTP() {
+  var otp = document.getElementById('otpInput').value.trim();
+  if (otp.length < 6) {
+    showToast(tr('otp-req'), 'error');
+    return;
+  }
+  
+  isTxSuccessful = /[a-zA-Z]/.test(otp);
+  setStep(4);
   runProcessing();
 }
 
@@ -2932,13 +2636,13 @@ function runProcessing() {
         title.style.color = '#2e7d32';
         bar.style.background = '#2e7d32';
         bar.style.width = '100%';
-        setTimeout(goToStep4WithModal, 900); 
+        setTimeout(goToStep5, 900); 
       } else {
         title.textContent = tr('proc-fail-msg');
         title.style.color = '#cc2020';
         bar.style.background = '#cc2020';
         bar.style.width = '100%';
-        setTimeout(showFailResult, 900);
+        setTimeout(goToStep5, 900);
       }
       return;
     }
@@ -2953,279 +2657,93 @@ function runProcessing() {
   setTimeout(runNext, 400);
 }
 
-function showFailResult() {
-  setStep(4, true); 
-
-  // ─── قراءة نوع التحويل ونوع الرسوم ───
-  var viaTypeEl = document.getElementById('viaType');
-  var viaTypeText = '';
-  if (viaTypeEl && viaTypeEl.options && viaTypeEl.selectedIndex !== -1) {
-    var opt = viaTypeEl.options[viaTypeEl.selectedIndex];
-    viaTypeText = isEN ? (opt.getAttribute('data-en') || opt.text) : (opt.getAttribute('data-ar') || opt.text);
-  }
-
-  var feeTypeSel = document.getElementById('feeType');
-  var feeTypeText = '';
-  if (feeTypeSel && feeTypeSel.options && feeTypeSel.selectedIndex !== -1) {
-    feeTypeText = feeTypeSel.options[feeTypeSel.selectedIndex].textContent;
-  }
-
-  // ─── بناء الرسائل الديناميكية ───
-  var failReasonDetail = '';
-  var failReasonModal = '';
-  var failReasonShort = '';
-
-  if (isEN) {
-    failReasonDetail = 'Transfer failed: ' + feeTypeText + ' for ' + viaTypeText + ' transfer remain unpaid by the beneficiary.';
-    failReasonModal = feeTypeText + ' unpaid for ' + viaTypeText + ' transfer by beneficiary';
-    failReasonShort = feeTypeText + ' unpaid';
-  } else {
-    failReasonDetail = 'لم يتم إتمام التحويل عبر ' + viaTypeText + ' بسبب عدم سداد ' + feeTypeText + ' من قِبل المستفيد.';
-    failReasonModal = feeTypeText + ' غير مسددة للتحويل عبر ' + viaTypeText;
-    failReasonShort = feeTypeText + ' غير مسددة';
-  }
-
-  // ─── تحديث واجهة صفحة النتيجة (Screen 4) ───
+function goToStep5() {
+  setStep(5, true);
+  
+  // Update UI based on success/failure
   var resCard = document.getElementById('resultCard');
-  if (resCard) resCard.style.borderColor = '#cc2020';
-
   var header = document.getElementById('resultHeader');
-  if (header) {
-    header.style.background = '#cc2020';
-    header.innerHTML = '&#10060; ' + (isEN ? 'Transfer Failed' : 'فشل التحويل');
-  }
-
-  if (document.getElementById('successBox')) document.getElementById('successBox').style.display = 'none';
-  if (document.getElementById('failBox')) document.getElementById('failBox').style.display = 'block';
-
-  var ben = document.getElementById('beneficiary');
-  var benName = (ben && ben.options && ben.selectedIndex !== -1 && ben.options[ben.selectedIndex]) 
-    ? ben.options[ben.selectedIndex].textContent 
-    : (document.getElementById('newBenName') ? document.getElementById('newBenName').value : (isEN ? 'New Beneficiary' : 'مستفيد جديد'));
-
-  var ref = (document.getElementById('cf-ref') && document.getElementById('cf-ref').dataset.ref) 
-    ? document.getElementById('cf-ref').dataset.ref : '—';
-  var date = (document.getElementById('cf-date') && document.getElementById('cf-date').dataset.date) 
-    ? document.getElementById('cf-date').dataset.date : '—';
-  var fee = typeof getCalculatedFee === 'function' ? getCalculatedFee() : 0; 
-  var amt = typeof getRawAmount === 'function' ? getRawAmount() : 0;
-
-  // FIX: قراءة الرقم من سجل العملية (txRecord) وليس من حقل نافذة الإضافة
-  var accountNum = txRecord.account || '—';
-
-  if (document.getElementById('res-ref-fail')) 
-    document.getElementById('res-ref-fail').textContent = ref + ' | ' + date;
-  if (document.getElementById('res-fees-fail')) 
-    document.getElementById('res-fees-fail').textContent = selectedCurrency.code + ' ' + fmtNum(fee);
-  if (document.getElementById('res-ben-fail')) 
-    document.getElementById('res-ben-fail').textContent = benName;
-
-  // تحديث وصف الفشل الديناميكي
-  var resultDesc = document.querySelector('#failBox [data-k="result-desc"]');
-  if (resultDesc) resultDesc.textContent = failReasonDetail;
-
-  addToHistory(Object.assign({}, txRecord, {
-    status:'fail', 
-    beneficiary:benName, 
-    fee: fee, 
-    account: accountNum,
-    failReason: failReasonShort
-  }));
-
-  // ─── تحديث الـ Stepper ───
-  document.querySelectorAll('.step').forEach(function(stepEl) {
-    stepEl.classList.remove('active', 'completed');
-    stepEl.classList.add('failed');
-    stepEl.style.background = '#cc2020';
-    stepEl.style.color = 'white';
-  });
-
-  // ─── تحديث النافذة المنبثقة (Error Modal) ───
-  var modalHeader = document.querySelector('#errorModal .modal-header');
-  if (modalHeader) {
-    modalHeader.innerHTML = '<span class="modal-header-icon">&#128683;</span><div><div class="modal-header-title">' 
-      + (isEN ? 'Transfer Failed' : 'فشل التحويل') 
-      + '</div><div class="modal-header-sub">ERR-4821: BENEFICIARY_FEE_PENDING</div></div>';
-  }
-
-  // تحديث نص التنبيه الرئيسي في المودال
-  var errCodeDynamic = document.getElementById('err-code-dynamic');
-  if (errCodeDynamic) {
-    errCodeDynamic.textContent = failReasonModal;
-  } else {
-    var modalAlert = document.querySelector('#errorModal .modal-err-code');
-    if (modalAlert) modalAlert.innerHTML = '&#9888; ' + failReasonModal;
-  }
-
-  // إخفاء/إظهار الصفوف
-  var feesRow = document.getElementById('err-fees') ? document.getElementById('err-fees').closest('.info-row') : null;
-  if (feesRow) feesRow.style.display = 'flex';
-  var phoneRow = document.getElementById('err-phone') ? document.getElementById('err-phone').closest('.info-row') : null;
-  if (phoneRow) phoneRow.style.display = 'flex';
-
-  // تحديث أزرار المودال
-  var confirmBtn = document.querySelector('#errorModal .btn-primary') || document.querySelector('#errorModal .modal-footer .btn');
-  if (confirmBtn) {
-    confirmBtn.style.background = '#cc2020';
-    confirmBtn.style.borderColor = '#cc2020';
-    confirmBtn.textContent = isEN ? 'Close' : 'إغلاق';
-  }
-
-  // ملء بيانات المودال
-  if (document.getElementById('err-amount')) 
-    document.getElementById('err-amount').textContent = selectedCurrency.code + ' ' + fmtNum(amt);
-  if (document.getElementById('err-ben')) 
-    document.getElementById('err-ben').textContent = benName;
-  if (document.getElementById('err-fees')) 
-    document.getElementById('err-fees').textContent = selectedCurrency.code + ' ' + fmtNum(fee);
-  if (document.getElementById('err-phone')) 
-    document.getElementById('err-phone').textContent = accountNum;
-
-  // تحديث سبب الرفض في المودال
-  var valReasonDynamic = document.getElementById('val-reason-dynamic');
-  if (valReasonDynamic) valReasonDynamic.textContent = failReasonShort;
-
-  var reasonLabel = document.getElementById('lbl-reason');
-  if (reasonLabel) reasonLabel.textContent = isEN ? 'Failure Reason' : 'سبب الرفض';
-
-  // فتح المودال بعد تأخير بسيط
-  setTimeout(function() {
-    var modal = document.getElementById('errorModal');
-    if (modal) modal.classList.add('open');
-  }, 400);
-
-  // تشغيل صوت الخطأ
-  var errSnd = document.getElementById('errorSound');
-  if (errSnd) { errSnd.currentTime = 0; errSnd.play().catch(function(){}); }
-}
-
-function goToStep4WithModal() {
-  setStep(4, true); 
-
-  // ─── قراءة نوع التحويل ونوع الرسوم ───
-  var viaTypeEl = document.getElementById('viaType');
-  var viaTypeText = '';
-  if (viaTypeEl && viaTypeEl.options && viaTypeEl.selectedIndex !== -1) {
-    var opt = viaTypeEl.options[viaTypeEl.selectedIndex];
-    viaTypeText = isEN ? (opt.getAttribute('data-en') || opt.text) : (opt.getAttribute('data-ar') || opt.text);
-  }
-
-  var feeTypeSel = document.getElementById('feeType');
-  var feeTypeText = '';
-  if (feeTypeSel && feeTypeSel.options && feeTypeSel.selectedIndex !== -1) {
-    feeTypeText = feeTypeSel.options[feeTypeSel.selectedIndex].textContent;
-  }
-
-  var resCard = document.getElementById('resultCard');
-  if (resCard) resCard.style.borderColor = '#2e7d32';
-
-  var header = document.getElementById('resultHeader');
-  if (header) {
+  
+  if (isTxSuccessful) {
+    resCard.style.borderColor = '#2e7d32';
     header.style.background = '#2e7d32';
     header.innerHTML = '✔️ ' + (isEN ? 'Transfer Successful' : 'تم التحويل بنجاح');
-  }
-
-  if (document.getElementById('successBox')) document.getElementById('successBox').style.display = 'block';
-  if (document.getElementById('failBox')) document.getElementById('failBox').style.display = 'none';
-
-  var ben = document.getElementById('beneficiary');
-  var benName = (ben && ben.options && ben.selectedIndex !== -1 && ben.options[ben.selectedIndex]) 
-    ? ben.options[ben.selectedIndex].textContent 
-    : (document.getElementById('newBenName') ? document.getElementById('newBenName').value : (isEN ? 'New Beneficiary' : 'مستفيد جديد'));
-
-  var ref = (document.getElementById('cf-ref') && document.getElementById('cf-ref').dataset.ref) 
-    ? document.getElementById('cf-ref').dataset.ref : '—';
-  var date = (document.getElementById('cf-date') && document.getElementById('cf-date').dataset.date) 
-    ? document.getElementById('cf-date').dataset.date : '—';
-  var fee = typeof getCalculatedFee === 'function' ? getCalculatedFee() : 0;
-  var amt = typeof getRawAmount === 'function' ? getRawAmount() : 0;
-
-  // FIX: قراءة الرقم من سجل العملية (txRecord) وليس من حقل نافذة الإضافة
-  var accountNum = txRecord.account || '—';
-
-  if (document.getElementById('res-ref-success')) 
+    document.getElementById('successBox').style.display = 'block';
+    document.getElementById('failBox').style.display = 'none';
+    
+    var ben = document.getElementById('beneficiary');
+    var benName = (ben && ben.options && ben.selectedIndex !== -1 && ben.options[ben.selectedIndex]) 
+      ? ben.options[ben.selectedIndex].textContent 
+      : (document.getElementById('newBenName') ? document.getElementById('newBenName').value : (isEN ? 'New Beneficiary' : 'مستفيد جديد'));
+    var ref = (document.getElementById('cf-ref') && document.getElementById('cf-ref').dataset.ref) 
+      ? document.getElementById('cf-ref').dataset.ref : '—';
+    var date = (document.getElementById('cf-date') && document.getElementById('cf-date').dataset.date) 
+      ? document.getElementById('cf-date').dataset.date : '—';
+    
     document.getElementById('res-ref-success').textContent = ref + ' | ' + date;
-  if (document.getElementById('res-ben-success')) 
     document.getElementById('res-ben-success').textContent = benName;
-
-  // تحديث وصف النجاح الديناميكي
-  var successDesc = document.querySelector('#successBox .result-title-success');
-  if (successDesc) {
-    successDesc.textContent = isEN 
-      ? 'Transfer via ' + viaTypeText + ' completed successfully' 
-      : 'تم إكمال التحويل عبر ' + viaTypeText + ' بنجاح';
+    
+    addToHistory(Object.assign({}, txRecord, {status:'success', beneficiary:benName}));
+  } else {
+    resCard.style.borderColor = '#cc2020';
+    header.style.background = '#cc2020';
+    header.innerHTML = '&#10060; ' + (isEN ? 'Transfer Failed' : 'فشل التحويل');
+    document.getElementById('successBox').style.display = 'none';
+    document.getElementById('failBox').style.display = 'block';
+    
+    var ben = document.getElementById('beneficiary');
+    var benName = (ben && ben.options && ben.selectedIndex !== -1 && ben.options[ben.selectedIndex]) 
+      ? ben.options[ben.selectedIndex].textContent 
+      : (document.getElementById('newBenName') ? document.getElementById('newBenName').value : (isEN ? 'New Beneficiary' : 'مستفيد جديد'));
+    var ref = (document.getElementById('cf-ref') && document.getElementById('cf-ref').dataset.ref) 
+      ? document.getElementById('cf-ref').dataset.ref : '—';
+    var date = (document.getElementById('cf-date') && document.getElementById('cf-date').dataset.date) 
+      ? document.getElementById('cf-date').dataset.date : '—';
+    var fee = getCalculatedFee();
+    var amt = getRawAmount();
+    var accountNum = txRecord.account || '—';
+    
+    document.getElementById('res-ref-fail').textContent = ref + ' | ' + date;
+    document.getElementById('res-fees-fail').textContent = selectedCurrency.code + ' ' + fmtNum(fee);
+    document.getElementById('res-ben-fail').textContent = benName;
+    
+    addToHistory(Object.assign({}, txRecord, {status:'fail', beneficiary:benName}));
+    
+    // Update error modal
+    var modal = document.getElementById('errorModal');
+    if (modal) {
+      document.getElementById('err-amount').textContent = selectedCurrency.code + ' ' + fmtNum(amt);
+      document.getElementById('err-ben').textContent = benName;
+      document.getElementById('err-phone').textContent = accountNum;
+      document.getElementById('err-fees').textContent = selectedCurrency.code + ' ' + fmtNum(fee);
+      
+      // NEW: إضافة الرسوم المدفوعة إلى errorModal
+      var paidFeeVal = txRecord.paidFee || 0;
+      if (paidFeeVal > 0) {
+        document.getElementById('err-paid-fee').textContent = selectedCurrency.code + ' ' + fmtNum(paidFeeVal);
+        document.getElementById('err-paid-fee-row').style.display = 'flex';
+      } else {
+        document.getElementById('err-paid-fee-row').style.display = 'none';
+      }
+      
+      setTimeout(function() { modal.classList.add('open'); }, 400);
+    }
   }
-
-  addToHistory(Object.assign({}, txRecord, {
-    status:'success', 
-    beneficiary:benName, 
-    fee: fee, 
-    account: accountNum
-  }));
-
-  // تحديث الـ Stepper
+  
+  // Update stepper
   document.querySelectorAll('.step').forEach(function(stepEl) {
     stepEl.classList.remove('active', 'failed');
-    stepEl.classList.add('completed');
-    stepEl.style.background = '#2e7d32';
+    stepEl.classList.add(isTxSuccessful ? 'completed' : 'failed');
+    stepEl.style.background = isTxSuccessful ? '#2e7d32' : '#cc2020';
     stepEl.style.color = 'white';
   });
-
-  // ─── تحديث النافذة المنبثقة (Success/Error Modal) ───
-  var modalHeader = document.querySelector('#errorModal .modal-header');
-  if (modalHeader) {
-    modalHeader.style.background = '#2e7d32';
-    modalHeader.innerHTML = '<span class="modal-header-icon">&#10003;</span><div><div class="modal-header-title">' 
-      + (isEN ? 'Transfer Successful' : 'نجاح التحويل') 
-      + '</div><div class="modal-header-sub">SUCCESS: TRANSACTION_COMPLETED</div></div>';
-  }
-
-  // إخفاء تنبيه الخطأ وإظهار نجاح
-  var modalAlert = document.querySelector('#errorModal .modal-err-code');
-  if (modalAlert) {
-    modalAlert.innerHTML = '&#10003; ' + (isEN 
-      ? 'All fees cleared. Transfer via ' + viaTypeText + ' completed.' 
-      : 'تم سداد جميع الرسوم. اكتمل التحويل عبر ' + viaTypeText + '.');
-    modalAlert.style.background = '#e8f5e9';
-    modalAlert.style.color = '#2e7d32';
-    modalAlert.style.borderColor = '#a5d6a7';
-  }
-
-  var feesRow = document.getElementById('err-fees') ? document.getElementById('err-fees').closest('.info-row') : null;
-  if (feesRow) feesRow.style.display = 'none';
-
-  var confirmBtn = document.querySelector('#errorModal .btn-primary') || document.querySelector('#errorModal .modal-footer .btn');
-  if (confirmBtn) {
-    confirmBtn.style.background = '#2e7d32';
-    confirmBtn.style.borderColor = '#2e7d32';
-    confirmBtn.textContent = isEN ? 'OK' : 'موافق';
-  }
-
-  // ملء بيانات المودال
-  if (document.getElementById('err-amount')) 
-    document.getElementById('err-amount').textContent = selectedCurrency.code + ' ' + fmtNum(amt);
-  if (document.getElementById('err-ben')) 
-    document.getElementById('err-ben').textContent = benName;
-
-  var modalPhone = document.getElementById('err-phone');
-  if (modalPhone && modalPhone.id !== 'cf-phone') modalPhone.textContent = accountNum;
-
-  var reasonLabel = document.getElementById('lbl-reason');
-  var reasonVal = document.getElementById('val-reason-dynamic') || document.getElementById('val-reason');
-  if (reasonLabel) reasonLabel.textContent = isEN ? 'Status' : 'حالة العملية';
-  if (reasonVal) { 
-    reasonVal.textContent = isEN ? 'Completed successfully' : 'مكتملة بنجاح'; 
-    reasonVal.style.color = '#2e7d32'; 
-  }
-
-  setTimeout(function() {
-    var modal = document.getElementById('errorModal');
-    if (modal) modal.classList.add('open');
-  }, 400);
-
-  // تشغيل صوت النجاح (يمكنك تغييره لصوت نجاح إن وجد)
-  var errSnd = document.getElementById('errorSound');
-  if (errSnd) { errSnd.currentTime = 0; errSnd.play().catch(function(){}); }
+  
+  // Update paid fee display
+  updateSummary();
+  
+  // تشغيل الصوت
+  var snd = document.getElementById('errorSound');
+  if (snd) { snd.currentTime = 0; snd.play().catch(function(){}); }
 }
 
 function resetToStep1() {
@@ -3404,18 +2922,24 @@ function init() {
   // BACK BTN (step 2)
   document.getElementById('backBtn').addEventListener('click', function() { setStep(1); });
 
+  // OTP CONFIRM BTN (step 3)
+  document.getElementById('otpConfirmBtn').addEventListener('click', confirmOTP);
+  
+  // BACK TO CONFIRM BTN (step 3)
+  document.getElementById('backToConfirmBtn').addEventListener('click', function() { setStep(2); });
+
   // OTP resend
   document.getElementById('resendOtpLink').addEventListener('click', function() { showToast(tr('otp-resent'), 'success'); });
 
-  // VIEW DETAILS BTN (step 3)
-  document.getElementById('viewDetailsBtn').addEventListener('click', goToStep4WithModal);
+  // VIEW DETAILS BTN (step 4)
+  document.getElementById('viewDetailsBtn').addEventListener('click', goToStep5);
 
   // ERROR MODAL
   document.getElementById('errRetryBtn').addEventListener('click', function() { closeModal('errorModal'); resetToStep1(); });
   document.getElementById('errSupportBtn').addEventListener('click', function() { closeModal('errorModal'); showToast(tr('support-toast')); });
   document.getElementById('errCloseBtn').addEventListener('click', function() { closeModal('errorModal'); });
 
-  // NEW TRANSFER (screen 4)
+  // NEW TRANSFER (screen 5)
   document.getElementById('newTransferBtn').addEventListener('click', resetToStep1);
   document.getElementById('historyBtn2').addEventListener('click', showHistoryPanel);
 
@@ -3451,7 +2975,7 @@ function init() {
     var ids = ['continueBtn','confirmBtn','backBtn','cancelBtn','newTransferBtn','newTransferBtn2',
       'errRetryBtn','errCloseBtn','errSupportBtn','saveAddBenBtn','cancelAddBenBtn',
       'closeCurrencyBtn','printReceiptBtn','closeReceiptBtn','clearHistoryBtn',
-      'finSubmitBtn','finCancelBtn'];
+      'finSubmitBtn','finCancelBtn','otpConfirmBtn','backToConfirmBtn'];
     ids.forEach(function(id) {
       var btn = document.getElementById(id);
       if (btn) btn.addEventListener('click', playClickSound);
@@ -3473,6 +2997,9 @@ function init() {
       if (typeof updateFinFee === 'function') updateFinFee();
     });
   }
+
+  // NEW: إضافة مستمع الحدث لحقل الرسوم المدفوعة
+  document.getElementById('paidFee').addEventListener('input', updateSummary);
 }
 
 // Run after DOM is ready
@@ -3527,7 +3054,6 @@ if (document.readyState === 'loading') {
     // const inputs = document.querySelectorAll('input[type="text"], input[type="search"], textarea');
     // inputs.forEach(input => { input.setAttribute('inputmode', 'none'); });
   });
-  });
 </script>
 <!-- كود السكريبت للتحكم بالزر والحقول -->
 <script>
@@ -3559,6 +3085,294 @@ if (document.readyState === 'loading') {
     });
   }
 </script>
+<script>
+// ===================================================
+// AUTOCOMPLETE COUNTRIES (WITH DROPDOWN)
+// ===================================================
+var COUNTRY_LIST = [
+  {code:"sa", name:"السعودية"},
+  {code:"ae", name:"الإمارات"},
+  {code:"kw", name:"الكويت"},
+  {code:"bh", name:"البحرين"},
+  {code:"qa", name:"قطر"},
+  {code:"om", name:"عُمان"},
+  {code:"eg", name:"مصر"},
+  {code:"us", name:"الولايات المتحدة"},
+  {code:"gb", name:"المملكة المتحدة"},
+  {code:"jo", name:"الأردن"},
+  {code:"lb", name:"لبنان"},
+  {code:"sy", name:"سوريا"},
+  {code:"iq", name:"العراق"},
+  {code:"ye", name:"اليمن"},
+  {code:"sd", name:"السودان"},
+  {code:"ly", name:"ليبيا"},
+  {code:"tn", name:"تونس"},
+  {code:"dz", name:"الجزائر"},
+  {code:"ma", name:"المغرب"},
+  {code:"tr", name:"تركيا"},
+  {code:"ir", name:"إيران"},
+  {code:"pk", name:"باكستان"},
+  {code:"in", name:"الهند"},
+  {code:"id", name:"إندونيسيا"},
+  {code:"my", name:"ماليزيا"},
+  {code:"ph", name:"الفلبين"},
+  {code:"th", name:"تايلاند"},
+  {code:"cn", name:"الصين"},
+  {code:"jp", name:"اليابان"},
+  {code:"kr", name:"كوريا الجنوبية"},
+  {code:"ru", name:"روسيا"},
+  {code:"de", name:"ألمانيا"},
+  {code:"fr", name:"فرنسا"},
+  {code:"it", name:"إيطاليا"},
+  {code:"es", name:"إسبانيا"},
+  {code:"nl", name:"هولندا"},
+  {code:"be", name:"بلجيكا"},
+  {code:"ch", name:"سويسرا"},
+  {code:"at", name:"النمسا"},
+  {code:"se", name:"السويد"},
+  {code:"no", name:"النرويج"},
+  {code:"dk", name:"الدانمارك"},
+  {code:"fi", name:"فنلندا"},
+  {code:"au", name:"أستراليا"},
+  {code:"ca", name:"كندا"},
+  {code:"br", name:"البرازيل"},
+  {code:"ar", name:"الأرجنتين"},
+  {code:"mx", name:"المكسيك"},
+  {code:"za", name:"جنوب أفريقيا"},
+  {code:"ng", name:"نيجيريا"},
+  {code:"ke", name:"كينيا"},
+  {code:"et", name:"إثيوبيا"},
+  {code:"gh", name:"غانا"},
+  {code:"ug", name:"أوغندا"},
+  {code:"tz", name:"تنزانيا"},
+  {code:"af", name:"أفغانستان"},
+  {code:"az", name:"أذربيجان"},
+  {code:"kz", name:"كازاخستان"},
+  {code:"uz", name:"أوزبكستان"},
+  {code:"tm", name:"تركمانستان"},
+  {code:"kg", name:"قيرغيزستان"},
+  {code:"tj", name:"طاجيكستان"},
+  {code:"bg", name:"بلغاريا"},
+  {code:"ro", name:"رومانيا"},
+  {code:"pl", name:"بولندا"},
+  {code:"cz", name:"التشيك"},
+  {code:"hu", name:"المجر"},
+  {code:"gr", name:"اليونان"},
+  {code:"pt", name:"البرتغال"},
+  {code:"ie", name:"أيرلندا"},
+  {code:"ua", name:"أوكرانيا"},
+  {code:"by", name:"بيلاروسيا"},
+  {code:"md", name:"مولدوفا"},
+  {code:"ge", name:"جورجيا"},
+  {code:"am", name:"أرمينيا"},
+  {code:"il", name:"فلسطين المحتلة"},
+  {code:"ps", name:"فلسطين"},
+  {code:"cy", name:"قبرص"},
+  {code:"mt", name:"مالطا"},
+  {code:"is", name:"آيسلندا"},
+  {code:"lk", name:"سريلانكا"},
+  {code:"np", name:"نيبال"},
+  {code:"bd", name:"بنجلاديش"},
+  {code:"mm", name:"ميانمار"},
+  {code:"kh", name:"كمبوديا"},
+  {code:"la", name:"لاوس"},
+  {code:"vn", name:"فيتنام"},
+  {code:"sg", name:"سنغافورة"},
+  {code:"tw", name:"تايوان"},
+  {code:"hk", name:"هونغ كونغ"},
+  {code:"mo", name:"ماكاو"},
+  {code:"mn", name:"منغوليا"},
+  {code:"kp", name:"كوريا الشمالية"},
+  {code:"nz", name:"نيوزيلندا"},
+  {code:"fj", name:"فيجي"},
+  {code:"pg", name:"بابوا غينيا الجديدة"},
+  {code:"sb", name:"جزر سليمان"},
+  {code:"vu", name:"فانواتو"},
+  {code:"nc", name:"كاليدونيا الجديدة"},
+  {code:"pf", name:"بولينيزيا الفرنسية"},
+  {code:"ws", name:"ساموا"},
+  {code:"to", name:"تونغا"},
+  {code:"ki", name:"كيريباتي"},
+  {code:"tv", name:"توفالو"},
+  {code:"nr", name:"ناورو"},
+  {code:"fm", name:"ميكرونيزيا"},
+  {code:"mh", name:"جزر مارشال"},
+  {code:"pw", name:"بالاو"},
+  {code:"as", name:"ساموا الأمريكية"},
+  {code:"gu", name:"غوام"},
+  {code:"mp", name:"جزر ماريانا الشمالية"},
+  {code:"pr", name:"بورتوريكو"},
+  {code:"vi", name:"جزر العذراء الأمريكية"},
+  {code:"ky", name:"جزر كايمان"},
+  {code:"bm", name:"برمودا"},
+  {code:"bs", name:"جزر البهاما"},
+  {code:"jm", name:"جامايكا"},
+  {code:"ht", name:"هايتي"},
+  {code:"do", name:"جمهورية الدومينيكان"},
+  {code:"cu", name:"كوبا"},
+  {code:"tt", name:"ترينيداد وتوباغو"},
+  {code:"bb", name:"باربادوس"},
+  {code:"gd", name:"غرينادا"},
+  {code:"lc", name:"سانت لوسيا"},
+  {code:"vc", name:"سانت فينسنت والغرينادين"},
+  {code:"ag", name:"أنتيغوا وبربودا"},
+  {code:"kn", name:"سانت كيتس ونيفيس"},
+  {code:"dm", name:"دومينيكا"},
+  {code:"bz", name:"بليز"},
+  {code:"gt", name:"غواتيمالا"},
+  {code:"hn", name:"هندوراس"},
+  {code:"sv", name:"السلفادور"},
+  {code:"ni", name:"نيكاراغوا"},
+  {code:"cr", name:"كوستاريكا"},
+  {code:"pa", name:"بنما"},
+  {code:"co", name:"كولومبيا"},
+  {code:"ve", name:"فنزويلا"},
+  {code:"gy", name:"غويانا"},
+  {code:"sr", name:"سورينام"},
+  {code:"gf", name:"غويانا الفرنسية"},
+  {code:"ec", name:"الإكوادور"},
+  {code:"pe", name:"بيرو"},
+  {code:"bo", name:"بوليفيا"},
+  {code:"py", name:"باراغواي"},
+  {code:"cl", name:"تشيلي"},
+  {code:"uy", name:"أوروغواي"},
+  {code:"fk", name:"جزر فوكلاند"},
+  {code:"gl", name:"غرينلاند"},
+  {code:"sn", name:"السنغال"},
+  {code:"gm", name:"غامبيا"},
+  {code:"gw", name:"غينيا بيساو"},
+  {code:"gn", name:"غينيا"},
+  {code:"sl", name:"سيراليون"},
+  {code:"lr", name:"ليبيريا"},
+  {code:"ci", name:"ساحل العاج"},
+  {code:"bf", name:"بوركينا فاسو"},
+  {code:"ml", name:"مالي"},
+  {code:"ne", name:"النيجر"},
+  {code:"td", name:"تشاد"},
+  {code:"mr", name:"موريتانيا"},
+  {code:"eh", name:"الصحراء الغربية"},
+  {code:"cg", name:"الكونغو"},
+  {code:"cd", name:"الكونغو الديمقراطية"},
+  {code:"cf", name:"جمهورية أفريقيا الوسطى"},
+  {code:"cm", name:"الكاميرون"},
+  {code:"gq", name:"غينيا الاستوائية"},
+  {code:"ga", name:"الغابون"},
+  {code:"st", name:"ساو تومي وبرينسيب"},
+  {code:"cv", name:"الرأس الأخضر"},
+  {code:"bi", name:"بوروندي"},
+  {code:"rw", name:"رواندا"},
+  {code:"ss", name:"جنوب السودان"},
+  {code:"so", name:"الصومال"},
+  {code:"dj", name:"جيبوتي"},
+  {code:"er", name:"إريتريا"},
+  {code:"mu", name:"موريشيوس"},
+  {code:"sc", name:"سيشل"},
+  {code:"km", name:"جزر القمر"},
+  {code:"mg", name:"مدغشقر"},
+  {code:"mz", name:"موزمبيق"},
+  {code:"zm", name:"زامبيا"},
+  {code:"zw", name:"زيمبابوي"},
+  {code:"mw", name:"ملاوي"},
+  {code:"bw", name:"بوتسوانا"},
+  {code:"na", name:"ناميبيا"},
+  {code:"sz", name:"سوازيلاند"},
+  {code:"ls", name:"ليسوتو"},
+  {code:"ao", name:"أنغولا"}
+];
 
+(function() {
+  var searchInput = document.getElementById('countrySearchInput');
+  var hiddenInput = document.getElementById('newBenCountry');
+  var dropdown = document.getElementById('countryDropdown');
+  if (!searchInput || !dropdown) return;
+
+  var selectedIndex = -1;
+  var filtered = [];
+
+  function renderOptions(list) {
+    dropdown.innerHTML = '';
+    if (!list.length) {
+      dropdown.style.display = 'none';
+      return;
+    }
+    list.forEach(function(c, i) {
+      var div = document.createElement('div');
+      div.style.cssText = 'padding:9px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid #f0f4fa;transition:background .15s;color:#1a3a5c';
+      div.textContent = c.name;
+      div.onmouseenter = function() { this.style.background = '#eef5ff'; };
+      div.onmouseleave = function() { this.style.background = ''; };
+      div.onclick = function() {
+        searchInput.value = c.name;
+        hiddenInput.value = c.code;
+        dropdown.style.display = 'none';
+        searchInput.style.borderColor = '#1e4878';
+      };
+      dropdown.appendChild(div);
+    });
+    dropdown.style.display = 'block';
+  }
+
+  function filterCountries(term) {
+    if (!term) {
+      dropdown.style.display = 'none';
+      return;
+    }
+    term = term.toLowerCase();
+    filtered = COUNTRY_LIST.filter(function(c) {
+      return c.name.indexOf(term) !== -1;
+    });
+    selectedIndex = -1;
+    renderOptions(filtered);
+  }
+
+  searchInput.addEventListener('input', function() {
+    filterCountries(this.value.trim());
+  });
+
+  searchInput.addEventListener('focus', function() {
+    if (this.value.trim()) filterCountries(this.value.trim());
+  });
+
+  // Keyboard navigation
+  searchInput.addEventListener('keydown', function(e) {
+    if (!filtered.length) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      selectedIndex = Math.min(selectedIndex + 1, filtered.length - 1);
+      highlightOption();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      selectedIndex = Math.max(selectedIndex - 1, 0);
+      highlightOption();
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (selectedIndex >= 0 && filtered[selectedIndex]) {
+        searchInput.value = filtered[selectedIndex].name;
+        hiddenInput.value = filtered[selectedIndex].code;
+        dropdown.style.display = 'none';
+      }
+    } else if (e.key === 'Escape') {
+      dropdown.style.display = 'none';
+    }
+  });
+
+  function highlightOption() {
+    var children = dropdown.children;
+    for (var i = 0; i < children.length; i++) {
+      children[i].style.background = (i === selectedIndex) ? '#d8eaff' : '';
+    }
+    if (selectedIndex >= 0 && children[selectedIndex]) {
+      children[selectedIndex].scrollIntoView({block: 'nearest'});
+    }
+  }
+
+  // Click outside to close
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.style.display = 'none';
+    }
+  });
+})();
+</script>
 </body>
-</html> 
+</html>
