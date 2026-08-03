@@ -34,74 +34,103 @@
         body { font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
         .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
         .card-hover { transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
-        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
         .slide-in { animation: slideIn 0.4s ease-out; }
         @keyframes slideIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        .color-dot { width:24px; height:24px; border-radius:50%; cursor:pointer; border:3px solid transparent; transition:all 0.2s; }
+        .color-dot { width:20px; height:20px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:all 0.2s; }
         .color-dot.active { border-color:#fff; box-shadow:0 0 0 2px #000; }
         .dark .color-dot.active { border-color:#1f2937; box-shadow:0 0 0 2px #fff; }
         .scrollbar-hide::-webkit-scrollbar { display:none; }
         .scrollbar-hide { -ms-overflow-style:none; scrollbar-width:none; }
         #installBtn { display:none; }
         #installBtn.show { display:flex; }
+        .link-card { min-height: 0; }
+        .action-btn { 
+            width: 28px; height: 28px; border-radius: 6px; 
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; font-size: 11px;
+        }
+        .action-btn:hover { transform: scale(1.1); }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-300">
 
     <header class="sticky top-0 z-50 glass bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
-                    <i class="fas fa-link text-white text-lg"></i>
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+                    <i class="fas fa-link text-white text-sm"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">روابطي</h1>
+                    <h1 class="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">روابطي</h1>
                     <p class="text-xs text-gray-500 dark:text-gray-400" id="linksCount">0 رابط</p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-colors">
-                    <i class="fas fa-moon dark:hidden text-gray-600"></i>
-                    <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
+                <button onclick="scrollToAdd()" class="w-9 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors shadow-lg shadow-blue-500/30" title="إضافة رابط جديد">
+                    <i class="fas fa-plus text-sm"></i>
                 </button>
-                <button id="installBtn" onclick="installPWA()" class="gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors items-center">
-                    <i class="fas fa-download"></i><span>تثبيت</span>
+                <button onclick="toggleDarkMode()" class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-colors">
+                    <i class="fas fa-moon dark:hidden text-gray-600 text-sm"></i>
+                    <i class="fas fa-sun hidden dark:block text-yellow-400 text-sm"></i>
+                </button>
+                <button id="installBtn" onclick="installPWA()" class="gap-1.5 px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition-colors items-center">
+                    <i class="fas fa-download text-xs"></i><span>تثبيت</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-6">
+    <main class="max-w-7xl mx-auto px-4 py-4">
 
         <!-- البحث والتصنيف -->
-        <div class="mb-6 flex flex-col sm:flex-row gap-3">
+        <div class="mb-4 flex flex-col sm:flex-row gap-3">
             <div class="flex-1 relative">
-                <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <i class="fas fa-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
                 <input type="text" id="searchInput" placeholder="ابحث في روابطك..." 
-                    class="w-full pr-11 pl-4 py-3 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm"
+                    class="w-full pr-9 pl-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm"
                     oninput="filterLinks()">
             </div>
             <div class="flex gap-2 overflow-x-auto scrollbar-hide pb-1" id="categoryFilters">
-                <button onclick="filterByCategory('all')" class="category-btn active px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium whitespace-nowrap transition-all" data-cat="all">الكل</button>
-                <button onclick="filterByCategory('work')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="work"><i class="fas fa-briefcase ml-1"></i>عمل</button>
-                <button onclick="filterByCategory('personal')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="personal"><i class="fas fa-user ml-1"></i>شخصي</button>
-                <button onclick="filterByCategory('learning')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="learning"><i class="fas fa-graduation-cap ml-1"></i>تعلم</button>
-                <button onclick="filterByCategory('entertainment')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="entertainment"><i class="fas fa-gamepad ml-1"></i>ترفيه</button>
-                <button onclick="filterByCategory('other')" class="category-btn px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="other"><i class="fas fa-tag ml-1"></i>أخرى</button>
+                <button onclick="filterByCategory('all')" class="category-btn active px-3 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-medium whitespace-nowrap transition-all" data-cat="all">الكل</button>
+                <button onclick="filterByCategory('work')" class="category-btn px-3 py-1.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xs font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="work"><i class="fas fa-briefcase ml-1 text-[10px]"></i>عمل</button>
+                <button onclick="filterByCategory('personal')" class="category-btn px-3 py-1.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xs font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="personal"><i class="fas fa-user ml-1 text-[10px]"></i>شخصي</button>
+                <button onclick="filterByCategory('learning')" class="category-btn px-3 py-1.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xs font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="learning"><i class="fas fa-graduation-cap ml-1 text-[10px]"></i>تعلم</button>
+                <button onclick="filterByCategory('entertainment')" class="category-btn px-3 py-1.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xs font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="entertainment"><i class="fas fa-gamepad ml-1 text-[10px]"></i>ترفيه</button>
+                <button onclick="filterByCategory('other')" class="category-btn px-3 py-1.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xs font-medium whitespace-nowrap transition-all hover:bg-gray-50 dark:hover:bg-gray-700" data-cat="other"><i class="fas fa-tag ml-1 text-[10px]"></i>أخرى</button>
             </div>
         </div>
 
-        <!-- الروابط المحفوظة (أعلى الصفحة) -->
-        <div id="linksContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
-        <div id="emptyState" class="hidden text-center py-16 mb-8">
-            <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"><i class="fas fa-link text-4xl text-gray-300 dark:text-gray-600"></i></div>
-            <h3 class="text-xl font-bold text-gray-400 mb-2">لا توجد روابط</h3>
+        <!-- الروابط المحفوظة -->
+        <div id="linksContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mb-6"></div>
+        <div id="emptyState" class="hidden text-center py-12 mb-6">
+            <div class="w-20 h-20 mx-auto mb-3 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"><i class="fas fa-link text-3xl text-gray-300 dark:text-gray-600"></i></div>
+            <h3 class="text-lg font-bold text-gray-400 mb-1">لا توجد روابط</h3>
             <p class="text-gray-400 text-sm">أضف رابطك الأول بالأسفل</p>
         </div>
 
+        <!-- نسخ احتياطي واستعادة -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 mb-4 shadow-sm">
+            <h2 class="text-base font-bold mb-3 flex items-center gap-2"><i class="fas fa-database text-green-500 text-sm"></i> نسخ احتياطي واستعادة</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-medium mb-1.5 text-gray-600 dark:text-gray-400">تصدير البيانات</label>
+                    <button onclick="exportData()" class="w-full py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-medium transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-download text-xs"></i> تحميل ملف النسخ الاحتياطي
+                    </button>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium mb-1.5 text-gray-600 dark:text-gray-400">استيراد البيانات</label>
+                    <input type="file" id="importFile" accept=".json" onchange="importData(this)" class="hidden">
+                    <label for="importFile" class="w-full py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fas fa-upload text-xs"></i> اختيار ملف للاستيراد
+                    </label>
+                </div>
+            </div>
+        </div>
 
-        <!-- إضافة رابط جديد (أسفل الصفحة) -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 mb-6 shadow-sm">
+        <!-- إضافة رابط جديد -->
+        <div id="addFormSection" class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 mb-6 shadow-sm scroll-mt-24">
             <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-plus-circle text-blue-500"></i> إضافة رابط جديد</h2>
             <form id="addLinkForm" onsubmit="addLink(event)">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -125,11 +154,11 @@
                     <div>
                         <label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">التصنيف</label>
                         <div class="flex gap-2 flex-wrap">
-                            <label class="cursor-pointer"><input type="radio" name="category" value="work" class="hidden peer"><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-blue-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-blue-600"><i class="fas fa-briefcase ml-1"></i>عمل</span></label>
-                            <label class="cursor-pointer"><input type="radio" name="category" value="personal" class="hidden peer" checked><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-green-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-green-600"><i class="fas fa-user ml-1"></i>شخصي</span></label>
-                            <label class="cursor-pointer"><input type="radio" name="category" value="learning" class="hidden peer"><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-purple-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-purple-600"><i class="fas fa-graduation-cap ml-1"></i>تعلم</span></label>
-                            <label class="cursor-pointer"><input type="radio" name="category" value="entertainment" class="hidden peer"><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-pink-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-pink-600"><i class="fas fa-gamepad ml-1"></i>ترفيه</span></label>
-                            <label class="cursor-pointer"><input type="radio" name="category" value="other" class="hidden peer"><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm peer-checked:bg-gray-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-gray-600"><i class="fas fa-tag ml-1"></i>أخرى</span></label>
+                            <label class="cursor-pointer"><input type="radio" name="category" value="work" class="hidden peer"><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-xs peer-checked:bg-blue-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-blue-600"><i class="fas fa-briefcase ml-1"></i>عمل</span></label>
+                            <label class="cursor-pointer"><input type="radio" name="category" value="personal" class="hidden peer" checked><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-xs peer-checked:bg-green-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-green-600"><i class="fas fa-user ml-1"></i>شخصي</span></label>
+                            <label class="cursor-pointer"><input type="radio" name="category" value="learning" class="hidden peer"><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-xs peer-checked:bg-purple-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-purple-600"><i class="fas fa-graduation-cap ml-1"></i>تعلم</span></label>
+                            <label class="cursor-pointer"><input type="radio" name="category" value="entertainment" class="hidden peer"><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-xs peer-checked:bg-pink-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-pink-600"><i class="fas fa-gamepad ml-1"></i>ترفيه</span></label>
+                            <label class="cursor-pointer"><input type="radio" name="category" value="other" class="hidden peer"><span class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-xs peer-checked:bg-gray-600 peer-checked:text-white transition-all border border-transparent peer-checked:border-gray-600"><i class="fas fa-tag ml-1"></i>أخرى</span></label>
                         </div>
                     </div>
                     <div>
@@ -147,8 +176,8 @@
                     </div>
                 </div>
                 <div class="flex gap-2">
-                    <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2"><i class="fas fa-plus"></i> إضافة الرابط</button>
-                    <button type="button" onclick="clearForm()" class="px-6 py-3 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 font-medium transition-all">إلغاء</button>
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 text-sm"><i class="fas fa-plus"></i> إضافة الرابط</button>
+                    <button type="button" onclick="clearForm()" class="px-6 py-3 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 font-medium transition-all text-sm">إلغاء</button>
                 </div>
             </form>
         </div>
@@ -187,35 +216,16 @@
                         </div>
                     </div>
                     <div class="flex gap-2">
-                        <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition-all">حفظ التغييرات</button>
-                        <button type="button" onclick="closeEditModal()" class="px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 font-medium transition-all">إلغاء</button>
+                        <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition-all text-sm">حفظ التغييرات</button>
+                        <button type="button" onclick="closeEditModal()" class="px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 font-medium transition-all text-sm">إلغاء</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <button onclick="scrollToTop()" class="fixed bottom-6 left-6 w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 flex items-center justify-center transition-all z-40"><i class="fas fa-arrow-up"></i></button>
+    <button onclick="scrollToTop()" class="fixed bottom-6 left-6 w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 flex items-center justify-center transition-all z-40"><i class="fas fa-arrow-up text-sm"></i></button>
 
-        <!-- نسخ احتياطي واستعادة (ظاهر) -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 mb-6 shadow-sm">
-            <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-database text-green-500"></i> نسخ احتياطي واستعادة</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">تصدير البيانات</label>
-                    <button onclick="exportData()" class="w-full py-2.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-medium transition-all flex items-center justify-center gap-2">
-                        <i class="fas fa-download"></i> تحميل ملف النسخ الاحتياطي
-                    </button>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">استيراد البيانات</label>
-                    <input type="file" id="importFile" accept=".json" onchange="importData(this)" class="hidden">
-                    <label for="importFile" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
-                        <i class="fas fa-upload"></i> اختيار ملف للاستيراد
-                    </label>
-                </div>
-            </div>
-        </div>
     <script>
         // Register Service Worker from file
         if ('serviceWorker' in navigator) {
@@ -259,6 +269,11 @@
         function selectColor(el, color) { document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active')); el.classList.add('active'); selectedColor = color; }
         function selectEditColor(el, color) { document.querySelectorAll('[data-edit-color]').forEach(d => d.classList.remove('active')); el.classList.add('active'); editSelectedColor = color; }
 
+        function scrollToAdd() {
+            document.getElementById('addFormSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => document.getElementById('linkUrl').focus(), 500);
+        }
+
         function addLink(e) {
             e.preventDefault();
             const url = document.getElementById('linkUrl').value.trim();
@@ -286,26 +301,40 @@
                 const cat = categoryConfig[link.category] || categoryConfig.other;
                 const col = colorConfig[link.color] || colorConfig.blue;
                 const date = new Date(link.createdAt).toLocaleDateString('ar-SA');
-                return `<div class="group relative bg-white dark:bg-gray-800 rounded-2xl border ${col.border} overflow-hidden card-hover slide-in">
-                    <div class="absolute top-0 right-0 w-full h-1 bg-gradient-to-l ${col.gradient}"></div>
-                    <div class="p-5">
-                        <div class="flex items-start justify-between mb-3">
-                            <div class="flex items-center gap-2">
-                                <span class="w-8 h-8 rounded-lg ${col.bg} flex items-center justify-center"><i class="fas ${cat.icon} ${col.text} text-sm"></i></span>
-                                <span class="text-xs font-medium text-gray-400">${cat.label}</span>
+                const safeUrl = escapeHtml(link.url);
+                return `<div class="group relative bg-white dark:bg-gray-800 rounded-xl border ${col.border} overflow-hidden card-hover slide-in link-card">
+                    <div class="absolute top-0 right-0 w-full h-0.5 bg-gradient-to-l ${col.gradient}"></div>
+                    <div class="p-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-1.5 min-w-0">
+                                <span class="w-6 h-6 rounded-md ${col.bg} flex items-center justify-center shrink-0"><i class="fas ${cat.icon} ${col.text} text-[10px]"></i></span>
+                                <span class="text-[10px] font-medium text-gray-400 shrink-0">${cat.label}</span>
                             </div>
-                            <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onclick="editLink(${link.id})" class="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-blue-500 transition-colors"><i class="fas fa-pen text-xs"></i></button>
-                                <button onclick="deleteLink(${link.id})" class="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors"><i class="fas fa-trash text-xs"></i></button>
+                            <div class="flex gap-1 shrink-0">
+                                <button onclick="copyLink('${safeUrl}')" class="action-btn bg-gray-100 dark:bg-gray-700 text-gray-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30" title="نسخ الرابط">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button onclick="openInChrome('${safeUrl}')" class="action-btn bg-gray-100 dark:bg-gray-700 text-gray-500 hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/30" title="فتح في Chrome">
+                                    <i class="fab fa-chrome"></i>
+                                </button>
+                                <button onclick="shareLink('${safeUrl}', '${escapeHtml(link.name)}')" class="action-btn bg-gray-100 dark:bg-gray-700 text-gray-500 hover:text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/30" title="مشاركة">
+                                    <i class="fas fa-share-alt"></i>
+                                </button>
+                                <button onclick="editLink(${link.id})" class="action-btn bg-gray-100 dark:bg-gray-700 text-gray-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30" title="تعديل">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <button onclick="deleteLink(${link.id})" class="action-btn bg-gray-100 dark:bg-gray-700 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30" title="حذف">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </div>
-                        <h3 class="font-bold text-lg mb-1 text-gray-800 dark:text-gray-100 truncate">${escapeHtml(link.name)}</h3>
-                        ${link.notes ? `<p class="text-sm text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">${escapeHtml(link.notes)}</p>` : '<div class="mb-3"></div>'}
-                        <a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 w-full py-2.5 px-4 rounded-xl ${col.bg} ${col.text} hover:opacity-80 transition-all text-sm font-medium group/link">
-                            <i class="fas fa-external-link-alt text-xs transition-transform group-hover/link:-translate-x-1"></i>
-                            <span class="truncate flex-1 text-right">${escapeHtml(link.url)}</span>
+                        <h3 class="font-bold text-sm mb-0.5 text-gray-800 dark:text-gray-100 truncate leading-tight">${escapeHtml(link.name)}</h3>
+                        ${link.notes ? `<p class="text-[11px] text-gray-500 dark:text-gray-400 mb-2 line-clamp-1 leading-tight">${escapeHtml(link.notes)}</p>` : '<div class="mb-1"></div>'}
+                        <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 w-full py-1.5 px-3 rounded-lg ${col.bg} ${col.text} hover:opacity-80 transition-all text-xs font-medium group/link">
+                            <i class="fas fa-external-link-alt text-[10px] transition-transform group-hover/link:-translate-x-1"></i>
+                            <span class="truncate flex-1 text-right">${safeUrl}</span>
                         </a>
-                        <div class="mt-3 flex items-center justify-between text-xs text-gray-400"><span>${date}</span><span class="w-2 h-2 rounded-full ${col.accent}"></span></div>
+                        <div class="mt-2 flex items-center justify-between text-[10px] text-gray-400"><span>${date}</span><span class="w-1.5 h-1.5 rounded-full ${col.accent}"></span></div>
                     </div>
                 </div>`;
             }).join('');
@@ -321,6 +350,28 @@
                 else { btn.classList.remove('bg-blue-600','text-white'); btn.classList.add('bg-white','dark:bg-gray-800'); }
             });
             renderLinks();
+        }
+
+        function copyLink(url) {
+            navigator.clipboard.writeText(url).then(() => showToast('تم نسخ الرابط', 'success')).catch(() => {
+                const ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); showToast('تم نسخ الرابط', 'success');
+            });
+        }
+
+        function openInChrome(url) {
+            // Try to open with intent on Android, fallback to regular open
+            const chromeUrl = 'googlechrome://navigate?url=' + encodeURIComponent(url);
+            const intentUrl = 'intent://' + url.replace(/^https?:\/\//, '') + '#Intent;scheme=https;package=com.android.chrome;end';
+            window.location.href = intentUrl;
+            setTimeout(() => { window.open(url, '_blank'); }, 300);
+        }
+
+        async function shareLink(url, title) {
+            if (navigator.share) {
+                try { await navigator.share({ title: title || 'رابط', text: title || '', url: url }); } catch (err) { if (err.name !== 'AbortError') copyLink(url); }
+            } else {
+                copyLink(url);
+            }
         }
 
         function editLink(id) {
